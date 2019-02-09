@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using PuzzleMeWindowsProject.Manager;
 
 namespace PuzzleMeWindowsProject
 {
@@ -9,12 +10,14 @@ namespace PuzzleMeWindowsProject
     /// </summary>
     public class Game1 : Game
     {
-        GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch;
+        TextureManager textureManager;
 
+        Vector2 position = new Vector2(0,0);
+        
         public Game1()
         {
-            graphics = new GraphicsDeviceManager(this);
+            Global.Graphics = new GraphicsDeviceManager(this);
+
             Content.RootDirectory = "Content";
         }
 
@@ -26,7 +29,7 @@ namespace PuzzleMeWindowsProject
         /// </summary>
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
+            Global.GameWindow = Window;
 
             base.Initialize();
         }
@@ -37,10 +40,12 @@ namespace PuzzleMeWindowsProject
         /// </summary>
         protected override void LoadContent()
         {
-            // Create a new SpriteBatch, which can be used to draw textures.
-            spriteBatch = new SpriteBatch(GraphicsDevice);
+            Global.SpriteBatch = new SpriteBatch(GraphicsDevice);
+            Global.Content = Content;
+            Global.GraphicsDevice = GraphicsDevice;
 
-            // TODO: use this.Content to load your game content here
+            textureManager = new TextureManager().Load(Content.Load<Texture2D>("WP_20180819_005"));
+
         }
 
         /// <summary>
@@ -49,7 +54,7 @@ namespace PuzzleMeWindowsProject
         /// </summary>
         protected override void UnloadContent()
         {
-            // TODO: Unload any non ContentManager content here
+           
         }
 
         /// <summary>
@@ -62,7 +67,16 @@ namespace PuzzleMeWindowsProject
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            // TODO: Add your update logic here
+            var amount = 5;
+
+            if (Keyboard.GetState().IsKeyDown(Keys.Up))
+                position.Y -= amount;
+            if (Keyboard.GetState().IsKeyDown(Keys.Down))
+                position.Y += amount;
+            if (Keyboard.GetState().IsKeyDown(Keys.Left))
+                position.X -= amount;
+            if (Keyboard.GetState().IsKeyDown(Keys.Right))
+                position.X += amount;
 
             base.Update(gameTime);
         }
@@ -75,7 +89,13 @@ namespace PuzzleMeWindowsProject
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            // TODO: Add your drawing code here
+            Global.SpriteBatch.Begin();
+
+            
+
+            Global.SpriteBatch.Draw(TextureManager.Crop(textureManager.Texture,new Rectangle((int)position.X,(int)position.Y,100,600)),new Rectangle(0,0,200,200),Color.White);
+
+            Global.SpriteBatch.End();
 
             base.Draw(gameTime);
         }

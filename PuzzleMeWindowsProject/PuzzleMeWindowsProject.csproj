@@ -42,6 +42,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Game1.cs" />
+    <Compile Include="Manager\Global.cs" />
+    <Compile Include="Manager\TextureManager.cs" />
+    <Compile Include="Model\Piece.cs" />
     <Compile Include="Model\Sprite.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
