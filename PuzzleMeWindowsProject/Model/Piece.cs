@@ -43,9 +43,8 @@ namespace PuzzleMeWindowsProject.Model
 
         public Piece() { }
 
-        public Piece(Vector2 startingPosition, Vector2 startingSize, Color bgColor)
+        public Piece(Vector2 startingPosition, Vector2 startingSize)
         {
-            BackgroundColor = bgColor;            
             SetPosition(startingPosition);
             SetSize(startingSize);
             State = PieceState.UnSelected;
@@ -99,6 +98,13 @@ namespace PuzzleMeWindowsProject.Model
         public Piece SetBoard(Board board)
         {
             Board = board;
+
+            return this;
+        }
+
+        public Piece SetBackgroundColor(Color color)
+        {
+            BackgroundColor = color;
 
             return this;
         }
@@ -211,6 +217,26 @@ namespace PuzzleMeWindowsProject.Model
 
             Pieces[emptyPiece.RowNumber, emptyPiece.ColumnNumber] = emptyPiece;
             Pieces[filledPiece.RowNumber, filledPiece.ColumnNumber] = filledPiece;
+        }
+
+        public static Piece[,] To2DPieceArray(Vector2 pieceSize, int rowCount, int columnCount)
+        {
+            Piece[,] array = new Piece[rowCount, columnCount];
+
+            for (int i = 0, number = 0; i < rowCount; i++)
+            {
+                for (int k = 0; k < columnCount; k++, number++)
+                {
+                    var color = new Color(Global.Random.Next(0, 255), Global.Random.Next(0, 255), Global.Random.Next(0, 255));
+
+                    array[i, k] = new Piece(new Vector2(pieceSize.X * k, pieceSize.Y * i), pieceSize)
+                                        .SetBackgroundColor(color)
+                                        .SetRowAndColumnNumber(i, k)
+                                        .SetNumber(number);
+                }
+            }
+
+            return array;
         }
 
     }

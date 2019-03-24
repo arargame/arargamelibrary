@@ -10,12 +10,12 @@ namespace PuzzleMeWindowsProject.Model
 {
     public class Image : Sprite
     {
-        public int Row { get; set; }
+        public int RowCount { get; set; }
 
-        public int Column { get; set; }
+        public int ColumnCount { get; set; }
 
-        //public List<Piece> Pieces = new List<Piece>();
-
+        public List<Piece> Pieces { get; set; }
+        
         public Image() { }
 
         public override void LoadContent()
@@ -23,16 +23,30 @@ namespace PuzzleMeWindowsProject.Model
             SetTexture(Name);
         }
 
-        public Image SetRowCount(int row)
+        public override void Initialize()
         {
-            Row = row;
+            Pieces = new List<Piece>();
 
-            return this;
+            base.Initialize();
         }
 
-        public Image SetColumnCount(int column)
+        public override void Update()
         {
-            Column = column;
+            base.Update();
+        }
+
+        public override void Draw()
+        {
+            base.Draw();
+        }
+
+        public Image SetRowAndColumnCount(int rowCount,int columnCount)
+        {
+            RowCount = rowCount;
+
+            ColumnCount = columnCount;
+
+            //Texture
 
             return this;
         }

@@ -10,11 +10,13 @@ namespace PuzzleMeWindowsProject.Model
 {
     public class Board : IXna
     {
-        public Vector2 PieceSize { get; set; }
+        public Image Image { get; set; }
 
         public int RowCount { get; set; }
 
         public int ColumnCount { get; set; }
+
+        public Vector2 PieceSize { get; set; }
 
         public Piece[,] Pieces { get; set; }
 
@@ -31,17 +33,26 @@ namespace PuzzleMeWindowsProject.Model
         {
             PieceSize = new Vector2(Global.ViewportWidth / ColumnCount, Global.ViewportHeight / RowCount);
 
-            for (int i = 0; i < RowCount; i++)
-            {
-                for (int k = 0; k < ColumnCount; k++)
-                {
-                    var color = new Color(Global.Random.Next(0, 255), Global.Random.Next(0, 255), Global.Random.Next(0, 255));
+            //for (int i = 0; i < RowCount; i++)
+            //{
+            //    for (int k = 0; k < ColumnCount; k++)
+            //    {
+            //        var color = new Color(Global.Random.Next(0, 255), Global.Random.Next(0, 255), Global.Random.Next(0, 255));
 
-                    Pieces[i, k] = new Piece(new Vector2(PieceSize.X * k, PieceSize.Y * i), PieceSize, color)
-                                        .SetRowAndColumnNumber(i,k)
-                                        .UnSelect()
-                                        .SetBoard(this);
-                }
+            //        Pieces[i, k] = new Piece(new Vector2(PieceSize.X * k, PieceSize.Y * i), PieceSize)
+            //                            .SetBackgroundColor(color)
+            //                            .SetRowAndColumnNumber(i,k)
+            //                            .UnSelect()
+            //                            .SetBoard(this);
+            //    }
+            //}
+
+            Pieces = Piece.To2DPieceArray(PieceSize,RowCount,ColumnCount);
+
+            foreach (var piece in Pieces)
+            {
+                piece.UnSelect()
+                    .SetBoard(this);
             }
         }
 
@@ -108,6 +119,18 @@ namespace PuzzleMeWindowsProject.Model
             }
         }
 
+        public void UnloadContent()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Board SetImage(Image image)
+        {
+            Image = image;
+
+            return this;
+        }
+
         public void UnSelectOthersPieces()
         {
             var pieceList = Pieces.OfType<Piece>();
@@ -119,12 +142,6 @@ namespace PuzzleMeWindowsProject.Model
                 if (selectedPiece!=null && piece.Id != selectedPiece.Id)
                     piece.UnSelect();
             }
-        }
-
-
-        public void UnloadContent()
-        {
-            throw new NotImplementedException();
         }
     }
 }

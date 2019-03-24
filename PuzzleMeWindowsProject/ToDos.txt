@@ -3,5 +3,8 @@
 -Gamescreen tasarlanacak
 -FontManager de spritefont girilmezse default font sunan bir yapı düzenle
 -select-unselect görsel ayarlarndı piece lerin için doldurma zamanı köşelikleri olmalı seçildiğinde belli olsun
--boş piece ayarla
--boş zemine hareket sağla seçili piece için
++boş piece ayarla
++boş zemine hareket sağla seçili piece için
++boş piece için uygun image tasarla
++selected efekti yap
++board ta Image kullan

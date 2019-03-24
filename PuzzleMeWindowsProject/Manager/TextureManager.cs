@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using PuzzleMeWindowsProject.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -99,6 +100,21 @@ namespace PuzzleMeWindowsProject.Manager
             }
 
             return cropTexture;
+        }
+
+        public static List<Piece> Crop(Texture2D originalTexture, int rowCount, int columnCount)
+        {
+            var pieces = new List<Piece>();
+
+            var size = new Vector2(originalTexture.Width, originalTexture.Height);
+
+            var pieceSize = new Vector2(size.X / columnCount, size.Y / rowCount);
+
+            pieces = Piece.To2DPieceArray(pieceSize, rowCount, columnCount)
+                            .OfType<Piece>()
+                            .ToList();
+
+            return pieces;
         }
     }
 }

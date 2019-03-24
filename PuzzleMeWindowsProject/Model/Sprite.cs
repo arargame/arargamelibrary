@@ -22,26 +22,6 @@ namespace PuzzleMeWindowsProject.Model
         DateTime UpdateDate { get; set; }
     }
 
-    public abstract class BaseObject : IBaseObject
-    {
-        public Guid Id { get; set; }
-
-        public string Name { get; set; }
-
-        public string Description { get; set; }
-
-        public DateTime CreateDate { get; set; }
-
-        public DateTime UpdateDate { get; set; }
-
-        public BaseObject()
-        {
-            Id = Guid.NewGuid();
-
-            CreateDate = UpdateDate = DateTime.Now;
-        }
-    }
-
     public interface IXna
     {
         void Initialize();
@@ -74,6 +54,26 @@ namespace PuzzleMeWindowsProject.Model
         Color Color { get; set; }
 
         bool IsAlive { get; set; }
+    }
+
+    public abstract class BaseObject : IBaseObject
+    {
+        public Guid Id { get; set; }
+
+        public string Name { get; set; }
+
+        public string Description { get; set; }
+
+        public DateTime CreateDate { get; set; }
+
+        public DateTime UpdateDate { get; set; }
+
+        public BaseObject()
+        {
+            Id = Guid.NewGuid();
+
+            CreateDate = UpdateDate = DateTime.Now;
+        }
     }
 
     
@@ -152,9 +152,10 @@ namespace PuzzleMeWindowsProject.Model
                 Global.SpriteBatch.Draw(Texture,DestinationRectangle,Color);
         }
 
-        public void SetName(string name)
+        
+        public void SetColor(Color color)
         {
-            Name = name;
+            Color = color;
         }
 
         public void SetDescription(string description)
@@ -162,30 +163,9 @@ namespace PuzzleMeWindowsProject.Model
             Description = description;
         }
 
-        public void SetTexture(string name)
+        public void SetName(string name)
         {
-            Texture = Global.Content.Load<Texture2D>(name);
-        }
-
-        public virtual void SetStartingPosition()
-        {
-            SetPosition(Vector2.Zero);
-        }
-
-        public virtual void SetStartingSpeed()
-        {
-            SetSpeed(Vector2.Zero);
-        }
-
-        public virtual void SetStartingSize()
-        {
-            SetSize(Vector2.Zero);
-        }
-
-        private void SetRectangle()
-        {
-            DestinationRectangle = new Rectangle((int)Position.X, (int)Position.Y, (int)Size.X, (int)Size.Y);
-            //SourceRectangle = new Rectangle(animation.FrameBounds.X, animation.FrameBounds.Y, (int)Size.X, (int)Size.Y);
+            Name = name;
         }
 
         private void SetOrigin()
@@ -198,9 +178,10 @@ namespace PuzzleMeWindowsProject.Model
             Position = position;
         }
 
-        public void SetSize(Vector2 size)
+        private void SetRectangle()
         {
-            Size = size;
+            DestinationRectangle = new Rectangle((int)Position.X, (int)Position.Y, (int)Size.X, (int)Size.Y);
+            //SourceRectangle = new Rectangle(animation.FrameBounds.X, animation.FrameBounds.Y, (int)Size.X, (int)Size.Y);
         }
 
         public void SetSpeed(Vector2 speed)
@@ -208,11 +189,30 @@ namespace PuzzleMeWindowsProject.Model
             Speed = speed;
         }
 
-        public void SetColor(Color color)
+        public void SetSize(Vector2 size)
         {
-            Color = color;
+            Size = size;
         }
 
+        public virtual void SetStartingPosition()
+        {
+            SetPosition(Vector2.Zero);
+        }
+
+        public virtual void SetStartingSize()
+        {
+            SetSize(Vector2.Zero);
+        }
+
+        public virtual void SetStartingSpeed()
+        {
+            SetSpeed(Vector2.Zero);
+        }
+
+        public void SetTexture(string name)
+        {
+            Texture = Global.Content.Load<Texture2D>(name);
+        }
         #endregion
     }
 }
