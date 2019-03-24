@@ -1,0 +1,7 @@
+﻿-14.3.2019 tarihinde bakıldığında ekran yönetim sistemleri hazırlanmış çalışmalar gayet başarılı görünüyor
+-Level sistemi yapılacak?
+-Gamescreen tasarlanacak
+-FontManager de spritefont girilmezse default font sunan bir yapı düzenle
+-select-unselect görsel ayarlarndı piece lerin için doldurma zamanı köşelikleri olmalı seçildiğinde belli olsun
+-boş piece ayarla
+-boş zemine hareket sağla seçili piece için

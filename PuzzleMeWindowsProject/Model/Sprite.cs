@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using PuzzleMeWindowsProject.Manager;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,14 +22,28 @@ namespace PuzzleMeWindowsProject.Model
         DateTime UpdateDate { get; set; }
     }
 
-    public interface IDrawableObject
+    public abstract class BaseObject : IBaseObject
     {
-        Texture2D Texture { get; set; }
+        public Guid Id { get; set; }
 
-        Vector2 Position { get; set; }
+        public string Name { get; set; }
 
-        Vector2 Size { get; set; }
+        public string Description { get; set; }
 
+        public DateTime CreateDate { get; set; }
+
+        public DateTime UpdateDate { get; set; }
+
+        public BaseObject()
+        {
+            Id = Guid.NewGuid();
+
+            CreateDate = UpdateDate = DateTime.Now;
+        }
+    }
+
+    public interface IXna
+    {
         void Initialize();
 
         void LoadContent();
@@ -40,25 +55,50 @@ namespace PuzzleMeWindowsProject.Model
         void Draw();
     }
 
-    public abstract class Sprite : IBaseObject,IDrawableObject
+    public interface IDrawableObject : IXna
+    {
+        Texture2D Texture { get; set; }
+
+        Vector2 Position { get; set; }
+
+        Vector2 Size { get; set; }
+
+        Vector2 Origin { get; set; }
+
+        Vector2 Speed { get; set; }
+
+        Rectangle DestinationRectangle { get; set; }
+
+        Rectangle SourceRectangle { get; set; }
+
+        Color Color { get; set; }
+
+        bool IsAlive { get; set; }
+    }
+
+    
+
+    public abstract class Sprite : BaseObject,IDrawableObject
     {
         #region Properties
-
-        public Guid Id { get; set; }
-
-        public string Name { get; set; }
-
-        public string Description { get; set; }
-
-        public DateTime CreateDate { get; set; }
-
-        public DateTime UpdateDate { get; set; }
 
         public Texture2D Texture { get; set; }
 
         public Vector2 Position { get; set; }
 
         public Vector2 Size { get; set; }
+
+        public Vector2 Speed { get; set; }
+
+        public Vector2 Origin { get; set; }
+
+        public Rectangle DestinationRectangle { get; set; }
+
+        public Rectangle SourceRectangle { get; set; }
+
+        public Color Color { get; set; }
+
+        public bool IsAlive { get; set; }
 
         #endregion
 
@@ -75,50 +115,102 @@ namespace PuzzleMeWindowsProject.Model
 
         public virtual void Initialize()
         {
-            Id = Guid.NewGuid();
+            IsAlive = true;
 
-            CreateDate = UpdateDate = DateTime.Now;
+            SetStartingPosition();
 
-            Position = Size = Vector2.Zero;
+            SetStartingSpeed();
+
+            SetStartingSize();
+
+            SetOrigin();
+
+            DestinationRectangle = new Rectangle((int)Position.X, (int)Position.Y, (int)Size.X, (int)Size.Y);
+
+            SourceRectangle = new Rectangle(0, 0, (int)Size.X, (int)Size.Y);
+
+            Color = Color.White;
         }
 
-        public virtual void LoadContent()
-        {
-
-        }
+        public virtual void LoadContent() { }
 
         public virtual void UnloadContent() { }
 
-        public virtual void Update() { }
+        public virtual void Update() 
+        {
+            if (IsAlive)
+            {
+                SetRectangle();
 
-        public virtual void Draw() { }
+                SetOrigin();
+            }
+        }
 
-        public Sprite SetName(string name)
+        public virtual void Draw() 
+        {
+            if(IsAlive)
+                Global.SpriteBatch.Draw(Texture,DestinationRectangle,Color);
+        }
+
+        public void SetName(string name)
         {
             Name = name;
-
-            return this;
         }
 
-        public Sprite SetDescription(string description)
+        public void SetDescription(string description)
         {
             Description = description;
-
-            return this;
         }
 
-        public Sprite SetPosition(Vector2 position)
+        public void SetTexture(string name)
+        {
+            Texture = Global.Content.Load<Texture2D>(name);
+        }
+
+        public virtual void SetStartingPosition()
+        {
+            SetPosition(Vector2.Zero);
+        }
+
+        public virtual void SetStartingSpeed()
+        {
+            SetSpeed(Vector2.Zero);
+        }
+
+        public virtual void SetStartingSize()
+        {
+            SetSize(Vector2.Zero);
+        }
+
+        private void SetRectangle()
+        {
+            DestinationRectangle = new Rectangle((int)Position.X, (int)Position.Y, (int)Size.X, (int)Size.Y);
+            //SourceRectangle = new Rectangle(animation.FrameBounds.X, animation.FrameBounds.Y, (int)Size.X, (int)Size.Y);
+        }
+
+        private void SetOrigin()
+        {
+            Origin = Texture != null ? new Vector2(Texture.Width / 2, Texture.Height / 2) : Vector2.Zero;
+        }
+
+        public void SetPosition(Vector2 position)
         {
             Position = position;
-
-            return this;
         }
 
-        public Sprite SetSize(Vector2 size)
+        public void SetSize(Vector2 size)
         {
             Size = size;
+        }
 
-            return this;
+        public void SetSpeed(Vector2 speed)
+        {
+            Speed = speed;
+        }
+
+        public void SetColor(Color color)
+        {
+            Color = color;
         }
 
         #endregion

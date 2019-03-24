@@ -2,6 +2,12 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using PuzzleMeWindowsProject.Manager;
+using PuzzleMeWindowsProject.Model;
+using PuzzleMeWindowsProject.ScreenManagement;
+using PuzzleMeWindowsProject.ScreenManagement.Screens;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace PuzzleMeWindowsProject
 {
@@ -13,12 +19,21 @@ namespace PuzzleMeWindowsProject
         TextureManager textureManager;
 
         Vector2 position = new Vector2(0,0);
+
+        Image image;
+
+        Color bgColor = Color.Black;
+
+        private FrameManager frameManager = new FrameManager();
         
         public Game1()
         {
             Global.Graphics = new GraphicsDeviceManager(this);
 
             Content.RootDirectory = "Content";
+
+            IsFixedTimeStep = false;
+            //TargetElapsedTime = TimeSpan.FromMilliseconds(30); // 20 milliseconds, or 50 FPS.
         }
 
         /// <summary>
@@ -29,7 +44,16 @@ namespace PuzzleMeWindowsProject
         /// </summary>
         protected override void Initialize()
         {
+            Global.Content = Content;
             Global.GameWindow = Window;
+            Global.GraphicsDevice = GraphicsDevice;
+            Global.Random = new Random();
+            Global.SpriteBatch = new SpriteBatch(GraphicsDevice);
+
+            InputManager.IsMouseVisible = IsMouseVisible = true;
+            ScreenManager.SetFullScreen(false);
+
+            ScreenManager.Add(new MainMenu());
 
             base.Initialize();
         }
@@ -40,12 +64,11 @@ namespace PuzzleMeWindowsProject
         /// </summary>
         protected override void LoadContent()
         {
-            Global.SpriteBatch = new SpriteBatch(GraphicsDevice);
-            Global.Content = Content;
-            Global.GraphicsDevice = GraphicsDevice;
-
             textureManager = new TextureManager().Load(Content.Load<Texture2D>("WP_20180819_005"));
 
+            image = new Image();
+            image.SetName("WP_20180819_005");
+            image.LoadContent();
         }
 
         /// <summary>
@@ -64,8 +87,16 @@ namespace PuzzleMeWindowsProject
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            Global.GameTime = gameTime;
+
+            InputManager.Update();
+            ScreenManager.Update();
+
+            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Global.OnExit)
                 Exit();
+
+            //gameTime.IsRunningSlowly
+
 
             var amount = 5;
 
@@ -87,17 +118,34 @@ namespace PuzzleMeWindowsProject
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(bgColor);
+
+            //image.Draw();
+
 
             Global.SpriteBatch.Begin();
 
-            
+            //float frameRate = 1 / (float)gameTime.ElapsedGameTime.TotalSeconds;
+            //var fm = FontManager.Create(string.Format("FPS : {0} = 1 / {1} , IsRunningSlowly : {2}",frameRate,(float)gameTime.ElapsedGameTime.TotalSeconds,gameTime.IsRunningSlowly),new Vector2(10,10),Color.Bisque);
+            //fm.Draw();
 
-            Global.SpriteBatch.Draw(TextureManager.Crop(textureManager.Texture,new Rectangle((int)position.X,(int)position.Y,100,600)),new Rectangle(0,0,200,200),Color.White);
+            //var deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+            //frameManager.Update(deltaTime);
+
+            //Global.SpriteBatch.DrawString(fm.Font,"fps : "+frameManager.AverageFramesPerSecond,new Vector2(50,50),Color.Blue);
+
+            ScreenManager.Draw();
+
 
             Global.SpriteBatch.End();
 
             base.Draw(gameTime);
+        }
+
+        protected override void OnExiting(object sender, EventArgs args)
+        {
+            base.OnExiting(sender, args);
         }
     }
 }
