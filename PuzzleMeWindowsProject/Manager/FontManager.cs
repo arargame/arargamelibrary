@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using PuzzleMeWindowsProject.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace PuzzleMeWindowsProject.Manager
 {
-    public class FontManager
+    public class FontManager : IXna
     {
         public SpriteFont Font { get; set; }
 
@@ -32,7 +33,19 @@ namespace PuzzleMeWindowsProject.Manager
 
         public Vector2 Padding { get; set; }
 
-        public FontManager(string fontFile, string text, Vector2 position, Color color, float rotation, Vector2 origin, Vector2 scale, SpriteEffects effects, float layerDepth, Vector2 padding)
+        public Func<string> SetTextFunction { get; set; }
+
+        public FontManager(string fontFile,
+            string text,
+            Vector2 position,
+            Color color,
+            float rotation,
+            Vector2 origin,
+            Vector2 scale,
+            SpriteEffects effects,
+            float layerDepth,
+            Vector2 padding,
+            Func<string> setTextFunction)
         {
             Font = Global.Content.Load<SpriteFont>(fontFile);
 
@@ -52,9 +65,15 @@ namespace PuzzleMeWindowsProject.Manager
 
             LayerDepth = layerDepth;
 
-            TextMeasure = Font.MeasureString(Text);
-
             Padding = padding;
+
+            SetTextFunction = setTextFunction;
+        }
+
+        public void Update()
+        {
+            if (SetTextFunction != null)
+                SetText(SetTextFunction.Invoke());
         }
 
         public void Draw()
@@ -64,7 +83,7 @@ namespace PuzzleMeWindowsProject.Manager
 
         public static FontManager Create(string text,Vector2 position,Color color)
         {
-            return new FontManager("Fonts/MenuFont", text, position, color, 0f, Vector2.Zero, new Vector2(1, 1), SpriteEffects.None, 0f, Vector2.Zero); 
+            return new FontManager("Fonts/MenuFont", text, position, color, 0f, Vector2.Zero, new Vector2(1, 1), SpriteEffects.None, 0f, Vector2.Zero,null); 
         }
 
         public FontManager SetText(string text)
@@ -96,6 +115,21 @@ namespace PuzzleMeWindowsProject.Manager
             var y = rect.Center.Y - TextMeasure.Y / 2;
 
             SetPosition(new Vector2(x, y));
+        }
+
+        public void Initialize()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void LoadContent()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UnloadContent()
+        {
+            throw new NotImplementedException();
         }
     }
 }

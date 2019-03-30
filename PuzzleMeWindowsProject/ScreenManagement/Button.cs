@@ -21,7 +21,7 @@ namespace PuzzleMeWindowsProject.ScreenManagement
         {
             var padding = new Vector2(25, 10);
 
-            FontManager = new FontManager("Fonts/MenuFont", text, position, color, 0f, Vector2.Zero, new Vector2(1, 1), SpriteEffects.None, 0f, padding);
+            FontManager = new FontManager("Fonts/MenuFont", text, position, color, 0f, Vector2.Zero, new Vector2(1, 1), SpriteEffects.None, 0f, padding, null);
 
             LoadContent();
 
@@ -112,6 +112,8 @@ namespace PuzzleMeWindowsProject.ScreenManagement
                 InnerTextureSize.X = Size.X;
 
             InnerTextureSize.Y = Size.Y;
+
+            FontManager.Update();
         }
 
         public override void Draw()

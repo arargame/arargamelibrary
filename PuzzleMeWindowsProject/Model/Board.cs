@@ -8,9 +8,11 @@ using System.Threading.Tasks;
 
 namespace PuzzleMeWindowsProject.Model
 {
-    public class Board : IXna
+    public class Board : BaseObject,IXna
     {
-        public Image Image { get; set; }
+        public Level Level { get; set; }
+
+        //public Image Image { get; set; }
 
         public int RowCount { get; set; }
 
@@ -33,20 +35,6 @@ namespace PuzzleMeWindowsProject.Model
         {
             PieceSize = new Vector2(Global.ViewportWidth / ColumnCount, Global.ViewportHeight / RowCount);
 
-            //for (int i = 0; i < RowCount; i++)
-            //{
-            //    for (int k = 0; k < ColumnCount; k++)
-            //    {
-            //        var color = new Color(Global.Random.Next(0, 255), Global.Random.Next(0, 255), Global.Random.Next(0, 255));
-
-            //        Pieces[i, k] = new Piece(new Vector2(PieceSize.X * k, PieceSize.Y * i), PieceSize)
-            //                            .SetBackgroundColor(color)
-            //                            .SetRowAndColumnNumber(i,k)
-            //                            .UnSelect()
-            //                            .SetBoard(this);
-            //    }
-            //}
-
             Pieces = Piece.To2DPieceArray(PieceSize,RowCount,ColumnCount);
 
             foreach (var piece in Pieces)
@@ -58,22 +46,26 @@ namespace PuzzleMeWindowsProject.Model
 
         public void LoadContent()
         {
-            var counter = 0;
-
             foreach (var piece in Pieces)
             {
                 piece.LoadContent();
 
-                piece.SetNumber(counter++);
-
-                piece.FontManager.SetText(string.Format("({0},{1})={2}",piece.RowNumber,piece.ColumnNumber,piece.Number));
+                piece.SetText();
             }
 
-            var emptyPieceNumber = Global.Random.Next(0, counter + 1);
+            var emptyPieceNumber = Global.Random.Next(0, Pieces.OfType<Piece>().Count());
 
             var emptyPiece = Pieces.OfType<Piece>().FirstOrDefault(p=>p.Number==emptyPieceNumber);
 
             emptyPiece.MakeEmpty();
+
+            //var image = new Image("Textures/shutterstock_360399314");
+            //image.LoadContent();
+            //image.SetRowAndColumnCount(2, 2);
+
+            //image.Pieces.ForEach(p=>p.SetSize(PieceSize));
+
+            //SetImage(image);
         }
 
 
@@ -109,6 +101,8 @@ namespace PuzzleMeWindowsProject.Model
             }
 
             UnSelectOthersPieces();
+
+           // Image.Update();
         }
 
         public void Draw()
@@ -117,6 +111,8 @@ namespace PuzzleMeWindowsProject.Model
             {
                 piece.Draw();
             }
+
+            //Image.Draw();
         }
 
         public void UnloadContent()
@@ -126,7 +122,7 @@ namespace PuzzleMeWindowsProject.Model
 
         public Board SetImage(Image image)
         {
-            Image = image;
+            //Image = image;
 
             return this;
         }

@@ -4,11 +4,20 @@ using PuzzleMeWindowsProject.Manager;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace PuzzleMeWindowsProject.Model
 {
+    public enum PieceType
+    {
+        Normal,
+        Image,
+        Nest,
+        Empty
+    }
+
     public enum PieceState
     {
         Selected,
@@ -17,6 +26,9 @@ namespace PuzzleMeWindowsProject.Model
 
     public class Piece : Sprite
     {
+        public static int MaxWidth = 50;
+        public static int MaxHeight = 50;
+
         public Board Board { get; set; }
 
         public FontManager FontManager { get; set; }
@@ -27,9 +39,15 @@ namespace PuzzleMeWindowsProject.Model
 
         public int ColumnNumber { get; set; }
 
+        public int ImageNumber = -1;
+
         public Color BackgroundColor { get; set; }
 
         public Texture2D BackgroundTexture { get; set; }
+
+        //public Color MidLayerColor { get; set; }
+
+        //public Texture2D MidLayerTexture { get; set; }
 
         public Texture2D SelectedTexture { get; set; }
 
@@ -37,49 +55,116 @@ namespace PuzzleMeWindowsProject.Model
 
         public Vector2 StartingSize { get; set; }
 
+        public Graph Frame { get; set; }
+
         public PieceState State { get; set; }
 
-        public bool IsEmpty { get; set; }
+        //public PieceType PieceType { get; set; }
+
+        public List<PieceType> Types = new List<PieceType>();
+
+        public bool IsEmpty
+        {
+            get
+            {
+                return HasType(PieceType.Empty);
+            }
+        }
+
+        public bool IsImage
+        {
+            get
+            {
+                return HasType(PieceType.Image);
+            }
+        }
+
+        public bool IsNest
+        {
+            get
+            {
+                return HasType(PieceType.Nest);
+            }
+        }
+
+        public bool IsNormal
+        {
+            get
+            {
+                return HasType(PieceType.Normal);
+            }
+        }
 
         public Piece() { }
 
-        public Piece(Vector2 startingPosition, Vector2 startingSize)
+        public Piece(Vector2 startingPosition,
+            Vector2 startingSize,
+            PieceState pieceState = PieceState.UnSelected,
+            params PieceType[] pieceTypes)
         {
             SetPosition(startingPosition);
             SetSize(startingSize);
-            State = PieceState.UnSelected;
+            State = pieceState;
+            AddType(pieceTypes);
         }
 
         public override void LoadContent()
         {
-            SetBackgroundTexture();
+            if (BackgroundTexture == null)
+            {
+                //var color = new Color(Global.Random.Next(0, 255), Global.Random.Next(0, 255), Global.Random.Next(0, 255));
+                //var color = new Color(74, 74, 31, 127);
+                var color = new Color(178,147,114);
+
+                SetBackgroundColor(color);
+                SetBackgroundTexture();
+                SetBackgroundColor(Color.White * 0.8f);
+            }
 
             SelectedTexture = TextureManager.CreateTexture2DBySingleColor(Color.IndianRed,(int)Size.X, (int)Size.Y);
 
-            FontManager = new FontManager("Fonts/MenuFont", string.Format("R:{0},C:{1},N:{2}",RowNumber,ColumnNumber,Number.ToString()), Position, Color.White, 0f, Vector2.Zero, new Vector2(1, 1), SpriteEffects.None, 0f, Vector2.Zero);
+            FontManager = new FontManager("Fonts/MenuFont", "", Position, Color.White, 0f, Vector2.Zero, new Vector2(1, 1), SpriteEffects.None, 0f, Vector2.Zero, () => SetText());
+
+            SetRectangle();
+
+            Frame = new Graph(true).PopulatePoints(new Vector2(DestinationRectangle.X, DestinationRectangle.Y),
+                                                    new Vector2(DestinationRectangle.Right, DestinationRectangle.Y),
+                                                    new Vector2(DestinationRectangle.Right, DestinationRectangle.Bottom),
+                                                    new Vector2(DestinationRectangle.Left, DestinationRectangle.Bottom))
+                .PopulateLines(Color.Blue,2f);
+
+            Frame.LoadContent();
         }
 
         public override void Update()
         {
             FontManager.CalculateCenterVector2(DestinationRectangle);
 
+            FontManager.Update();
+
             base.Update();
         }
 
         public override void Draw()
         {
-            Global.SpriteBatch.Draw(BackgroundTexture, DestinationRectangle, Color);
+            //if (IsImage)
+            //    return;
+
+            if (BackgroundTexture != null)
+                Global.SpriteBatch.Draw(BackgroundTexture, DestinationRectangle, BackgroundColor);
+
+            if (Texture != null)
+                base.Draw();
 
             if (!IsEmpty)
             {
-                if (Texture != null)
-                    base.Draw();
-
-                if(State==PieceState.Selected)
+                if (State == PieceState.Selected)
                     Global.SpriteBatch.Draw(SelectedTexture, DestinationRectangle, Color);
             }
 
             FontManager.Draw();
+
+            Frame.Draw();
         }
 
         public Piece MakeEmpty()
@@ -88,11 +173,79 @@ namespace PuzzleMeWindowsProject.Model
 
             //SetBackgroundTexture();
 
-            BackgroundTexture = TextureManager.CreateTexture2D("Textures/emptyPiece");
+            SetBackgroundColor(Color.White);
+            SetBackgroundTexture(null);
 
-            IsEmpty = true;
+            //SetMidLayerTexture(null);
+
+
+            //SetColor(Color.White * 0.5f);
+            SetColor(Color.White);
+            SetTexture(TextureManager.CreateTexture2D("Textures/emptyPiece"));
+            //SetTexture(TextureManager.CreateTexture2DBySingleColor(Color.Black, (int)Size.X, (int)Size.Y));
+
+            ClearTypes();
+            AddType(PieceType.Empty);
+
+            Frame.ChangeAllLinesColor(Color.Red);
 
             return this;
+        }
+
+        public Piece MakeNest(Texture2D backgroundTexture, Color backgroundColor, Texture2D texture, Color color)
+        {
+            SetBackgroundColor(backgroundColor);
+            SetBackgroundTexture(backgroundTexture);
+
+            //SetImageNumber(imageNumber);
+            SetColor(color);
+            SetTexture(null);
+
+            ClearTypes();
+            AddType(PieceType.Nest);
+
+            return this;
+        }
+
+        public Piece MakeImage(int imageNumber,Texture2D texture) 
+        {
+            SetTexture(texture);
+
+            SetImageNumber(imageNumber);
+
+            AddType(PieceType.Image);
+
+            return this;
+        }
+
+        public Piece AddType(params PieceType[] pieceTypes)
+        {
+            foreach (var type in pieceTypes)
+            {
+                if (!Types.Any(t => t == type))
+                    Types.Add(type);
+            }
+
+            return this;
+        }
+
+        public Piece RemoveType(PieceType pieceType)
+        {
+            Types.Remove(pieceType);
+
+            return this;
+        }
+
+        public Piece ClearTypes()
+        {
+            Types.Clear();
+
+            return this;
+        }
+
+        public bool HasType(PieceType type)
+        {
+            return Types.Any(t => t == type);
         }
 
         public Piece SetBoard(Board board)
@@ -116,6 +269,42 @@ namespace PuzzleMeWindowsProject.Model
             return this;
         }
 
+        public Piece SetBackgroundTexture(Texture2D texture)
+        {
+            BackgroundTexture = texture;
+
+            return this;
+        }
+
+        public new Piece SetColor(Color color)
+        {
+            base.SetColor(color);
+
+            return this;
+        }
+
+        public Piece SetImageNumber(int imageNumber)
+        {
+            ImageNumber = imageNumber;
+
+            return this;
+        }
+
+
+        //public Piece SetMidLayerColor(Color color)
+        //{
+        //    MidLayerColor = color;
+
+        //    return this;
+        //}
+
+        //public Piece SetMidLayerTexture(Texture2D texture)
+        //{
+        //    MidLayerTexture = texture;
+
+        //    return this;
+        //}
+
         public Piece SetNumber(int number)
         {
             Number = number;
@@ -125,13 +314,27 @@ namespace PuzzleMeWindowsProject.Model
             return this;
         }
 
+        public string SetText(string text = null)
+        {
+            return text ?? $"({RowNumber},{ColumnNumber})={Number}";
+
+            //return text ?? $"{ImageNumber}";
+        }
+
+        public new Piece SetTexture(Texture2D texture)
+        {
+            base.SetTexture(texture);
+
+            return this;
+        }
+
         public Piece Select()
         {
-            if (!IsEmpty)
+            if (!HasType(PieceType.Empty) && !HasType(PieceType.Nest))
             {
                 State = PieceState.Selected;
 
-                SetColor(Color.Red);
+                //SetColor(Color.Red);
             }
 
             return this;
@@ -141,7 +344,7 @@ namespace PuzzleMeWindowsProject.Model
         {
             State = PieceState.UnSelected;
 
-            SetColor(Color.White);
+            //SetColor(Color.White);
 
             return this;
         }
@@ -193,12 +396,17 @@ namespace PuzzleMeWindowsProject.Model
 
         public static void Replace(Piece selectedPiece,Piece previouslySelectedPiece,Piece[,] Pieces)
         {
-            var emptyPiece = Pieces[selectedPiece.RowNumber, selectedPiece.ColumnNumber];
-            var tempPiece = emptyPiece;
-            var filledPiece = Pieces[previouslySelectedPiece.RowNumber, previouslySelectedPiece.ColumnNumber];
-            emptyPiece = filledPiece;
-            filledPiece = tempPiece;
+            //var emptyPiece = Pieces[selectedPiece.RowNumber, selectedPiece.ColumnNumber];
+            //var tempPiece = emptyPiece;
+            //var filledPiece = Pieces[previouslySelectedPiece.RowNumber, previouslySelectedPiece.ColumnNumber];
+            //emptyPiece = filledPiece;
+            //filledPiece = tempPiece;
 
+            var emptyPiece = Pieces[selectedPiece.RowNumber, selectedPiece.ColumnNumber].MemberwiseClone() as Piece;
+
+            var filledPiece = Pieces[previouslySelectedPiece.RowNumber, previouslySelectedPiece.ColumnNumber].MemberwiseClone() as Piece;
+
+            
             var tempPositon = emptyPiece.Position;
             emptyPiece.Position = filledPiece.Position;
             filledPiece.Position = tempPositon;
@@ -212,8 +420,17 @@ namespace PuzzleMeWindowsProject.Model
             emptyPiece.SetNumber(filledPiece.Number);
             filledPiece.SetNumber(tempNumber);
 
-            emptyPiece.FontManager.SetText(string.Format("({0},{1})={2}", emptyPiece.RowNumber, emptyPiece.ColumnNumber, emptyPiece.Number.ToString()));
-            filledPiece.FontManager.SetText(string.Format("({0},{1})={2}", filledPiece.RowNumber, filledPiece.ColumnNumber, filledPiece.Number.ToString()));
+            emptyPiece.SetText();
+            filledPiece.SetText();
+
+            //if (filledPiece.IsNest)
+            //{
+            //    var tempTexture = emptyPiece.Texture;
+
+            //    emptyPiece.SetTexture(filledPiece.Texture);
+
+            //    filledPiece.SetTexture(tempTexture);
+            //}
 
             Pieces[emptyPiece.RowNumber, emptyPiece.ColumnNumber] = emptyPiece;
             Pieces[filledPiece.RowNumber, filledPiece.ColumnNumber] = filledPiece;
@@ -227,16 +444,32 @@ namespace PuzzleMeWindowsProject.Model
             {
                 for (int k = 0; k < columnCount; k++, number++)
                 {
-                    var color = new Color(Global.Random.Next(0, 255), Global.Random.Next(0, 255), Global.Random.Next(0, 255));
-
                     array[i, k] = new Piece(new Vector2(pieceSize.X * k, pieceSize.Y * i), pieceSize)
-                                        .SetBackgroundColor(color)
+                                        .SetBackgroundColor(Color.White)
+                                        .SetColor(Color.White)
                                         .SetRowAndColumnNumber(i, k)
-                                        .SetNumber(number);
+                                        .SetNumber(number)
+                                        .AddType(PieceType.Normal);
                 }
             }
 
             return array;
+        }
+
+        public static Piece CreateACopy(Piece previous)
+        {
+            var newPiece = new Piece(previous.Position, previous.Size,previous.State, previous.Types.ToArray())
+                                .SetBackgroundColor(previous.BackgroundColor)
+                                .SetBackgroundTexture(previous.BackgroundTexture)
+                                .SetColor(previous.Color)
+                                .SetTexture(previous.Texture)
+                                .SetRowAndColumnNumber(previous.RowNumber,previous.ColumnNumber)
+                                .SetNumber(previous.Number)
+                                .SetImageNumber(previous.ImageNumber);
+
+            newPiece.LoadContent();
+
+            return newPiece;
         }
 
     }

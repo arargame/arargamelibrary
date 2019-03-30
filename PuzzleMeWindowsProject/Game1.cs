@@ -8,6 +8,7 @@ using PuzzleMeWindowsProject.ScreenManagement.Screens;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 
 namespace PuzzleMeWindowsProject
 {
@@ -16,6 +17,11 @@ namespace PuzzleMeWindowsProject
     /// </summary>
     public class Game1 : Game
     {
+        Graph graph;
+
+        Texture2D texture1;
+        Texture2D texture2;
+
         TextureManager textureManager;
 
         Vector2 position = new Vector2(0,0);
@@ -66,9 +72,30 @@ namespace PuzzleMeWindowsProject
         {
             textureManager = new TextureManager().Load(Content.Load<Texture2D>("WP_20180819_005"));
 
-            image = new Image();
-            image.SetName("WP_20180819_005");
+            image = new Image("WP_20180819_005");
             image.LoadContent();
+
+
+            texture1 = Content.Load<Texture2D>("Textures/shutterstock_360399314");
+            texture2 = TextureManager.Crop(texture1,new Rectangle(0,0,50,50));
+
+
+            var list = new List<Vector2>();
+
+            for (int i = 0; i < 100; i++)
+            {
+                Thread.Sleep(10);
+
+                Random r = new Random();
+
+                list.Add(new Vector2(r.Next(400),r.Next(400)));
+            }
+
+            //new Vector2(10, 10), new Vector2(100, 10), new Vector2(100, 100), new Vector2(10, 100)
+            graph = new Graph(true).PopulatePoints(list.ToArray())
+                                .PopulateLines(Color.Blue);
+
+            graph.LoadContent();
         }
 
         /// <summary>
@@ -120,23 +147,32 @@ namespace PuzzleMeWindowsProject
         {
             GraphicsDevice.Clear(bgColor);
 
+
             //image.Draw();
 
 
-            Global.SpriteBatch.Begin();
+            //Global.SpriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
 
-            //float frameRate = 1 / (float)gameTime.ElapsedGameTime.TotalSeconds;
-            //var fm = FontManager.Create(string.Format("FPS : {0} = 1 / {1} , IsRunningSlowly : {2}",frameRate,(float)gameTime.ElapsedGameTime.TotalSeconds,gameTime.IsRunningSlowly),new Vector2(10,10),Color.Bisque);
-            //fm.Draw();
+            //Global.SpriteBatch.Draw(texture1, new Rectangle(0, 0, texture1.Width, texture1.Height), Color.White * 0.5f);
+            //Global.SpriteBatch.Draw(texture2, new Rectangle(0, 0, texture1.Width, texture1.Height), Color.White);
+            
+            //Global.SpriteBatch.End();
 
-            //var deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
+            Global.SpriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
 
-            //frameManager.Update(deltaTime);
+            ////float frameRate = 1 / (float)gameTime.ElapsedGameTime.TotalSeconds;
+            ////var fm = FontManager.Create(string.Format("FPS : {0} = 1 / {1} , IsRunningSlowly : {2}",frameRate,(float)gameTime.ElapsedGameTime.TotalSeconds,gameTime.IsRunningSlowly),new Vector2(10,10),Color.Bisque);
+            ////fm.Draw();
 
-            //Global.SpriteBatch.DrawString(fm.Font,"fps : "+frameManager.AverageFramesPerSecond,new Vector2(50,50),Color.Blue);
+            ////var deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+            ////frameManager.Update(deltaTime);
+
+            ////Global.SpriteBatch.DrawString(fm.Font,"fps : "+frameManager.AverageFramesPerSecond,new Vector2(50,50),Color.Blue);
 
             ScreenManager.Draw();
 
+            //graph.Draw();
 
             Global.SpriteBatch.End();
 

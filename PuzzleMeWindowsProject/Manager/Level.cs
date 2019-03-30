@@ -16,9 +16,17 @@ namespace PuzzleMeWindowsProject.Manager
 
         public Level Next { get; set; }
 
-        public List<Sprite> Sprites = new List<Sprite>();
+        Image Image { get; set; }
 
         Board Board { get; set; }
+
+        Nest Nest { get; set; }
+
+        public static int MinRowCount = 3;
+        public static int MaxRowCount = Global.ViewportHeight / Piece.MaxHeight;
+
+        public static int MinColumnCount = 3;
+        public static int MaxColumnCount = Global.ViewportWidth / Piece.MaxWidth;
 
         public Level()
         {
@@ -27,43 +35,70 @@ namespace PuzzleMeWindowsProject.Manager
 
         public void Initialize()
         {
+            //Board = new Board(Global.Random.Next(MinRowCount,MaxRowCount),Global.Random.Next(MinColumnCount,MaxColumnCount));
+
             Board = new Board(8,8);
 
-            //Box box = new Box(new Vector2(100,100),new Vector2(100,100),Color.Bisque);
-
-            //Sprites.Add(box);
+            Image = new Image("Textures/shutterstock_360399314");
         }
+
 
         public void Load()
         {
             Board.LoadContent();
 
-            foreach (var sprite in Sprites)
+            Image.LoadContent();
+
+            //Image.SetRowAndColumnCount(Global.Random.Next(2, Board.ColumnCount - 1));
+            //Image.SetRowAndColumnCount(5);
+            Image.SetRowAndColumnCount(2);
+
+            //spreadedimage preparing
+            var spreadedImagePieces = General.PopulateListRandomlyFromAnother<Piece>(Board.Pieces.OfType<Piece>().Where(p => !p.IsEmpty).ToList(), Image.Pieces.Count);
+
+            for (int i = 0; i < Image.Pieces.Count; i++)
             {
-                sprite.LoadContent();
+                var imagePiece = Image.Pieces[i];
+
+                spreadedImagePieces[i].Id = imagePiece.Id;
+
+                spreadedImagePieces[i].MakeImage(imagePiece.ImageNumber, imagePiece.Texture);
             }
+
+            Nest = new Nest(Board,Image);
+
+
+
+            ////spreading part
+            //var spreadedImagePieces = General.PopulateListRandomlyFromAnother<Piece>(Board.Pieces.OfType<Piece>().ToList(), Image.RowCount * Image.ColumnCount);
+
+            //for (int i = 0; i < Image.Pieces.Count; i++)
+            //{
+            //    spreadedImagePieces[i].SetBackgroundTexture(Image.Pieces[i].Texture);
+            //}
+            
+            
         }
 
         public void Update()
         {
+            Nest.Update();
+
             Board.Update();
 
-            foreach (var sprite in Sprites)
-            {
-                sprite.Update();
-            }
+            //Image.Update();
+
+            if (InputManager.IsKeyPress(Microsoft.Xna.Framework.Input.Keys.R))
+                Load();
         }
 
         public void Draw()
         {
+            Nest.Draw();
+
             Board.Draw();
-
-            foreach (var sprite in Sprites)
-            {
-                sprite.Draw();
-            }
+            //Image.Draw();
         }
-
 
         public void LoadContent()
         {

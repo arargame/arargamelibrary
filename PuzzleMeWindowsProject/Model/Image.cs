@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using PuzzleMeWindowsProject.Manager;
 using System;
 using System.Collections.Generic;
@@ -7,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace PuzzleMeWindowsProject.Model
-{
+{   
     public class Image : Sprite
     {
         public int RowCount { get; set; }
@@ -16,11 +17,9 @@ namespace PuzzleMeWindowsProject.Model
 
         public List<Piece> Pieces { get; set; }
         
-        public Image() { }
-
-        public override void LoadContent()
+        public Image(string name) 
         {
-            SetTexture(Name);
+            SetName(name);
         }
 
         public override void Initialize()
@@ -30,14 +29,31 @@ namespace PuzzleMeWindowsProject.Model
             base.Initialize();
         }
 
+        public override void LoadContent()
+        {
+            SetTexture(Name);
+        }
+
         public override void Update()
         {
-            base.Update();
+            if (Pieces.Count > 0)
+                Pieces.ForEach(p => p.Update());
+            else 
+                base.Update();
         }
 
         public override void Draw()
         {
-            base.Draw();
+            if (Pieces.Count > 0)
+                Pieces.ForEach(p => p.Draw());
+            else
+                base.Draw();
+        }
+
+
+        public Image SetRowAndColumnCount(int pieceCount)
+        {
+            return SetRowAndColumnCount(pieceCount, pieceCount);
         }
 
         public Image SetRowAndColumnCount(int rowCount,int columnCount)
@@ -46,7 +62,9 @@ namespace PuzzleMeWindowsProject.Model
 
             ColumnCount = columnCount;
 
-            //Texture
+            Pieces = TextureManager.Crop(Texture, rowCount, columnCount);
+
+            Pieces.ForEach(p=>p.LoadContent());
 
             return this;
         }

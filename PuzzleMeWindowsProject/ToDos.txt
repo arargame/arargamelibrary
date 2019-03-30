@@ -8,3 +8,18 @@
 +boş piece için uygun image tasarla
 +selected efekti yap
 +board ta Image kullan
+-image tammalanacağı alan board un üzerinde rastgele bir konumda oluşacak
+-bu alan board tan en veya boy anlamında maksimum bir küçük olması lazım
+-image ın parçaları board üzerine rastgele dağılmış olmalı
+-board ile ilgili ayarlar level nesnesinden gelecek
+-image ın parçaları board üzerinde belirtilen alanda image ı tamamlarsa level tamamlanır
+-Level üzerinde board için image ın toplanma konumu ve boyutu ile ilgili ayarları tutan nesne(Image olabilir)
+-easy-hard seçeneklerine göre image ın tamamlanacağı yerde görselin gri kopyası parça bazlı yardımcı olabilir
+-max min piece and board size ları ayarla
+-kenardan siyah arka planla açılır kapanır görseli hatırlatan bir sistem
+-Parça değişimlerinde Nest parçası ile diğerlerinin değişimine dikkat et(26.3.2019)
+-midlayer color,backgroundcolor vb incele fazlalıklar olabilir
++nest pieces ler görünüm olarak hazırlandı(27.3.2019)
+-nest ile değişimlerde sıkıntılar mevcut
++fontmanager settext sıkıntısını çöz(31.3.2019)
+-seçili parçayı ön plana çıkaracak çalışmalar yap,size değişimi ve z ekseninde oynama gibi(31.3.2019)

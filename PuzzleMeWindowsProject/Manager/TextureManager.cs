@@ -114,6 +114,14 @@ namespace PuzzleMeWindowsProject.Manager
                             .OfType<Piece>()
                             .ToList();
 
+            var number = 0;
+
+            foreach (var piece in pieces)
+            {
+                piece.SetTexture(Crop(originalTexture, new Rectangle((int)piece.Position.X, (int)piece.Position.Y, (int)piece.Size.X, (int)piece.Size.Y)));
+                piece.ImageNumber = number++;
+            }
+
             return pieces;
         }
     }

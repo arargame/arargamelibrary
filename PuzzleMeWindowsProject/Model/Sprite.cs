@@ -56,7 +56,7 @@ namespace PuzzleMeWindowsProject.Model
         bool IsAlive { get; set; }
     }
 
-    public abstract class BaseObject : IBaseObject
+    public abstract class BaseObject : IBaseObject,ICloneable
     {
         public Guid Id { get; set; }
 
@@ -74,10 +74,14 @@ namespace PuzzleMeWindowsProject.Model
 
             CreateDate = UpdateDate = DateTime.Now;
         }
+
+        public Object Clone()
+        {
+            return MemberwiseClone();
+        }
     }
 
     
-
     public abstract class Sprite : BaseObject,IDrawableObject
     {
         #region Properties
@@ -178,7 +182,7 @@ namespace PuzzleMeWindowsProject.Model
             Position = position;
         }
 
-        private void SetRectangle()
+        public void SetRectangle()
         {
             DestinationRectangle = new Rectangle((int)Position.X, (int)Position.Y, (int)Size.X, (int)Size.Y);
             //SourceRectangle = new Rectangle(animation.FrameBounds.X, animation.FrameBounds.Y, (int)Size.X, (int)Size.Y);
@@ -213,6 +217,13 @@ namespace PuzzleMeWindowsProject.Model
         {
             Texture = Global.Content.Load<Texture2D>(name);
         }
+
+        public void SetTexture(Texture2D texture)
+        {
+            Texture = texture;
+        }
+
         #endregion
+
     }
 }
