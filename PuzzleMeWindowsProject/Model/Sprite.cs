@@ -104,6 +104,9 @@ namespace PuzzleMeWindowsProject.Model
 
         public bool IsAlive { get; set; }
 
+        public delegate void ChangingSomething();
+        public event ChangingSomething OnChangeRectangle;
+
         #endregion
 
         #region Constructor 
@@ -119,6 +122,8 @@ namespace PuzzleMeWindowsProject.Model
 
         public virtual void Initialize()
         {
+            OnChangeRectangle += SetRectangle;
+
             IsAlive = true;
 
             SetStartingPosition();
@@ -180,6 +185,8 @@ namespace PuzzleMeWindowsProject.Model
         public void SetPosition(Vector2 position)
         {
             Position = position;
+
+            OnChangeRectangle();
         }
 
         public void SetRectangle()
@@ -196,7 +203,10 @@ namespace PuzzleMeWindowsProject.Model
         public void SetSize(Vector2 size)
         {
             Size = size;
+
+            OnChangeRectangle();
         }
+
 
         public virtual void SetStartingPosition()
         {

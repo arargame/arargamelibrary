@@ -108,6 +108,24 @@ namespace PuzzleMeWindowsProject.Model
             AddType(pieceTypes);
         }
 
+        public override void Initialize()
+        {
+            base.Initialize();
+
+            OnChangeRectangle += Piece_OnChangeRectangle;
+        }
+
+        private void Piece_OnChangeRectangle()
+        {
+            Frame = new Graph(true).PopulatePoints(new Vector2(DestinationRectangle.X, DestinationRectangle.Y),
+                                                    new Vector2(DestinationRectangle.Right, DestinationRectangle.Y),
+                                                    new Vector2(DestinationRectangle.Right, DestinationRectangle.Bottom),
+                                                    new Vector2(DestinationRectangle.Left, DestinationRectangle.Bottom))
+                .PopulateLines(Color.Blue, 2f);
+
+            Frame.LoadContent();
+        }
+
         public override void LoadContent()
         {
             if (BackgroundTexture == null)

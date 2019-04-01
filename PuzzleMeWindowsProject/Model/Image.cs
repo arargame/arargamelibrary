@@ -69,5 +69,15 @@ namespace PuzzleMeWindowsProject.Model
             return this;
         }
 
+        public Image SetPieceSize(Vector2 pieceSize)
+        {
+            foreach (var piece in Pieces)
+            {
+                piece.SetSize(pieceSize);
+            }
+
+            return this;
+        }
+
     }
 }

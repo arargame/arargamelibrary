@@ -33,7 +33,7 @@ namespace PuzzleMeWindowsProject.Manager
 
         public Vector2 Padding { get; set; }
 
-        public Func<string> SetTextFunction { get; set; }
+        public Func<string> ChangeTextEvent { get; set; }
 
         public FontManager(string fontFile,
             string text,
@@ -45,7 +45,7 @@ namespace PuzzleMeWindowsProject.Manager
             SpriteEffects effects,
             float layerDepth,
             Vector2 padding,
-            Func<string> setTextFunction)
+            Func<string> changeTextEvent)
         {
             Font = Global.Content.Load<SpriteFont>(fontFile);
 
@@ -67,13 +67,13 @@ namespace PuzzleMeWindowsProject.Manager
 
             Padding = padding;
 
-            SetTextFunction = setTextFunction;
+            ChangeTextEvent = changeTextEvent;
         }
 
         public void Update()
         {
-            if (SetTextFunction != null)
-                SetText(SetTextFunction.Invoke());
+            if (ChangeTextEvent != null)
+                SetText(ChangeTextEvent.Invoke());
         }
 
         public void Draw()

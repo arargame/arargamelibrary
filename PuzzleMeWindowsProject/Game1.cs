@@ -30,6 +30,8 @@ namespace PuzzleMeWindowsProject
 
         Color bgColor = Color.Black;
 
+        List<Piece> Pieces;
+
         private FrameManager frameManager = new FrameManager();
         
         public Game1()
@@ -74,6 +76,8 @@ namespace PuzzleMeWindowsProject
 
             image = new Image("WP_20180819_005");
             image.LoadContent();
+            image.SetRowAndColumnCount(6);
+            image.SetPieceSize(new Vector2(100,100));
 
 
             texture1 = Content.Load<Texture2D>("Textures/shutterstock_360399314");
@@ -84,7 +88,7 @@ namespace PuzzleMeWindowsProject
 
             for (int i = 0; i < 100; i++)
             {
-                Thread.Sleep(10);
+                //Thread.Sleep(10);
 
                 Random r = new Random();
 
@@ -124,6 +128,7 @@ namespace PuzzleMeWindowsProject
 
             //gameTime.IsRunningSlowly
 
+            image.Update();
 
             var amount = 5;
 
@@ -170,10 +175,10 @@ namespace PuzzleMeWindowsProject
 
             ////Global.SpriteBatch.DrawString(fm.Font,"fps : "+frameManager.AverageFramesPerSecond,new Vector2(50,50),Color.Blue);
 
-            ScreenManager.Draw();
+            //ScreenManager.Draw();
 
             //graph.Draw();
-
+            image.Draw();
             Global.SpriteBatch.End();
 
             base.Draw(gameTime);
