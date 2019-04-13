@@ -9,13 +9,18 @@ using System.Threading.Tasks;
 
 namespace PuzzleMeWindowsProject.Model
 {   
-    public class Image : Sprite
+    public class Image : Sprite,IPieceContainer
     {
         public int RowCount { get; set; }
 
         public int ColumnCount { get; set; }
 
         public List<Piece> Pieces { get; set; }
+
+        public Image(Texture2D texture)
+        {
+            SetTexture(texture);
+        }
         
         public Image(string name) 
         {
@@ -64,7 +69,12 @@ namespace PuzzleMeWindowsProject.Model
 
             Pieces = TextureManager.Crop(Texture, rowCount, columnCount);
 
-            Pieces.ForEach(p=>p.LoadContent());
+            foreach (var piece in Pieces)
+            {
+                piece.LoadContent();
+
+                piece.SetContainer(this);
+            }
 
             return this;
         }

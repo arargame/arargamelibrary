@@ -17,6 +17,8 @@ namespace PuzzleMeWindowsProject
     /// </summary>
     public class Game1 : Game
     {
+        Animation animation;
+
         Graph graph;
 
         Texture2D texture1;
@@ -36,6 +38,8 @@ namespace PuzzleMeWindowsProject
         
         public Game1()
         {
+            var f = (float)100 / 3;
+
             Global.Graphics = new GraphicsDeviceManager(this);
 
             Content.RootDirectory = "Content";
@@ -100,6 +104,11 @@ namespace PuzzleMeWindowsProject
                                 .PopulateLines(Color.Blue);
 
             graph.LoadContent();
+
+            animation = new Animation(TextureManager.CreateTexture2D("Textures/runningcat"),Vector2.Zero,new Vector2(300,250),4,2,8);
+            animation.LoadContent();
+
+            //animation.SetPieceSize(new Vector2(100,100));
         }
 
         /// <summary>
@@ -129,6 +138,8 @@ namespace PuzzleMeWindowsProject
             //gameTime.IsRunningSlowly
 
             image.Update();
+
+            animation.Update();
 
             var amount = 5;
 
@@ -178,7 +189,8 @@ namespace PuzzleMeWindowsProject
             //ScreenManager.Draw();
 
             //graph.Draw();
-            image.Draw();
+            //image.Draw();
+            animation.Draw();
             Global.SpriteBatch.End();
 
             base.Draw(gameTime);

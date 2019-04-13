@@ -8,8 +8,8 @@ using System.Threading.Tasks;
 
 namespace PuzzleMeWindowsProject.Model
 {
-    public class Board : BaseObject,IXna
-    {
+    public class Board : BaseObject,IXna,IPieceContainer
+    { 
         public Level Level { get; set; }
 
         //public Image Image { get; set; }
@@ -20,11 +20,12 @@ namespace PuzzleMeWindowsProject.Model
 
         public Vector2 PieceSize { get; set; }
 
-        public Piece[,] Pieces { get; set; }
+        //public Piece[,] Pieces { get; set; }
+        public List<Piece> Pieces { get; set; }
 
         public Board(int rowCount, int columnCount)
         {
-            Pieces = new Piece[rowCount, columnCount];
+            //Pieces = new Piece[rowCount, columnCount];
             RowCount = rowCount;
             ColumnCount = columnCount;
 
@@ -33,14 +34,14 @@ namespace PuzzleMeWindowsProject.Model
 
         public void Initialize()
         {
-            PieceSize = new Vector2(Global.ViewportWidth / ColumnCount, Global.ViewportHeight / RowCount);
+            PieceSize = new Vector2((float)Global.ViewportWidth / ColumnCount, (float)Global.ViewportHeight / RowCount);
 
-            Pieces = Piece.To2DPieceArray(PieceSize,RowCount,ColumnCount);
+            Pieces = Piece.To2DPieceArray(PieceSize,RowCount,ColumnCount).OfType<Piece>().ToList();
 
             foreach (var piece in Pieces)
             {
                 piece.UnSelect()
-                    .SetBoard(this);
+                    .SetContainer(this);
             }
         }
 
@@ -138,6 +139,11 @@ namespace PuzzleMeWindowsProject.Model
                 if (selectedPiece!=null && piece.Id != selectedPiece.Id)
                     piece.UnSelect();
             }
+        }
+
+        public Piece GetPiece(int rowNumber,int columnNumber)
+        {
+            return Pieces.FirstOrDefault(p => p.RowNumber == rowNumber && p.ColumnNumber == columnNumber);
         }
     }
 }

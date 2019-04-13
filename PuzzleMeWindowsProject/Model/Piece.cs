@@ -10,6 +10,16 @@ using System.Threading.Tasks;
 
 namespace PuzzleMeWindowsProject.Model
 {
+    public interface IPieceContainer
+    {
+        int RowCount { get; set; }
+
+        int ColumnCount { get; set; }
+
+        //Piece[,] Pieces { get; set; }
+        List<Piece> Pieces { get; set; }
+    }
+
     public enum PieceType
     {
         Normal,
@@ -29,7 +39,7 @@ namespace PuzzleMeWindowsProject.Model
         public static int MaxWidth = 50;
         public static int MaxHeight = 50;
 
-        public Board Board { get; set; }
+        public IPieceContainer Container { get; set; }
 
         public FontManager FontManager { get; set; }
 
@@ -45,21 +55,13 @@ namespace PuzzleMeWindowsProject.Model
 
         public Texture2D BackgroundTexture { get; set; }
 
-        //public Color MidLayerColor { get; set; }
-
-        //public Texture2D MidLayerTexture { get; set; }
-
         public Texture2D SelectedTexture { get; set; }
-
-        public Vector2 StartingPosition { get; set; }
 
         public Vector2 StartingSize { get; set; }
 
         public Graph Frame { get; set; }
 
         public PieceState State { get; set; }
-
-        //public PieceType PieceType { get; set; }
 
         public List<PieceType> Types = new List<PieceType>();
 
@@ -117,6 +119,7 @@ namespace PuzzleMeWindowsProject.Model
 
         private void Piece_OnChangeRectangle()
         {
+
             Frame = new Graph(true).PopulatePoints(new Vector2(DestinationRectangle.X, DestinationRectangle.Y),
                                                     new Vector2(DestinationRectangle.Right, DestinationRectangle.Y),
                                                     new Vector2(DestinationRectangle.Right, DestinationRectangle.Bottom),
@@ -266,9 +269,9 @@ namespace PuzzleMeWindowsProject.Model
             return Types.Any(t => t == type);
         }
 
-        public Piece SetBoard(Board board)
+        public Piece SetContainer(IPieceContainer pieceContainer)
         {
-            Board = board;
+            Container = pieceContainer;
 
             return this;
         }
@@ -309,20 +312,6 @@ namespace PuzzleMeWindowsProject.Model
         }
 
 
-        //public Piece SetMidLayerColor(Color color)
-        //{
-        //    MidLayerColor = color;
-
-        //    return this;
-        //}
-
-        //public Piece SetMidLayerTexture(Texture2D texture)
-        //{
-        //    MidLayerTexture = texture;
-
-        //    return this;
-        //}
-
         public Piece SetNumber(int number)
         {
             Number = number;
@@ -331,6 +320,7 @@ namespace PuzzleMeWindowsProject.Model
 
             return this;
         }
+
 
         public string SetText(string text = null)
         {
@@ -376,43 +366,72 @@ namespace PuzzleMeWindowsProject.Model
             return this;
         }
 
-        public Piece GetTopNeighbor(List<Piece> pieceList)
+        public Piece TopNeighbor
         {
-            return pieceList.FirstOrDefault(p => p.Number == (Number - 8));
+            //return pieceList.FirstOrDefault(p => p.Number == (Number - Container.ColumnCount));
+            get
+            {
+                return Container.Pieces.FirstOrDefault(p => p.Number == (Number - Container.ColumnCount));
+            }
         }
 
-        public Piece GetBottomNeighbor(List<Piece> pieceList)
+        public Piece BottomNeighbor
         {
-            return pieceList.FirstOrDefault(p => p.Number == (Number + 8));
+            //return pieceList.FirstOrDefault(p => p.Number == (Number + Container.ColumnCount));
+            get
+            {
+                return Container.Pieces.FirstOrDefault(p => p.Number == (Number + Container.ColumnCount));
+            }
         }
 
-        public Piece GetLeftNeighbor(List<Piece> pieceList)
+        public Piece LeftNeighbor
         {
-            return ColumnNumber!=0 ? pieceList.FirstOrDefault(p => p.Number == (Number - 1)) : null;
+            //return ColumnNumber!=0 ? pieceList.FirstOrDefault(p => p.Number == (Number - 1)) : null;
+            get
+            {
+                return ColumnNumber != 0 ? Container.Pieces.FirstOrDefault(p => p.Number == (Number - 1)) : null;
+            }
         }
 
-        public Piece GetRightNeighbor(List<Piece> pieceList)
+        ///?????
+        public Piece RightNeighbor
         {
-            return Board!=null && ColumnNumber!=Board.ColumnCount-1 ? pieceList.FirstOrDefault(p => p.Number == (Number + 1)) : null;
+            //return Container!=null && ColumnNumber!=Container.ColumnCount-1 ? pieceList.FirstOrDefault(p => p.Number == (Number + 1)) : null;
+
+            get
+            {
+                return Container != null && ColumnNumber != Container.ColumnCount - 1 ? Container.Pieces.FirstOrDefault(p => p.Number == Number + 1) : null;
+            }
+        }
+
+        public Piece Previous
+        {
+            get
+            {
+                return Container != null && Number > 0 ? Container.Pieces.FirstOrDefault(p => p.Number == Number - 1) : null;
+            }
+        }
+
+        public Piece Next
+        {
+            get
+            {
+                return Container != null && Number < Container.Pieces.Max(p => p.Number) ? Container.Pieces.FirstOrDefault(p => p.Number == Number + 1) : null;
+            }
         }
 
         public bool IsNeighborWith(List<Piece> pieceList,Piece piece)
         {
-            var topNeighbor = GetTopNeighbor(pieceList);
-            var bottomNeighbor = GetBottomNeighbor(pieceList);
-            var leftNeighbor = GetLeftNeighbor(pieceList);
-            var rightNeighbor = GetRightNeighbor(pieceList);
-
-            if ((topNeighbor != null && topNeighbor.Id == piece.Id) ||
-                (bottomNeighbor != null && bottomNeighbor.Id == piece.Id) ||
-                (leftNeighbor != null && leftNeighbor.Id == piece.Id) ||
-                (rightNeighbor != null && rightNeighbor.Id == piece.Id))
+            if ((TopNeighbor != null && TopNeighbor.Id == piece.Id) ||
+                (BottomNeighbor != null && BottomNeighbor.Id == piece.Id) ||
+                (LeftNeighbor != null && LeftNeighbor.Id == piece.Id) ||
+                (RightNeighbor != null && RightNeighbor.Id == piece.Id))
                 return true;
             else 
                 return false;
         }
 
-        public static void Replace(Piece selectedPiece,Piece previouslySelectedPiece,Piece[,] Pieces)
+        public static void Replace(Piece selectedPiece,Piece previouslySelectedPiece,List<Piece> Pieces)
         {
             //var emptyPiece = Pieces[selectedPiece.RowNumber, selectedPiece.ColumnNumber];
             //var tempPiece = emptyPiece;
@@ -420,9 +439,11 @@ namespace PuzzleMeWindowsProject.Model
             //emptyPiece = filledPiece;
             //filledPiece = tempPiece;
 
-            var emptyPiece = Pieces[selectedPiece.RowNumber, selectedPiece.ColumnNumber].MemberwiseClone() as Piece;
+            var emptyPiece = Pieces.FirstOrDefault(p => p.RowNumber == selectedPiece.RowNumber && p.ColumnNumber == selectedPiece.ColumnNumber);
+            //Pieces[selectedPiece.RowNumber, selectedPiece.ColumnNumber].MemberwiseClone() as Piece;
 
-            var filledPiece = Pieces[previouslySelectedPiece.RowNumber, previouslySelectedPiece.ColumnNumber].MemberwiseClone() as Piece;
+            var filledPiece = Pieces.FirstOrDefault(p => p.RowNumber == previouslySelectedPiece.RowNumber && p.ColumnNumber == previouslySelectedPiece.ColumnNumber);
+                //Pieces[previouslySelectedPiece.RowNumber, previouslySelectedPiece.ColumnNumber].MemberwiseClone() as Piece;
 
             
             var tempPositon = emptyPiece.Position;
@@ -450,8 +471,8 @@ namespace PuzzleMeWindowsProject.Model
             //    filledPiece.SetTexture(tempTexture);
             //}
 
-            Pieces[emptyPiece.RowNumber, emptyPiece.ColumnNumber] = emptyPiece;
-            Pieces[filledPiece.RowNumber, filledPiece.ColumnNumber] = filledPiece;
+            //Pieces[emptyPiece.RowNumber, emptyPiece.ColumnNumber] = emptyPiece;
+            //Pieces[filledPiece.RowNumber, filledPiece.ColumnNumber] = filledPiece;
         }
 
         public static Piece[,] To2DPieceArray(Vector2 pieceSize, int rowCount, int columnCount)

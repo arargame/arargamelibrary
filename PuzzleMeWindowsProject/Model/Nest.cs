@@ -141,13 +141,13 @@ namespace PuzzleMeWindowsProject.Model
                             NestPieces.Add(new NestPiece()
                             {
                                 Number = counter,
-                                RowCount = board.Pieces[i, k].RowNumber,
-                                ColumnCount = board.Pieces[i, k].ColumnNumber
+                                RowCount = board.GetPiece(i,k).RowNumber,
+                                ColumnCount = board.GetPiece(i,k).ColumnNumber
                             });
 
 
-                            var xx = board.Pieces[i, k];
-                            var piece = Piece.CreateACopy(board.Pieces[i, k]);
+                            var xx = board.GetPiece(i,k);
+                            var piece = Piece.CreateACopy(board.GetPiece(i,k));
 
                             piece.SetImageNumber(counter);
                             piece.ClearTypes();

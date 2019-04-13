@@ -54,7 +54,7 @@ namespace PuzzleMeWindowsProject.Manager
             Image.SetRowAndColumnCount(2);
 
             //spreadedimage preparing
-            var spreadedImagePieces = General.PopulateListRandomlyFromAnother<Piece>(Board.Pieces.OfType<Piece>().Where(p => !p.IsEmpty).ToList(), Image.Pieces.Count);
+            var spreadedImagePieces = General.PopulateListRandomlyFromAnother<Piece>(Board.Pieces.Where(p => !p.IsEmpty).ToList(), Image.Pieces.Count);
 
             for (int i = 0; i < Image.Pieces.Count; i++)
             {
