@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using PuzzleMeWindowsProject.Effect;
 using PuzzleMeWindowsProject.Manager;
 using System;
 using System.Collections.Generic;
@@ -37,23 +38,27 @@ namespace PuzzleMeWindowsProject.Model
 
     public interface IDrawableObject : IXna
     {
-        Texture2D Texture { get; set; }
-
-        Vector2 Position { get; set; }
-
-        Vector2 Size { get; set; }
-
-        Vector2 Origin { get; set; }
-
-        Vector2 Speed { get; set; }
+        Color Color { get; set; }
 
         Rectangle DestinationRectangle { get; set; }
 
-        Rectangle SourceRectangle { get; set; }
-
-        Color Color { get; set; }
-
         bool IsAlive { get; set; }
+
+        float LayerDepth { get; set; }
+
+        Vector2 Origin { get; set; }
+
+        Vector2 Position { get; set; }
+
+        float Rotation { get; set; }
+
+        float Scale { get; set; }
+        Vector2 Size { get; set; }
+        Rectangle SourceRectangle { get; set; }
+        Vector2 Speed { get; set; }
+        SpriteEffects SpriteEffects { get; set; }
+
+        Texture2D Texture { get; set; }
     }
 
     public abstract class BaseObject : IBaseObject,ICloneable
@@ -86,26 +91,35 @@ namespace PuzzleMeWindowsProject.Model
     {
         #region Properties
 
-        public Texture2D Texture { get; set; }
+        public Color Color { get; set; }
 
-        public Vector2 Position { get; set; }
+        public Rectangle DestinationRectangle { get; set; }
+        public int DrawMethodType { get; set; }
 
-        public Vector2 Size { get; set; }
 
-        public Vector2 Speed { get; set; }
+        public bool IsAlive { get; set; }
+        public bool IsPulsating { get; set; }
+
+        public float LayerDepth { get; set; }
 
         public Vector2 Origin { get; set; }
 
-        public Rectangle DestinationRectangle { get; set; }
+        public Vector2 Position { get; set; }
 
+        public float Rotation { get; set; }
+
+        public float Scale { get; set; }
+        public Vector2 Size { get; set; }
         public Rectangle SourceRectangle { get; set; }
+        public Vector2 Speed { get; set; }
+        public SpriteEffects SpriteEffects { get; set; }
 
-        public Color Color { get; set; }
-
-        public bool IsAlive { get; set; }
+        public Texture2D Texture { get; set; }
 
         public delegate void ChangingSomething();
         public event ChangingSomething OnChangeRectangle;
+
+        public List<EffectManager> Effects = new List<EffectManager>();
 
         #endregion
 
@@ -113,6 +127,8 @@ namespace PuzzleMeWindowsProject.Model
 
         public Sprite()
         {
+            SetDrawMethodType(1);
+            
             Initialize();
         }
 
@@ -126,19 +142,16 @@ namespace PuzzleMeWindowsProject.Model
 
             IsAlive = true;
 
-            SetStartingPosition();
-
-            SetStartingSpeed();
-
-            SetStartingSize();
-
-            SetOrigin();
+            SetStartingSettings();
 
             DestinationRectangle = new Rectangle((int)Position.X, (int)Position.Y, (int)Size.X, (int)Size.Y);
+            //destinationRectangle = new Rectangle((int)(position.X - origin.X), (int)(position.Y - origin.Y), (int)size.X, (int)size.Y);
 
             SourceRectangle = new Rectangle(0, 0, (int)Size.X, (int)Size.Y);
 
             Color = Color.White;
+
+            Effects.Add(new PulsateEffect(this));
         }
 
         public virtual void LoadContent() { }
@@ -152,16 +165,74 @@ namespace PuzzleMeWindowsProject.Model
                 SetRectangle();
 
                 SetOrigin();
+
+                //if (IsPulsating)
+                //{
+                //    Scale = General.Pulsate();
+                //}
+
+                foreach (var effect in Effects)
+                {
+                    effect.Update();
+                }
             }
         }
 
         public virtual void Draw() 
         {
-            if(IsAlive)
-                Global.SpriteBatch.Draw(Texture,DestinationRectangle,Color);
+            if (IsAlive)
+            {
+                switch (DrawMethodType)
+                {
+                    case 1:
+                        Global.SpriteBatch.Draw(Texture, DestinationRectangle, Color);
+                        break;
+
+                    case 2:
+                        Global.SpriteBatch.Draw(Texture,Position,Color);
+                        break;
+
+                    case 3:
+                        Global.SpriteBatch.Draw(Texture,DestinationRectangle,SourceRectangle,Color);
+                        break;
+
+                    case 4:
+                        Global.SpriteBatch.Draw(Texture,Position,SourceRectangle,Color);
+                        break;
+
+                    case 5:
+                        Global.SpriteBatch.Draw(Texture,DestinationRectangle,SourceRectangle,Color,Rotation,Origin, SpriteEffects, LayerDepth);
+                        break;
+
+                    case 6:
+                        Global.SpriteBatch.Draw(Texture,Position,SourceRectangle,Color,Rotation,Origin,Scale, SpriteEffects, LayerDepth);
+                        break;
+
+                    case 7:
+                        Global.SpriteBatch.Draw(Texture,Position,SourceRectangle,Color,Rotation,Origin,new Vector2(Scale), SpriteEffects, LayerDepth);
+                        break;
+
+                    default:
+                        Global.SpriteBatch.Draw(Texture, DestinationRectangle, Color);
+                        break;
+                }
+            }
         }
 
-        
+        public void Pulsate(bool enable)
+        {
+            IsPulsating = enable;
+
+            var pulsateEffect = Effects.FirstOrDefault(e => e is PulsateEffect);
+
+            if (IsPulsating)
+                pulsateEffect.Start();
+            else
+                pulsateEffect.End();
+        }
+
+        #region SetFunctions
+
         public void SetColor(Color color)
         {
             Color = color;
@@ -172,14 +243,27 @@ namespace PuzzleMeWindowsProject.Model
             Description = description;
         }
 
+        public void SetDrawMethodType(int methodType)
+        {
+            DrawMethodType = methodType;
+        }
+
+        public void SetLayerDepth(float layerDepth)
+        {
+            LayerDepth = LayerDepth;
+        }
+
         public void SetName(string name)
         {
             Name = name;
         }
 
-        private void SetOrigin()
+        private void SetOrigin(Vector2? origin = null)
         {
-            Origin = Texture != null ? new Vector2(Texture.Width / 2, Texture.Height / 2) : Vector2.Zero;
+            if (origin != null)
+                Origin = origin.Value;
+            else
+                Origin = Vector2.Zero;
         }
 
         public void SetPosition(Vector2 position)
@@ -192,12 +276,19 @@ namespace PuzzleMeWindowsProject.Model
         public void SetRectangle()
         {
             DestinationRectangle = new Rectangle((int)Position.X, (int)Position.Y, (int)Size.X, (int)Size.Y);
+            SourceRectangle = DestinationRectangle;
             //SourceRectangle = new Rectangle(animation.FrameBounds.X, animation.FrameBounds.Y, (int)Size.X, (int)Size.Y);
+            //            destinationRectangle = new Rectangle((int)(position.X - origin.X), (int)(position.Y - origin.Y), (int)size.X, (int)size.Y);
         }
 
-        public void SetSpeed(Vector2 speed)
+        public void SetRotation(float rotation)
         {
-            Speed = speed;
+            Rotation = rotation;
+        }
+
+        public void SetScale(float scale)
+        {
+            Scale = scale;
         }
 
         public void SetSize(Vector2 size)
@@ -207,20 +298,14 @@ namespace PuzzleMeWindowsProject.Model
             OnChangeRectangle();
         }
 
-
-        public virtual void SetStartingPosition()
+        public void SetSpeed(Vector2 speed)
         {
-            SetPosition(Vector2.Zero);
+            Speed = speed;
         }
 
-        public virtual void SetStartingSize()
+        public void SetSpriteEffects(SpriteEffects effects)
         {
-            SetSize(Vector2.Zero);
-        }
-
-        public virtual void SetStartingSpeed()
-        {
-            SetSpeed(Vector2.Zero);
+            SpriteEffects = effects;
         }
 
         public void SetTexture(string name)
@@ -234,6 +319,67 @@ namespace PuzzleMeWindowsProject.Model
         }
 
         #endregion
+
+
+        #region StartingFunctions
+
+        private void SetStartingSettings()
+        {
+            SetStartingLayerDepth();
+
+            SetOrigin();
+
+            SetStartingPosition();
+
+            SetStartingRotation();
+
+            SetStartingScale();
+            SetStartingSize();
+            SetStartingSpeed();
+            SetStartingSpriteEffects();
+        }
+
+        public virtual void SetStartingLayerDepth()
+        {
+            SetLayerDepth(0f);
+        }
+
+        public virtual void SetStartingScale()
+        {
+            SetScale(1f);
+        }
+
+        public virtual void SetStartingSpriteEffects()
+        {
+            SpriteEffects = SpriteEffects.None;
+        }
+
+        public virtual void SetStartingPosition()
+        {
+            SetPosition(Vector2.Zero);
+        }
+
+        public virtual void SetStartingRotation()
+        {
+            SetRotation(0f);
+        }
+
+        public virtual void SetStartingSize()
+        {
+            SetSize(Vector2.Zero);
+        }
+
+        public virtual void SetStartingSpeed()
+        {
+            SetSpeed(Vector2.Zero);
+        }
+
+        #endregion
+
+
+        #endregion
+
+        
 
     }
 }

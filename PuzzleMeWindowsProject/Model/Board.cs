@@ -78,7 +78,7 @@ namespace PuzzleMeWindowsProject.Model
             {
                 if (InputManager.Selected(piece.DestinationRectangle))
                 {
-                    if(!pieceList.Any(p=>p.State==PieceState.Selected))
+                    if (!pieceList.Any(p => p.State == PieceState.Selected))
                         piece.Select();
                     else
                     {

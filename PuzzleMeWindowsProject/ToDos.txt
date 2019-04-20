@@ -23,3 +23,8 @@
 -nest ile değişimlerde sıkıntılar mevcut
 +fontmanager settext sıkıntısını çöz(31.3.2019)
 -seçili parçayı ön plana çıkaracak çalışmalar yap,size değişimi ve z ekseninde oynama gibi(31.3.2019)
+-(13.4.2019)animasyon sınıfı tasarla
+-herhangi bir yere kolaycana yazı yazdırabileceğim bir yapı
+-20.4.2019 21:16 pulsate fonksiyonu sprite ın içine enjekte ediliyor bununla ilgili draw fonksiyonunda kullanılacak propertyler sağlanıyor
+-piece lerin gerçekten bir taş gibi pozisyonel yer değişimleri üzerine düşünülmesi lazım hafızada yer değiştirme mantıklı görünmüyor
+-21.04.2019 00:46 PulsateEffect tamamlandı,testler yapıldı,Board üzerindeki piecelerde test edilecek

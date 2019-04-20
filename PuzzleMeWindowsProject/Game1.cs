@@ -34,7 +34,11 @@ namespace PuzzleMeWindowsProject
 
         List<Piece> Pieces;
 
+        SpriteFont sFont;
+
         private FrameManager frameManager = new FrameManager();
+
+        Piece samplePiece;
         
         public Game1()
         {
@@ -109,6 +113,11 @@ namespace PuzzleMeWindowsProject
             animation.LoadContent();
 
             //animation.SetPieceSize(new Vector2(100,100));
+
+            sFont = Content.Load<SpriteFont>("Fonts/MenuFont");
+
+            samplePiece = new Piece(new Vector2(0,0),new Vector2(100,100));
+            samplePiece.LoadContent();
         }
 
         /// <summary>
@@ -152,6 +161,13 @@ namespace PuzzleMeWindowsProject
             if (Keyboard.GetState().IsKeyDown(Keys.Right))
                 position.X += amount;
 
+
+            samplePiece.Update();
+            if (InputManager.Selected(samplePiece.DestinationRectangle))
+            {
+                samplePiece.Pulsate(!samplePiece.IsPulsating);
+            }
+
             base.Update(gameTime);
         }
 
@@ -169,13 +185,18 @@ namespace PuzzleMeWindowsProject
 
             //Global.SpriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
 
-            //Global.SpriteBatch.Draw(texture1, new Rectangle(0, 0, texture1.Width, texture1.Height), Color.White * 0.5f);
+
             //Global.SpriteBatch.Draw(texture2, new Rectangle(0, 0, texture1.Width, texture1.Height), Color.White);
             
             //Global.SpriteBatch.End();
 
-            Global.SpriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
+            Global.SpriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend);
 
+
+            var scale = General.Pulsate(6);
+
+
+            Global.SpriteBatch.Draw(texture1,new Vector2(300,200) ,new Rectangle(300, 200, 100, 100), Color.White * 0.5f, 0f, Vector2.Zero,scale,SpriteEffects.None,0f);
             ////float frameRate = 1 / (float)gameTime.ElapsedGameTime.TotalSeconds;
             ////var fm = FontManager.Create(string.Format("FPS : {0} = 1 / {1} , IsRunningSlowly : {2}",frameRate,(float)gameTime.ElapsedGameTime.TotalSeconds,gameTime.IsRunningSlowly),new Vector2(10,10),Color.Bisque);
             ////fm.Draw();
@@ -186,11 +207,11 @@ namespace PuzzleMeWindowsProject
 
             ////Global.SpriteBatch.DrawString(fm.Font,"fps : "+frameManager.AverageFramesPerSecond,new Vector2(50,50),Color.Blue);
 
-            //ScreenManager.Draw();
-
+            ScreenManager.Draw();
+            samplePiece.Draw();
             //graph.Draw();
             //image.Draw();
-            animation.Draw();
+          //  animation.Draw();
             Global.SpriteBatch.End();
 
             base.Draw(gameTime);

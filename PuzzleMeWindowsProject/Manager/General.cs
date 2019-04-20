@@ -39,5 +39,15 @@ namespace PuzzleMeWindowsProject.Manager
                 return (T)formatter.Deserialize(ms);
             }
         }
+
+
+        public static float Pulsate(float speed = 6)
+        {
+            double time = Global.GameTime.TotalGameTime.TotalSeconds;
+
+            float pulsate = (float)Math.Sin(time * speed) + 1;
+
+            return 1 + pulsate * 0.05f;
+        }
     }
 }

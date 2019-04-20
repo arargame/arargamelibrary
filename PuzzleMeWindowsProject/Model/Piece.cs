@@ -115,6 +115,8 @@ namespace PuzzleMeWindowsProject.Model
             base.Initialize();
 
             OnChangeRectangle += Piece_OnChangeRectangle;
+
+            SetDrawMethodType(6);
         }
 
         private void Piece_OnChangeRectangle()
@@ -172,20 +174,26 @@ namespace PuzzleMeWindowsProject.Model
             //    return;
 
             if (BackgroundTexture != null)
-                Global.SpriteBatch.Draw(BackgroundTexture, DestinationRectangle, BackgroundColor);
+            {
+                SetLayerDepth(State == PieceState.Selected ? 1f : 0f);
+
+                Global.SpriteBatch.Draw(BackgroundTexture, Position, SourceRectangle, BackgroundColor, Rotation, Origin, Scale, SpriteEffects, 0f);
+            }
+
+            Color = new Color(Color, 1f);
 
             if (Texture != null)
                 base.Draw();
 
             if (!IsEmpty)
             {
-                if (State == PieceState.Selected)
-                    Global.SpriteBatch.Draw(SelectedTexture, DestinationRectangle, Color);
+                //if (State == PieceState.Selected)
+                //    Global.SpriteBatch.Draw(SelectedTexture, DestinationRectangle, Color);
             }
 
             FontManager.Draw();
 
-            Frame.Draw();
+            //Frame.Draw();
         }
 
         public Piece MakeEmpty()
@@ -342,6 +350,8 @@ namespace PuzzleMeWindowsProject.Model
             {
                 State = PieceState.Selected;
 
+                Pulsate(true);
+
                 //SetColor(Color.Red);
             }
 
@@ -353,6 +363,7 @@ namespace PuzzleMeWindowsProject.Model
             State = PieceState.UnSelected;
 
             //SetColor(Color.White);
+            Pulsate(false);
 
             return this;
         }
