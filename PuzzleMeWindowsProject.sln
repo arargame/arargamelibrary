@@ -5,16 +5,38 @@ VisualStudioVersion = 15.0.28307.168
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PuzzleMeWindowsProject", "PuzzleMeWindowsProject\PuzzleMeWindowsProject.csproj", "{ACB394B4-EDFD-4F17-9E5D-6D34BA0B3BF3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArarGameLibrary", "ArarGameLibrary\ArarGameLibrary.csproj", "{AED6EC28-C39E-40AA-A3F6-29A3401C67DA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestProject", "TestProject\TestProject.csproj", "{0C7C332D-E289-4519-8DED-DA267665909E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
 		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{ACB394B4-EDFD-4F17-9E5D-6D34BA0B3BF3}.Debug|Any CPU.ActiveCfg = Debug|x86
 		{ACB394B4-EDFD-4F17-9E5D-6D34BA0B3BF3}.Debug|x86.ActiveCfg = Debug|x86
 		{ACB394B4-EDFD-4F17-9E5D-6D34BA0B3BF3}.Debug|x86.Build.0 = Debug|x86
+		{ACB394B4-EDFD-4F17-9E5D-6D34BA0B3BF3}.Release|Any CPU.ActiveCfg = Release|x86
 		{ACB394B4-EDFD-4F17-9E5D-6D34BA0B3BF3}.Release|x86.ActiveCfg = Release|x86
 		{ACB394B4-EDFD-4F17-9E5D-6D34BA0B3BF3}.Release|x86.Build.0 = Release|x86
+		{AED6EC28-C39E-40AA-A3F6-29A3401C67DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AED6EC28-C39E-40AA-A3F6-29A3401C67DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AED6EC28-C39E-40AA-A3F6-29A3401C67DA}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{AED6EC28-C39E-40AA-A3F6-29A3401C67DA}.Debug|x86.Build.0 = Debug|Any CPU
+		{AED6EC28-C39E-40AA-A3F6-29A3401C67DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AED6EC28-C39E-40AA-A3F6-29A3401C67DA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AED6EC28-C39E-40AA-A3F6-29A3401C67DA}.Release|x86.ActiveCfg = Release|Any CPU
+		{AED6EC28-C39E-40AA-A3F6-29A3401C67DA}.Release|x86.Build.0 = Release|Any CPU
+		{0C7C332D-E289-4519-8DED-DA267665909E}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{0C7C332D-E289-4519-8DED-DA267665909E}.Debug|x86.ActiveCfg = Debug|x86
+		{0C7C332D-E289-4519-8DED-DA267665909E}.Debug|x86.Build.0 = Debug|x86
+		{0C7C332D-E289-4519-8DED-DA267665909E}.Release|Any CPU.ActiveCfg = Release|x86
+		{0C7C332D-E289-4519-8DED-DA267665909E}.Release|x86.ActiveCfg = Release|x86
+		{0C7C332D-E289-4519-8DED-DA267665909E}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

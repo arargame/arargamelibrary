@@ -84,8 +84,10 @@ namespace PuzzleMeWindowsProject
 
             image = new Image("WP_20180819_005");
             image.LoadContent();
-            image.SetRowAndColumnCount(6);
+            image.SetPosition(new Vector2(100,100));
+            image.SetRowAndColumnCount(4);
             image.SetPieceSize(new Vector2(100,100));
+            image.SetPiecePosition();
 
 
             texture1 = Content.Load<Texture2D>("Textures/shutterstock_360399314");
@@ -116,7 +118,10 @@ namespace PuzzleMeWindowsProject
 
             sFont = Content.Load<SpriteFont>("Fonts/MenuFont");
 
-            samplePiece = new Piece(new Vector2(0,0),new Vector2(100,100));
+            samplePiece = new Piece()
+                .SetPosition(new Vector2(0, 0))
+                .SetSize(new Vector2(100, 100));
+
             samplePiece.LoadContent();
         }
 
@@ -190,13 +195,11 @@ namespace PuzzleMeWindowsProject
             
             //Global.SpriteBatch.End();
 
-            Global.SpriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend);
+            Global.SpriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
 
 
             var scale = General.Pulsate(6);
 
-
-            Global.SpriteBatch.Draw(texture1,new Vector2(300,200) ,new Rectangle(300, 200, 100, 100), Color.White * 0.5f, 0f, Vector2.Zero,scale,SpriteEffects.None,0f);
             ////float frameRate = 1 / (float)gameTime.ElapsedGameTime.TotalSeconds;
             ////var fm = FontManager.Create(string.Format("FPS : {0} = 1 / {1} , IsRunningSlowly : {2}",frameRate,(float)gameTime.ElapsedGameTime.TotalSeconds,gameTime.IsRunningSlowly),new Vector2(10,10),Color.Bisque);
             ////fm.Draw();
@@ -207,11 +210,27 @@ namespace PuzzleMeWindowsProject
 
             ////Global.SpriteBatch.DrawString(fm.Font,"fps : "+frameManager.AverageFramesPerSecond,new Vector2(50,50),Color.Blue);
 
-            ScreenManager.Draw();
-            samplePiece.Draw();
+             ScreenManager.Draw();
             //graph.Draw();
-            //image.Draw();
-          //  animation.Draw();
+            // image.Draw();
+
+
+            //foreach (var piece in image.Pieces)
+            //{
+            //    piece.Draw();
+            //}
+
+            //var pi = image.Pieces[10];
+            //Global.SpriteBatch.Draw(pi.Texture,pi.Position,new Rectangle(0,0,pi.Texture.Width/2,pi.Texture.Height/2),pi.Color);
+            //Global.SpriteBatch.Draw(image.Texture, pi.Position,new Rectangle(250,250,100,100), pi.Color);
+            //Global.SpriteBatch.Draw(image.Texture, new Vector2(pi.Position.X+100,pi.Position.Y), new Rectangle(350, 250, 100, 100), pi.Color);
+
+            //Global.SpriteBatch.Draw(pi.Texture, new Rectangle(pi.DestinationRectangle.X, pi.DestinationRectangle.Y, (int)(pi.DestinationRectangle.Width * scale), (int)(pi.DestinationRectangle.Height * scale)), Color.White);
+
+            //Global.SpriteBatch.Draw(image.Texture, pi.Position,pi.SourceRectangle, pi.Color, pi.Rotation, pi.Origin, new Vector2(pi.Scale), pi.SpriteEffects, pi.LayerDepth);
+
+
+            //  animation.Draw();
             Global.SpriteBatch.End();
 
             base.Draw(gameTime);

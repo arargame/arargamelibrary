@@ -5,12 +5,12 @@
 -select-unselect görsel ayarlarndı piece lerin için doldurma zamanı köşelikleri olmalı seçildiğinde belli olsun
 +boş piece ayarla
 +boş zemine hareket sağla seçili piece için
-+boş piece için uygun image tasarla
+-boş piece için uygun image tasarla
 +selected efekti yap
 +board ta Image kullan
 -image tammalanacağı alan board un üzerinde rastgele bir konumda oluşacak
 -bu alan board tan en veya boy anlamında maksimum bir küçük olması lazım
--image ın parçaları board üzerine rastgele dağılmış olmalı
++image ın parçaları board üzerine rastgele dağılmış olmalı
 -board ile ilgili ayarlar level nesnesinden gelecek
 -image ın parçaları board üzerinde belirtilen alanda image ı tamamlarsa level tamamlanır
 -Level üzerinde board için image ın toplanma konumu ve boyutu ile ilgili ayarları tutan nesne(Image olabilir)
@@ -28,3 +28,9 @@
 -20.4.2019 21:16 pulsate fonksiyonu sprite ın içine enjekte ediliyor bununla ilgili draw fonksiyonunda kullanılacak propertyler sağlanıyor
 -piece lerin gerçekten bir taş gibi pozisyonel yer değişimleri üzerine düşünülmesi lazım hafızada yer değiştirme mantıklı görünmüyor
 -21.04.2019 00:46 PulsateEffect tamamlandı,testler yapıldı,Board üzerindeki piecelerde test edilecek
+-23.4.2019 23.30 mevcut yapılar tekrar gözden geçriliyor.Bazı sıknıtılar meydana geldi.Selected object öncesi bütün yapılar gözden geçriliyor.
+-Board un parçaları göstereceği kısmın durumu düşünülmeli örneğin bir başlangıç noktasına ihtiyaç var ki ona göre parçalar hesaplansın
+-Board içerisnde diğer aksiyonlar için pencereler sistemi düşün örneğin kenardan açılır kapanır veya sürekli açık duran bir ipucu ekranı vb
+-seçili parçaların farklı görünmesini sağla
+-pulsating efektini yap
++İki nokta arası çizgi çeken yapı tasarla ve çerçeve oluştur(Tamamlandı fakat henüz parçalar üzerinde kullanımı ideal görünmüyor)

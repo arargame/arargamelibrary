@@ -1,14 +1,13 @@
-﻿using Microsoft.Xna.Framework;
+﻿using ArarGameLibrary.Manager;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using PuzzleMeWindowsProject.Effect;
-using PuzzleMeWindowsProject.Manager;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PuzzleMeWindowsProject.Model
+namespace ArarGameLibrary.Model
 {
     public interface IBaseObject
     {
@@ -27,13 +26,13 @@ namespace PuzzleMeWindowsProject.Model
     {
         void Initialize();
 
-        void LoadContent();
+        void LoadContent(Texture2D texture = null);
 
         void UnloadContent();
 
-        void Update();
+        void Update(GameTime gameTime = null);
 
-        void Draw();
+        void Draw(SpriteBatch spriteBatch = null);
     }
 
     public interface IDrawableObject : IXna
@@ -61,7 +60,7 @@ namespace PuzzleMeWindowsProject.Model
         Texture2D Texture { get; set; }
     }
 
-    public abstract class BaseObject : IBaseObject,ICloneable
+    public abstract class BaseObject : IBaseObject, ICloneable
     {
         public Guid Id { get; set; }
 
@@ -86,8 +85,8 @@ namespace PuzzleMeWindowsProject.Model
         }
     }
 
-    
-    public abstract class Sprite : BaseObject,IDrawableObject
+
+    public abstract class Sprite : BaseObject, IDrawableObject
     {
         #region Properties
 
@@ -119,7 +118,7 @@ namespace PuzzleMeWindowsProject.Model
         public delegate void ChangingSomething();
         public event ChangingSomething OnChangeRectangle;
 
-        public List<EffectManager> Effects = new List<EffectManager>();
+        //public List<EffectManager> Effects = new List<EffectManager>();
 
         #endregion
 
@@ -149,14 +148,14 @@ namespace PuzzleMeWindowsProject.Model
 
             Color = Color.White;
 
-            Effects.Add(new PulsateEffect(this));
+            //Effects.Add(new PulsateEffect(this));
         }
 
-        public virtual void LoadContent() { }
+        public virtual void LoadContent(Texture2D texture) { }
 
         public virtual void UnloadContent() { }
 
-        public virtual void Update() 
+        public virtual void Update(GameTime gameTime = null)
         {
             if (IsAlive)
             {
@@ -169,14 +168,14 @@ namespace PuzzleMeWindowsProject.Model
                 //    Scale = General.Pulsate();
                 //}
 
-                foreach (var effect in Effects)
-                {
-                    effect.Update();
-                }
+                //foreach (var effect in Effects)
+                //{
+                //    effect.Update();
+                //}
             }
         }
 
-        public virtual void Draw() 
+        public virtual void Draw(SpriteBatch spriteBatch = null)
         {
             if (IsAlive)
             {
@@ -187,15 +186,15 @@ namespace PuzzleMeWindowsProject.Model
                         break;
 
                     case 2:
-                        Global.SpriteBatch.Draw(Texture,Position,Color);
+                        Global.SpriteBatch.Draw(Texture, Position, Color);
                         break;
 
                     case 3:
-                        Global.SpriteBatch.Draw(Texture,DestinationRectangle,SourceRectangle,Color);
+                        Global.SpriteBatch.Draw(Texture, DestinationRectangle, SourceRectangle, Color);
                         break;
 
                     case 4:
-                        Global.SpriteBatch.Draw(Texture,Position,SourceRectangle,Color);
+                        Global.SpriteBatch.Draw(Texture, Position, SourceRectangle, Color);
                         break;
 
                     case 5:
@@ -203,11 +202,11 @@ namespace PuzzleMeWindowsProject.Model
                         break;
 
                     case 6:
-                        Global.SpriteBatch.Draw(Texture,Position,SourceRectangle,Color,Rotation,Origin,Scale, SpriteEffects, LayerDepth);
+                        Global.SpriteBatch.Draw(Texture, Position, SourceRectangle, Color, Rotation, Origin, Scale, SpriteEffects, LayerDepth);
                         break;
 
                     case 7:
-                        Global.SpriteBatch.Draw(Texture,Position,SourceRectangle,Color,Rotation,Origin,new Vector2(Scale), SpriteEffects, LayerDepth);
+                        Global.SpriteBatch.Draw(Texture, Position, SourceRectangle, Color, Rotation, Origin, new Vector2(Scale), SpriteEffects, LayerDepth);
                         break;
 
                     default:
@@ -221,12 +220,12 @@ namespace PuzzleMeWindowsProject.Model
         {
             IsPulsating = enable;
 
-            var pulsateEffect = Effects.FirstOrDefault(e => e is PulsateEffect);
+           // var pulsateEffect = Effects.FirstOrDefault(e => e is PulsateEffect);
 
-            if (IsPulsating)
-                pulsateEffect.Start();
-            else
-                pulsateEffect.End();
+            //if (IsPulsating)
+            //    pulsateEffect.Start();
+            //else
+            //    pulsateEffect.End();
         }
 
         #region SetFunctions
@@ -377,7 +376,7 @@ namespace PuzzleMeWindowsProject.Model
 
         #endregion
 
-        
+
 
     }
 }

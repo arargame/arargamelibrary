@@ -1,6 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿using ArarGameLibrary.Manager;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using PuzzleMeWindowsProject.Manager;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +8,7 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PuzzleMeWindowsProject.Model
+namespace ArarGameLibrary.Model
 {
     public interface IPieceContainer
     {
@@ -121,7 +121,7 @@ namespace PuzzleMeWindowsProject.Model
             //Frame.LoadContent();
         }
 
-        public override void LoadContent()
+        public override void LoadContent(Texture2D texture = null)
         {
             //if (BackgroundTexture == null)
             //{
@@ -149,7 +149,7 @@ namespace PuzzleMeWindowsProject.Model
             //Frame.LoadContent();
         }
 
-        public override void Update()
+        public override void Update(GameTime gameTime = null)
         {
             FontManager.CalculateCenterVector2(DestinationRectangle);
 
@@ -158,7 +158,7 @@ namespace PuzzleMeWindowsProject.Model
             base.Update();
         }
 
-        public override void Draw()
+        public override void Draw(SpriteBatch spriteBatch = null)
         {
             //if (IsImage)
             //    return;

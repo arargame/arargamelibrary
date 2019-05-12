@@ -1,13 +1,13 @@
-﻿using Microsoft.Xna.Framework;
+﻿using ArarGameLibrary.Manager;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using PuzzleMeWindowsProject.Manager;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PuzzleMeWindowsProject.Model
+namespace ArarGameLibrary.Model
 {   
     public class Image : Sprite,IPieceContainer
     {
@@ -34,12 +34,12 @@ namespace PuzzleMeWindowsProject.Model
             base.Initialize();
         }
 
-        public override void LoadContent()
+        public override void LoadContent(Texture2D texture = null)
         {
             SetTexture(Name);
         }
 
-        public override void Update()
+        public override void Update(GameTime gameTime = null)
         {
             if (Pieces.Count > 0)
                 Pieces.ForEach(p => p.Update());
@@ -47,7 +47,7 @@ namespace PuzzleMeWindowsProject.Model
                 base.Update();
         }
 
-        public override void Draw()
+        public override void Draw(SpriteBatch spriteBatch = null)
         {
             if (Pieces.Count > 0)
                 Pieces.ForEach(p => p.Draw());

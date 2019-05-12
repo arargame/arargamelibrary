@@ -1,5 +1,4 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
@@ -7,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PuzzleMeWindowsProject.Manager
+namespace ArarGameLibrary.Manager
 {
     public class InputManager
     {
@@ -54,18 +53,13 @@ namespace PuzzleMeWindowsProject.Manager
 
                 CurrentMouseState = Mouse.GetState();
             }
-            
+
             CursorPosition = CurrentMouseState.Position.ToVector2();
         }
 
         public static bool IsNewKeyPress(Keys key)
         {
             return CurrentKeyboardState.IsKeyDown(key) && PreviousKeyboardState.IsKeyUp(key);
-        }
-
-        public static bool IsKeyPress(Keys key)
-        {
-            return CurrentKeyboardState.IsKeyDown(key);
         }
 
         public static bool IsKeyDown(Keys key)
@@ -85,7 +79,12 @@ namespace PuzzleMeWindowsProject.Manager
 
         public static bool Selected(Rectangle selectedRectangle)
         {
-            return CursorRectangle.Intersects(selectedRectangle) && IsLeftClicked();
+            return IsHovering(selectedRectangle) && IsLeftClicked();
+        }
+
+        public static bool IsHovering(Rectangle target)
+        {
+            return CursorRectangle.Intersects(target);
         }
     }
 }

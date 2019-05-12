@@ -1,13 +1,13 @@
-﻿using Microsoft.Xna.Framework;
+﻿using ArarGameLibrary.Model;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using PuzzleMeWindowsProject.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PuzzleMeWindowsProject.Manager
+namespace ArarGameLibrary.Manager
 {
     public class TextureManager
     {

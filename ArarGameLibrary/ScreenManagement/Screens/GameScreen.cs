@@ -1,11 +1,11 @@
-﻿using PuzzleMeWindowsProject.Manager;
+﻿using ArarGameLibrary.Manager;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PuzzleMeWindowsProject.ScreenManagement.Screens
+namespace ArarGameLibrary.ScreenManagement.Screens
 {
     public class GameScreen : Screen
     {
@@ -23,7 +23,7 @@ namespace PuzzleMeWindowsProject.ScreenManagement.Screens
                 Name = "Level X"
             };
 
-            Level.Load();
+            Level.LoadContent();
 
             return true; 
         }

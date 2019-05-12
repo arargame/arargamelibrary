@@ -49,8 +49,6 @@ namespace PuzzleMeWindowsProject.Manager
 
             Image.LoadContent();
 
-            //Image.SetRowAndColumnCount(Global.Random.Next(2, Board.ColumnCount - 1));
-            //Image.SetRowAndColumnCount(5);
             Image.SetRowAndColumnCount(2);
 
             //spreadedimage preparing
@@ -66,27 +64,13 @@ namespace PuzzleMeWindowsProject.Manager
             }
 
             Nest = new Nest(Board,Image);
-
-
-
-            ////spreading part
-            //var spreadedImagePieces = General.PopulateListRandomlyFromAnother<Piece>(Board.Pieces.OfType<Piece>().ToList(), Image.RowCount * Image.ColumnCount);
-
-            //for (int i = 0; i < Image.Pieces.Count; i++)
-            //{
-            //    spreadedImagePieces[i].SetBackgroundTexture(Image.Pieces[i].Texture);
-            //}
-            
-            
         }
 
         public void Update()
         {
-            Nest.Update();
+            //Nest.Update();
 
             Board.Update();
-
-            //Image.Update();
 
             if (InputManager.IsKeyPress(Microsoft.Xna.Framework.Input.Keys.R))
                 Load();
@@ -94,10 +78,9 @@ namespace PuzzleMeWindowsProject.Manager
 
         public void Draw()
         {
-            Nest.Draw();
+            //Nest.Draw();
 
             Board.Draw();
-            //Image.Draw();
         }
 
         public void LoadContent()

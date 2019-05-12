@@ -1,12 +1,13 @@
-﻿using Microsoft.Xna.Framework;
-using PuzzleMeWindowsProject.Manager;
+﻿using ArarGameLibrary.Manager;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PuzzleMeWindowsProject.Model
+namespace ArarGameLibrary.Model
 {
     //public class NestPiece
     //{
@@ -54,7 +55,7 @@ namespace PuzzleMeWindowsProject.Model
             throw new NotImplementedException();
         }
 
-        public void LoadContent()
+        public void LoadContent(Texture2D texture = null)
         {
             throw new NotImplementedException();
         }
@@ -64,7 +65,7 @@ namespace PuzzleMeWindowsProject.Model
             throw new NotImplementedException();
         }
 
-        public void Update()
+        public void Update(GameTime gameTime = null)
         {
             foreach (var piece in Pieces)
             {
@@ -72,7 +73,7 @@ namespace PuzzleMeWindowsProject.Model
             }
         }
 
-        public void Draw()
+        public void Draw(SpriteBatch spriteBatch = null)
         {
             foreach (var piece in Pieces)
             {
@@ -148,7 +149,6 @@ namespace PuzzleMeWindowsProject.Model
 
             return true;
         }
-
 
     }
 }
