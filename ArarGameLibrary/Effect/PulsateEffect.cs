@@ -1,13 +1,12 @@
-﻿using Microsoft.Xna.Framework;
-using PuzzleMeWindowsProject.Manager;
-using PuzzleMeWindowsProject.Model;
+﻿using ArarGameLibrary.Manager;
+using ArarGameLibrary.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PuzzleMeWindowsProject.Effect
+namespace ArarGameLibrary.Effect
 {
     public class PulsateEffect : EffectManager
     {
@@ -15,7 +14,7 @@ namespace PuzzleMeWindowsProject.Effect
 
         public float CollapseSpeed { get; set; }
 
-        public PulsateEffect(Sprite sprite, float lastScale = 1f,float collapseSpeed = 0.05f) : base(sprite)
+        public PulsateEffect(Sprite sprite, float lastScale = 1f, float collapseSpeed = 0.05f) : base(sprite)
         {
             SetTask(new Action(() =>
             {

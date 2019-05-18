@@ -1,10 +1,11 @@
-﻿using Microsoft.Xna.Framework;
+﻿using ArarGameLibrary.Manager;
+using ArarGameLibrary.Model;
+using ArarGameLibrary.ScreenManagement.Screens;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using PuzzleMeWindowsProject.Manager;
 using PuzzleMeWindowsProject.Model;
-using PuzzleMeWindowsProject.ScreenManagement;
-using PuzzleMeWindowsProject.ScreenManagement.Screens;
 using System;
 using System.Collections.Generic;
 using System.Linq;

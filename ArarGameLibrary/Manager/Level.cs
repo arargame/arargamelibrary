@@ -22,28 +22,28 @@ namespace ArarGameLibrary.Manager
             Initialize();
         }
 
-        public void Initialize()
+        public virtual void Initialize()
         {
  
         }
 
 
-        public void LoadContent(Texture2D texture = null)
+        public virtual void LoadContent(Texture2D texture = null)
         {
 
         }
 
-        public void Update(GameTime gameTime = null)
+        public virtual void Update(GameTime gameTime = null)
         {
 
         }
 
-        public void Draw(SpriteBatch spriteBatch = null)
+        public virtual void Draw(SpriteBatch spriteBatch = null)
         {
 
         }
 
-        public void UnloadContent()
+        public virtual void UnloadContent()
         {
             throw new NotImplementedException();
         }

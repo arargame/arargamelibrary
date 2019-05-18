@@ -1,11 +1,11 @@
-﻿using PuzzleMeWindowsProject.Model;
+﻿using ArarGameLibrary.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PuzzleMeWindowsProject.Effect
+namespace ArarGameLibrary.Effect
 {
     public abstract class EffectManager
     {

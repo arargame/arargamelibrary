@@ -1,16 +1,20 @@
-﻿using Microsoft.Xna.Framework;
+﻿using ArarGameLibrary.Manager;
+using ArarGameLibrary.Model;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using PuzzleMeWindowsProject.Manager;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GameLevel = PuzzleMeWindowsProject.Manager.GameLevel;
 
 namespace PuzzleMeWindowsProject.Model
 {
     public class Board : BaseObject, IXna, IPieceContainer
     {
-        public Level Level { get; set; }
+        public GameLevel Level { get; set; }
 
         //public Image Image { get; set; }
 
@@ -47,7 +51,7 @@ namespace PuzzleMeWindowsProject.Model
             }
         }
 
-        public void LoadContent()
+        public void LoadContent(Texture2D texture = null)
         {
             foreach (var piece in Pieces)
             {
@@ -64,7 +68,7 @@ namespace PuzzleMeWindowsProject.Model
         }
 
 
-        public void Update()
+        public void Update(GameTime gameTime = null)
         {
             var pieceList = Pieces.OfType<Piece>().ToList();
 
@@ -100,7 +104,7 @@ namespace PuzzleMeWindowsProject.Model
             // Image.Update();
         }
 
-        public void Draw()
+        public void Draw(SpriteBatch spriteBatch = null)
         {
             foreach (var piece in Pieces)
             {

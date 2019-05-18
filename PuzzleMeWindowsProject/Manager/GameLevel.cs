@@ -1,4 +1,7 @@
-﻿using Microsoft.Xna.Framework;
+﻿using ArarGameLibrary.Manager;
+using ArarGameLibrary.Model;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using PuzzleMeWindowsProject.Model;
 using System;
 using System.Collections.Generic;
@@ -8,14 +11,8 @@ using System.Threading.Tasks;
 
 namespace PuzzleMeWindowsProject.Manager
 {
-    public class Level : IXna
+    public class GameLevel : Level
     {
-        public string Name { get; set; }
-
-        public int Id { get; set; }
-
-        public Level Next { get; set; }
-
         Image Image { get; set; }
 
         Board Board { get; set; }
@@ -28,12 +25,12 @@ namespace PuzzleMeWindowsProject.Manager
         public static int MinColumnCount = 3;
         public static int MaxColumnCount = Global.ViewportWidth / Piece.MaxWidth;
 
-        public Level()
+        public GameLevel()
         {
             Initialize();
         }
 
-        public void Initialize()
+        public override void Initialize()
         {
             //Board = new Board(Global.Random.Next(MinRowCount,MaxRowCount),Global.Random.Next(MinColumnCount,MaxColumnCount));
 
@@ -43,7 +40,7 @@ namespace PuzzleMeWindowsProject.Manager
         }
 
 
-        public void Load()
+        public override void LoadContent(Texture2D texture = null)
         {
             Board.LoadContent();
 
@@ -66,29 +63,25 @@ namespace PuzzleMeWindowsProject.Manager
             Nest = new Nest(Board,Image);
         }
 
-        public void Update()
+        public override void Update(GameTime gameTime = null)
         {
             //Nest.Update();
 
             Board.Update();
 
-            if (InputManager.IsKeyPress(Microsoft.Xna.Framework.Input.Keys.R))
-                Load();
+            if (InputManager.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.R))
+                LoadContent();
         }
 
-        public void Draw()
+        public override void Draw(SpriteBatch spriteBatch = null)
         {
             //Nest.Draw();
 
             Board.Draw();
         }
 
-        public void LoadContent()
-        {
-            throw new NotImplementedException();
-        }
 
-        public void UnloadContent()
+        public override void UnloadContent()
         {
             throw new NotImplementedException();
         }

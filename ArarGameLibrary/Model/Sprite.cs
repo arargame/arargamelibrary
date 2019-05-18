@@ -1,4 +1,5 @@
-﻿using ArarGameLibrary.Manager;
+﻿using ArarGameLibrary.Effect;
+using ArarGameLibrary.Manager;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -118,7 +119,7 @@ namespace ArarGameLibrary.Model
         public delegate void ChangingSomething();
         public event ChangingSomething OnChangeRectangle;
 
-        //public List<EffectManager> Effects = new List<EffectManager>();
+        public List<EffectManager> Effects = new List<EffectManager>();
 
         #endregion
 
@@ -148,7 +149,7 @@ namespace ArarGameLibrary.Model
 
             Color = Color.White;
 
-            //Effects.Add(new PulsateEffect(this));
+            Effects.Add(new PulsateEffect(this));
         }
 
         public virtual void LoadContent(Texture2D texture) { }
@@ -168,10 +169,10 @@ namespace ArarGameLibrary.Model
                 //    Scale = General.Pulsate();
                 //}
 
-                //foreach (var effect in Effects)
-                //{
-                //    effect.Update();
-                //}
+                foreach (var effect in Effects)
+                {
+                    effect.Update();
+                }
             }
         }
 
@@ -220,12 +221,12 @@ namespace ArarGameLibrary.Model
         {
             IsPulsating = enable;
 
-           // var pulsateEffect = Effects.FirstOrDefault(e => e is PulsateEffect);
+            var pulsateEffect = Effects.FirstOrDefault(e => e is PulsateEffect);
 
-            //if (IsPulsating)
-            //    pulsateEffect.Start();
-            //else
-            //    pulsateEffect.End();
+            if (IsPulsating)
+                pulsateEffect.Start();
+            else
+                pulsateEffect.End();
         }
 
         #region SetFunctions
