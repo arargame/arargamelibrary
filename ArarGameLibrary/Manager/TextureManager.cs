@@ -50,6 +50,11 @@ namespace ArarGameLibrary.Manager
             return newTexture;
         }
 
+        public static Texture2D CreateTexture2DByRandomColor(int width, int height)
+        {
+            return CreateTexture2DBySingleColor(Global.RandomColor(), width, height);
+        }
+
         public static Texture2D CreateTexture2DBySingleColor(Color color,int width,int height)
         {
             Texture2D newTexture = null;

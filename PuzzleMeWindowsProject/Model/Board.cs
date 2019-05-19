@@ -46,7 +46,7 @@ namespace PuzzleMeWindowsProject.Model
 
             foreach (var piece in Pieces)
             {
-                piece.UnSelect()
+                piece.OnDeselecting()
                     .SetContainer(this);
             }
         }
@@ -77,21 +77,21 @@ namespace PuzzleMeWindowsProject.Model
                 if (InputManager.Selected(piece.DestinationRectangle))
                 {
                     if (!pieceList.Any(p => p.State == PieceState.Selected))
-                        piece.Select();
+                        piece.OnSelecting();
                     else
                     {
                         var previouslySelectedPiece = pieceList.FirstOrDefault(p => p.State == PieceState.Selected);
 
-                        previouslySelectedPiece.UnSelect();
+                        previouslySelectedPiece.OnDeselecting();
 
                         if (previouslySelectedPiece.Id != piece.Id)
                         {
-                            if (piece.IsEmpty && previouslySelectedPiece.IsNeighborWith(pieceList, piece))
+                            if (piece.IsEmpty && previouslySelectedPiece.IsNeighborWith(piece))
                             {
                                 Piece.Replace(piece, previouslySelectedPiece, Pieces);
                             }
                             else
-                                piece.Select();
+                                piece.OnSelecting();
                         }
                     }
                 }
@@ -135,7 +135,7 @@ namespace PuzzleMeWindowsProject.Model
                 var selectedPiece = pieceList.FirstOrDefault(p => p.State == PieceState.Selected);
 
                 if (selectedPiece != null && piece.Id != selectedPiece.Id)
-                    piece.UnSelect();
+                    piece.OnDeselecting();
             }
         }
 

@@ -99,5 +99,10 @@ namespace ArarGameLibrary.Manager
         {
             return rect.X > ViewportWidth;
         }
+
+        public static Color RandomColor(bool isOpaque = true)
+        {
+            return new Color(Random.Next(0, 256), Random.Next(0, 256), Random.Next(0, 256), isOpaque ? 255 : Random.Next(0, 256));
+        }
     }
 }

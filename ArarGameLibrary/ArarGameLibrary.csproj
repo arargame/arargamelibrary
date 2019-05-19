@@ -47,6 +47,7 @@
   <ItemGroup>
     <Compile Include="Effect\EffectManager.cs" />
     <Compile Include="Effect\PulsateEffect.cs" />
+    <Compile Include="Manager\ClampManager.cs" />
     <Compile Include="Manager\FontManager.cs" />
     <Compile Include="Manager\FrameManager.cs" />
     <Compile Include="Manager\General.cs" />

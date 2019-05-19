@@ -9,9 +9,9 @@ namespace TestProject
 {
     public class Game1 : Game
     {
-        SpriteBatch spriteBatch;
-
         DrawableObject sprite;
+
+        Piece piece;
 
         public Game1()
         {
@@ -35,12 +35,17 @@ namespace TestProject
 
         protected override void LoadContent()
         {
-            spriteBatch = new SpriteBatch(GraphicsDevice);
-
-
             sprite = new DrawableObject(Content.Load<Texture2D>("58669757_1118224611712565_8241604631101177856_o"),
                                             new Vector2(20, 20),
                                             new Vector2(120, 120));
+
+            piece = new Piece(50,50)
+                .SetPosition(new Vector2(250,250))
+                .SetSize(new Vector2(100,100))
+                .SetBackgroundTextureByRandomColor();
+
+
+            piece.LoadContent();
         }
 
         protected override void UnloadContent()
@@ -60,6 +65,8 @@ namespace TestProject
 
             sprite.Update();
 
+            piece.Update();
+
             base.Update(gameTime);
         }
 
@@ -71,6 +78,8 @@ namespace TestProject
             Global.SpriteBatch.Begin();
 
             sprite.Draw();
+
+            piece.Draw();
 
             Global.SpriteBatch.End();
 

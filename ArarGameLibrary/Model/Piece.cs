@@ -16,7 +16,6 @@ namespace ArarGameLibrary.Model
 
         int ColumnCount { get; set; }
 
-        //Piece[,] Pieces { get; set; }
         List<Piece> Pieces { get; set; }
     }
 
@@ -36,8 +35,8 @@ namespace ArarGameLibrary.Model
 
     public class Piece : Sprite
     {
-        public static int MaxWidth = 50;
-        public static int MaxHeight = 50;
+        //public static int MaxWidth = 50;
+        //public static int MaxHeight = 50;
 
         public IPieceContainer Container { get; set; }
 
@@ -51,7 +50,7 @@ namespace ArarGameLibrary.Model
 
         public int ImageNumber = -1;
 
-        public Color BackgroundColor { get; set; }
+        public Color BackgroundColor = Color.White;
 
         public Texture2D BackgroundTexture { get; set; }
 
@@ -97,8 +96,12 @@ namespace ArarGameLibrary.Model
             }
         }
 
-        public Piece() { }
+        public Piece(int maxWidth, int maxHeight)
+        {
+            ClampManager.Add(new ClampObject("Size.X", 0, maxWidth), new ClampObject("Size.Y", 0, maxHeight));
+        }
 
+        public Piece() { }
 
         public override void Initialize()
         {
@@ -163,12 +166,12 @@ namespace ArarGameLibrary.Model
             //if (IsImage)
             //    return;
 
-            //if (BackgroundTexture != null)
-            //{
-            //    SetLayerDepth(State == PieceState.Selected ? 1f : 0f);
+            if (BackgroundTexture != null)
+            {
+                //SetLayerDepth(State == PieceState.Selected ? 1f : 0f);
 
-            //    Global.SpriteBatch.Draw(BackgroundTexture, Position, SourceRectangle, BackgroundColor, Rotation, Origin, Scale, SpriteEffects, 0f);
-            //}
+                Global.SpriteBatch.Draw(BackgroundTexture, Position, SourceRectangle, BackgroundColor, Rotation, Origin, Scale, SpriteEffects, 0f);
+            }
 
             Color = new Color(Color, 0.2f);
 
@@ -259,9 +262,40 @@ namespace ArarGameLibrary.Model
             return Types.Any(t => t == type);
         }
 
+        public Piece OnSelecting()
+        {
+            if (!HasType(PieceType.Empty) && !HasType(PieceType.Nest))
+            {
+                State = PieceState.Selected;
+
+                Pulsate(true);
+
+                //SetColor(Color.Red);
+            }
+
+            return this;
+        }
+
+        public Piece OnDeselecting()
+        {
+            State = PieceState.UnSelected;
+
+            //SetColor(Color.White);
+            Pulsate(false);
+
+            return this;
+        }
+
         public Piece SetContainer(IPieceContainer pieceContainer)
         {
             Container = pieceContainer;
+
+            return this;
+        }
+
+        public Piece SetBackgroundTextureByRandomColor()
+        {
+            BackgroundTexture = TextureManager.CreateTexture2DByRandomColor((int)Size.X, (int)Size.Y);
 
             return this;
         }
@@ -300,7 +334,6 @@ namespace ArarGameLibrary.Model
 
             return this;
         }
-
 
         public Piece SetNumber(int number)
         {
@@ -347,29 +380,7 @@ namespace ArarGameLibrary.Model
             return this;
         }
 
-        public Piece Select()
-        {
-            if (!HasType(PieceType.Empty) && !HasType(PieceType.Nest))
-            {
-                State = PieceState.Selected;
 
-                Pulsate(true);
-
-                //SetColor(Color.Red);
-            }
-
-            return this;
-        }
-
-        public Piece UnSelect()
-        {
-            State = PieceState.UnSelected;
-
-            //SetColor(Color.White);
-            Pulsate(false);
-
-            return this;
-        }
 
         public Piece SetRowAndColumnNumber(int rowNumber,int columnNumber)
         {
@@ -434,14 +445,14 @@ namespace ArarGameLibrary.Model
             }
         }
 
-        public bool IsNeighborWith(List<Piece> pieceList,Piece piece)
+        public bool IsNeighborWith(Piece piece)
         {
             if ((TopNeighbor != null && TopNeighbor.Id == piece.Id) ||
                 (BottomNeighbor != null && BottomNeighbor.Id == piece.Id) ||
                 (LeftNeighbor != null && LeftNeighbor.Id == piece.Id) ||
                 (RightNeighbor != null && RightNeighbor.Id == piece.Id))
                 return true;
-            else 
+            else
                 return false;
         }
 

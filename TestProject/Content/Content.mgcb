@@ -25,3 +25,10 @@
 /processorParam:TextureFormat=Color
 /build:58669757_1118224611712565_8241604631101177856_o.jpg
 
+#begin Fonts/MenuFont.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:Fonts/MenuFont.spritefont
+

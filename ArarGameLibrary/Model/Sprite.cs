@@ -92,6 +92,7 @@ namespace ArarGameLibrary.Model
         #region Properties
 
         public Color Color { get; set; }
+        public ClampManager ClampManager { get; set; }
 
         public Rectangle DestinationRectangle { get; set; }
         public int DrawMethodType { get; set; }
@@ -150,6 +151,8 @@ namespace ArarGameLibrary.Model
             Color = Color.White;
 
             Effects.Add(new PulsateEffect(this));
+
+            ClampManager = new ClampManager(this);
         }
 
         public virtual void LoadContent(Texture2D texture) { }
@@ -173,6 +176,8 @@ namespace ArarGameLibrary.Model
                 {
                     effect.Update();
                 }
+
+                ClampManager.Update();
             }
         }
 

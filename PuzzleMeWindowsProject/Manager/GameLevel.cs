@@ -13,6 +13,9 @@ namespace PuzzleMeWindowsProject.Manager
 {
     public class GameLevel : Level
     {
+        static int MaxPieceWidth = 50;
+        static int MaxPieceHeight = 50;
+
         Image Image { get; set; }
 
         Board Board { get; set; }
@@ -20,10 +23,10 @@ namespace PuzzleMeWindowsProject.Manager
         Nest Nest { get; set; }
 
         public static int MinRowCount = 3;
-        public static int MaxRowCount = Global.ViewportHeight / Piece.MaxHeight;
+        public static int MaxRowCount = Global.ViewportHeight / MaxPieceHeight;
 
         public static int MinColumnCount = 3;
-        public static int MaxColumnCount = Global.ViewportWidth / Piece.MaxWidth;
+        public static int MaxColumnCount = Global.ViewportWidth / MaxPieceWidth;
 
         public GameLevel()
         {
