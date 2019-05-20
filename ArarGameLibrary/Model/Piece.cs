@@ -170,7 +170,8 @@ namespace ArarGameLibrary.Model
             {
                 //SetLayerDepth(State == PieceState.Selected ? 1f : 0f);
 
-                Global.SpriteBatch.Draw(BackgroundTexture, Position, SourceRectangle, BackgroundColor, Rotation, Origin, Scale, SpriteEffects, 0f);
+                //Global.SpriteBatch.Draw(BackgroundTexture, Position, SourceRectangle, BackgroundColor, Rotation, Origin, Scale, SpriteEffects, 0f);
+                Global.SpriteBatch.Draw(BackgroundTexture, DestinationRectangle, BackgroundColor);
             }
 
             Color = new Color(Color, 0.2f);
@@ -368,7 +369,7 @@ namespace ArarGameLibrary.Model
 
         public string SetText(string text = null)
         {
-            return text ?? $"({RowNumber},{ColumnNumber})={Number}";
+            return text ?? string.Format("({0},{1})={2}",RowNumber,ColumnNumber,Number);//$"({RowNumber},{ColumnNumber})={Number}";
 
             //return text ?? $"{ImageNumber}";
         }

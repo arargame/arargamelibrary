@@ -38,6 +38,7 @@ namespace ArarGameLibrary.Model
 
     public interface IDrawableObject : IXna
     {
+        Rectangle CollisionRectangle { get; set; }
         Color Color { get; set; }
 
         Rectangle DestinationRectangle { get; set; }
@@ -91,6 +92,7 @@ namespace ArarGameLibrary.Model
     {
         #region Properties
 
+        public Rectangle CollisionRectangle { get; set; }
         public Color Color { get; set; }
         public ClampManager ClampManager { get; set; }
 
@@ -216,9 +218,11 @@ namespace ArarGameLibrary.Model
                         break;
 
                     default:
-                        Global.SpriteBatch.Draw(Texture, new Rectangle(DestinationRectangle.X, DestinationRectangle.Y, (int)(DestinationRectangle.Width * Scale), (int)(DestinationRectangle.Height * Scale)), Color);
+                        Global.SpriteBatch.Draw(Texture, DestinationRectangle, Color);
                         break;
                 }
+
+                Global.SpriteBatch.Draw(TextureManager.CreateTexture2DByRandomColor((int)Size.X, (int)Size.Y), Position, DestinationRectangle, Color.White);
             }
         }
 
@@ -278,8 +282,9 @@ namespace ArarGameLibrary.Model
 
         public void SetRectangle()
         {
-            DestinationRectangle = new Rectangle((int)Position.X, (int)Position.Y, (int)Size.X, (int)Size.Y);
+            DestinationRectangle = new Rectangle((int)Position.X, (int)Position.Y, (int)(Size.X * Scale), (int)(Size.Y * Scale));
             SourceRectangle = DestinationRectangle;
+            //CollisionRectangle = new Rectangle(Des);
             //SourceRectangle = new Rectangle(animation.FrameBounds.X, animation.FrameBounds.Y, (int)Size.X, (int)Size.Y);
             //            destinationRectangle = new Rectangle((int)(position.X - origin.X), (int)(position.Y - origin.Y), (int)size.X, (int)size.Y);
         }
@@ -292,6 +297,8 @@ namespace ArarGameLibrary.Model
         public void SetScale(float scale)
         {
             Scale = scale;
+
+            OnChangeRectangle();
         }
 
         public void SetSize(Vector2 size)

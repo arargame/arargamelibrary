@@ -9,9 +9,13 @@ namespace TestProject
 {
     public class Game1 : Game
     {
+        //52 133 111 255
+
         DrawableObject sprite;
 
         Piece piece;
+
+        TestInfo ti;
 
         public Game1()
         {
@@ -39,13 +43,14 @@ namespace TestProject
                                             new Vector2(20, 20),
                                             new Vector2(120, 120));
 
-            piece = new Piece(50,50)
+            piece = new Piece(100,100)
                 .SetPosition(new Vector2(250,250))
-                .SetSize(new Vector2(100,100))
+                .SetSize(new Vector2(150,150))
                 .SetBackgroundTextureByRandomColor();
 
 
             piece.LoadContent();
+            ti = new TestInfo(piece).AddParameters("DestinationRectangle");
         }
 
         protected override void UnloadContent()
@@ -58,6 +63,7 @@ namespace TestProject
         {
             Global.GameTime = gameTime;
             InputManager.Update();
+            InputManager.IsActive = true;
 
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
@@ -67,6 +73,21 @@ namespace TestProject
 
             piece.Update();
 
+            if (InputManager.Selected(piece.DestinationRectangle))
+            {
+                if (piece.State == PieceState.UnSelected)
+                {
+                    piece.OnSelecting();
+                }
+                else
+                {
+                    piece.OnDeselecting();
+                }
+                
+            }
+
+            ti.Update();
+
             base.Update(gameTime);
         }
 
@@ -75,11 +96,13 @@ namespace TestProject
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            Global.SpriteBatch.Begin();
+            Global.SpriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
 
-            sprite.Draw();
+            //sprite.Draw();
 
             piece.Draw();
+
+            ti.Draw();
 
             Global.SpriteBatch.End();
 
