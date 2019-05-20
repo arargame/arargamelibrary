@@ -41,17 +41,17 @@ namespace ArarGameLibrary.Manager
 
             PreviousMouseState = CurrentMouseState;
 
-            if (!IsActive)
-            {
-                CurrentKeyboardState = new KeyboardState();
-
-                CurrentMouseState = new MouseState();
-            }
-            else
+            if (IsActive)
             {
                 CurrentKeyboardState = Keyboard.GetState();
 
                 CurrentMouseState = Mouse.GetState();
+            }
+            else
+            {
+                CurrentKeyboardState = new KeyboardState();
+
+                CurrentMouseState = new MouseState();
             }
 
             CursorPosition = CurrentMouseState.Position.ToVector2();

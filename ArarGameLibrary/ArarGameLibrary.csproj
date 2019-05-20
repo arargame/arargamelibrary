@@ -55,8 +55,10 @@
     <Compile Include="Manager\InputManager.cs" />
     <Compile Include="Manager\Level.cs" />
     <Compile Include="Manager\ScreenManager.cs" />
+    <Compile Include="Manager\TestInfo.cs" />
     <Compile Include="Manager\TextureManager.cs" />
     <Compile Include="Model\Animation.cs" />
+    <Compile Include="Model\Frame.cs" />
     <Compile Include="Model\DrawableObject.cs" />
     <Compile Include="Model\Graph.cs" />
     <Compile Include="Model\Image.cs" />
