@@ -37,6 +37,7 @@ namespace ArarGameLibrary.Model
         public override void LoadContent(Texture2D texture = null)
         {
             SetTexture(Name);
+            SetSize(new Vector2(Texture.Width,Texture.Height));
         }
 
         public override void Update(GameTime gameTime = null)
