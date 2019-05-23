@@ -15,6 +15,7 @@ namespace ArarGameLibrary.Effect
 
         private Action Task;
         private Action EndTask;
+        private Action DrawingTask;
 
         public EffectManager(Sprite sprite)
         {
@@ -35,12 +36,20 @@ namespace ArarGameLibrary.Effect
         {
             if (IsActive)
             {
-                Task.Invoke();
+                if (Task != null)
+                    Task.Invoke();
             }
             else
             {
-                EndTask.Invoke();
+                if (EndTask != null)
+                    EndTask.Invoke();
             }
+        }
+
+        public void Draw()
+        {
+            if (IsActive && DrawingTask != null)
+                DrawingTask.Invoke();
         }
 
         public EffectManager SetTask(Action task)
@@ -53,6 +62,13 @@ namespace ArarGameLibrary.Effect
         public EffectManager SetEndTask(Action endTask)
         {
             EndTask = endTask;
+
+            return this;
+        }
+
+        public EffectManager SetDrawingTask(Action drawingTask)
+        {
+            DrawingTask = drawingTask;
 
             return this;
         }

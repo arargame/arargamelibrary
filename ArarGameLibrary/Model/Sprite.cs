@@ -116,6 +116,7 @@ namespace ArarGameLibrary.Model
         public float Rotation { get; set; }
 
         public float Scale { get; set; }
+        public bool SimpleShadowVisibility { get; set; }
         public Vector2 Size { get; set; }
         public Rectangle SourceRectangle { get; set; }
         public Vector2 Speed { get; set; }
@@ -158,6 +159,7 @@ namespace ArarGameLibrary.Model
             Color = Color.White;
 
             Effects.Add(new PulsateEffect(this));
+            Effects.Add(new SimpleShadowEffect(this));
 
             ClampManager = new ClampManager(this);
 
@@ -231,6 +233,11 @@ namespace ArarGameLibrary.Model
                         break;
                 }
 
+                foreach (var effect in Effects)
+                {
+                    effect.Draw();
+                }
+
                 TestInfo.Draw();
             }
         }
@@ -245,6 +252,18 @@ namespace ArarGameLibrary.Model
                 pulsateEffect.Start();
             else
                 pulsateEffect.End();
+        }
+
+        public void ShowSimpleShadow(bool enable)
+        {
+            SimpleShadowVisibility = enable;
+
+            var simpleShadowEffect = Effects.FirstOrDefault(e => e is SimpleShadowEffect);
+
+            if (SimpleShadowVisibility)
+                simpleShadowEffect.Start();
+            else
+                simpleShadowEffect.End();
         }
 
         #region SetFunctions
@@ -292,7 +311,7 @@ namespace ArarGameLibrary.Model
         public void SetRectangle()
         {
             DestinationRectangle = new Rectangle((int)Position.X, (int)Position.Y, (int)(Size.X * Scale), (int)(Size.Y * Scale));
-            SourceRectangle = DestinationRectangle;
+            SourceRectangle = new Rectangle(DestinationRectangle.X,DestinationRectangle.Y,Texture!=null ? Texture.Width : DestinationRectangle.Width,Texture!=null ? Texture.Height : DestinationRectangle.Height);
             //CollisionRectangle = new Rectangle(Des);
             //SourceRectangle = new Rectangle(animation.FrameBounds.X, animation.FrameBounds.Y, (int)Size.X, (int)Size.Y);
             //            destinationRectangle = new Rectangle((int)(position.X - origin.X), (int)(position.Y - origin.Y), (int)size.X, (int)size.Y);

@@ -174,7 +174,7 @@ namespace ArarGameLibrary.Model
                 Global.SpriteBatch.Draw(BackgroundTexture, DestinationRectangle, BackgroundColor);
             }
 
-            Color = new Color(Color, 0.2f);
+            //Color = new Color(Color, 0.2f);
 
             if (Texture != null)
                 base.Draw();
@@ -269,9 +269,9 @@ namespace ArarGameLibrary.Model
             {
                 State = PieceState.Selected;
 
-                Pulsate(true);
+                //Pulsate(true);
 
-                //SetColor(Color.Red);
+                ShowSimpleShadow(true);
             }
 
             return this;
@@ -281,8 +281,8 @@ namespace ArarGameLibrary.Model
         {
             State = PieceState.UnSelected;
 
-            //SetColor(Color.White);
-            Pulsate(false);
+            ShowSimpleShadow(false);
+            //Pulsate(false);
 
             return this;
         }

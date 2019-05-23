@@ -196,7 +196,7 @@ namespace PuzzleMeWindowsProject
             
             //Global.SpriteBatch.End();
 
-            Global.SpriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
+            Global.SpriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
 
 
             var scale = General.Pulsate(6);

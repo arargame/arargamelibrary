@@ -62,11 +62,15 @@ namespace TestProject
             image.LoadContent();
             image.SetPosition(Global.ViewportCenter-new Vector2(50,50));
             image.SetSize(new Vector2(200,200));
-            image.SetRowAndColumnCount(2,6);
+            image.SetRowAndColumnCount(1,1);
             image.SetPieceSize(new Vector2(150,150));
             image.SetPiecePosition(Vector2.Zero);
 
             image.Pieces.ForEach(p => p.TestInfo.Show(true).AddParameters("DestinationRectangle"));
+
+            image.Pieces.ForEach(p=>p.SetDrawMethodType(5));
+
+            //image.Pieces.ForEach(p => p.SetLayerDepth(2));
 
         }
 
@@ -129,7 +133,7 @@ namespace TestProject
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            Global.SpriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
+            Global.SpriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
 
             //sprite.Draw();
 
