@@ -1,5 +1,6 @@
 ﻿using ArarGameLibrary.Model;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +16,8 @@ namespace ArarGameLibrary.Manager
         private IDrawableObject DrawableObject { get; set; }
 
         private Frame DestinationRectangleFrame { get; set; }
+
+        private bool IsVisible { get; set; }
 
         public TestInfo(IDrawableObject drawableObject)
         {
@@ -33,6 +36,9 @@ namespace ArarGameLibrary.Manager
 
         public void Update()
         {
+            if (!IsVisible)
+                return;
+
             foreach (var parameter in TestInfoParameters)
             {
                 switch (parameter)
@@ -45,6 +51,7 @@ namespace ArarGameLibrary.Manager
                         var drP4 = new Vector2(DrawableObject.DestinationRectangle.X, drP3.Y);
 
                         DestinationRectangleFrame = new Frame(drP1, drP2, drP3, drP4, Color.Beige);
+                        DestinationRectangleFrame.IsInPerformanceMode = true;
                         DestinationRectangleFrame.LoadContent();
 
                         break;
@@ -57,6 +64,9 @@ namespace ArarGameLibrary.Manager
 
         public void Draw()
         {
+            if (!IsVisible)
+                return;
+
             foreach (var parameter in TestInfoParameters)
             {
                 switch (parameter)
@@ -69,6 +79,13 @@ namespace ArarGameLibrary.Manager
                         break;
                 }       
             }
+        }
+
+        public TestInfo Show(bool enable)
+        {
+            IsVisible = enable;
+
+            return this;
         }
     }
 }

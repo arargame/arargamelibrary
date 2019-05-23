@@ -11,6 +11,10 @@ namespace TestProject
     {
         //52 133 111 255
 
+        Image image;
+
+        Texture2D damageTexture;
+
         DrawableObject sprite;
 
         Piece piece;
@@ -39,8 +43,8 @@ namespace TestProject
 
         protected override void LoadContent()
         {
-            sprite = new DrawableObject(Content.Load<Texture2D>("58669757_1118224611712565_8241604631101177856_o"),
-                                            new Vector2(20, 20),
+            sprite = new DrawableObject(Content.Load<Texture2D>("grsl1"),
+                                            new Vector2(200, 50),
                                             new Vector2(120, 120));
 
             piece = new Piece(100,100)
@@ -51,6 +55,19 @@ namespace TestProject
 
             piece.LoadContent();
             ti = new TestInfo(piece).AddParameters("DestinationRectangle");
+
+            damageTexture = TextureManager.CreateDamageTexture(sprite.Texture);
+
+            image = new Image("wrokcubeBackground");
+            image.LoadContent();
+            image.SetPosition(Global.ViewportCenter-new Vector2(50,50));
+            image.SetSize(new Vector2(200,200));
+            image.SetRowAndColumnCount(2,6);
+            image.SetPieceSize(new Vector2(150,150));
+            image.SetPiecePosition(Vector2.Zero);
+
+            image.Pieces.ForEach(p => p.TestInfo.Show(true).AddParameters("DestinationRectangle"));
+
         }
 
         protected override void UnloadContent()
@@ -69,24 +86,40 @@ namespace TestProject
                 Exit();
 
 
-            sprite.Update();
+            //sprite.Update();
 
-            piece.Update();
+            //piece.Update();
 
             if (InputManager.Selected(piece.DestinationRectangle))
             {
-                if (piece.State == PieceState.UnSelected)
+                //if (piece.State == PieceState.UnSelected)
+                //{
+                //    piece.OnSelecting();
+                //}
+                //else
+                //{
+                //    piece.OnDeselecting();
+                //}
+            }
+
+            foreach (var item in image.Pieces)
+            {
+                if (InputManager.Selected(item.DestinationRectangle))
                 {
-                    piece.OnSelecting();
+                    if (item.State == PieceState.UnSelected)
+                    {
+                        item.OnSelecting();
+                    }
+                    else
+                    {
+                        item.OnDeselecting();
+                    }
                 }
-                else
-                {
-                    piece.OnDeselecting();
-                }
-                
             }
 
             ti.Update();
+
+            image.Update();
 
             base.Update(gameTime);
         }
@@ -100,9 +133,13 @@ namespace TestProject
 
             //sprite.Draw();
 
-            piece.Draw();
+            //piece.Draw();
 
-            ti.Draw();
+            //ti.Draw();
+
+            //Global.SpriteBatch.Draw(damageTexture, new Vector2(0, 0), Color.White);
+
+            image.Draw();
 
             Global.SpriteBatch.End();
 

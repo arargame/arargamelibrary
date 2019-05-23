@@ -29,10 +29,10 @@ namespace ArarGameLibrary.Manager
 
         public Color[] GetColors()
         {
-            return GetColors(Texture);
+            return GetDataFromTexture2DToColorArray(Texture);
         }
 
-        public static Color[] GetColors(Texture2D texture)
+        public static Color[] GetDataFromTexture2DToColorArray(Texture2D texture)
         {
             Color[] colors = new Color[texture.Width * texture.Height];
 
@@ -53,6 +53,15 @@ namespace ArarGameLibrary.Manager
         public static Texture2D CreateTexture2DByRandomColor(int width, int height)
         {
             return CreateTexture2DBySingleColor(Global.RandomColor(), width, height);
+        }
+
+        public static Texture2D CreateTexture2DByColorArray(Color[] colorArray, int width, int height, bool mipmap = false, SurfaceFormat surfaceFormat = SurfaceFormat.Color)
+        {
+            var texture = new Texture2D(Global.GraphicsDevice, width, height, mipmap, surfaceFormat);
+
+            texture.SetData<Color>(colorArray);
+
+            return texture;
         }
 
         public static Texture2D CreateTexture2DBySingleColor(Color color,int width,int height)
@@ -128,6 +137,37 @@ namespace ArarGameLibrary.Manager
             }
 
             return pieces;
+        }
+
+        public static Texture2D CreateDamageTexture(Texture2D texture)
+        {
+            var pixels = GetDataFromTexture2DToColorArray(texture);
+
+            //var collection = new Dictionary<int,Color>();
+
+            //for (int i = 0; i < pixels.Length; i++)
+            //{
+            //    if (pixels[i].R != 0 || pixels[i].G != 0 || pixels[i].B != 0)
+            //    {
+            //        collection.Add(i,pixels[i]);
+            //    }
+            //}
+
+
+            for (int i = 0; i < pixels.Length; i++)
+            {
+                //if (collection.ContainsKey(i))
+                if(pixels[i].A!=0)
+                {
+                    byte offset = 200;
+                    byte r = (byte)Math.Min(pixels[i].R + offset, 255);
+                    byte g = (byte)Math.Min(pixels[i].R + offset, 255);
+                    byte b = (byte)Math.Min(pixels[i].R + offset, 255);
+                    pixels[i] = new Color(r, g, b, pixels[i].A);
+                }
+            }
+
+            return CreateTexture2DByColorArray(pixels,texture.Width,texture.Height);
         }
     }
 }

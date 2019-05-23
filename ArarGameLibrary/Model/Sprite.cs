@@ -21,6 +21,8 @@ namespace ArarGameLibrary.Model
         DateTime CreateDate { get; set; }
 
         DateTime UpdateDate { get; set; }
+
+        bool IsInPerformanceMode { get; set; }
     }
 
     public interface IXna
@@ -74,6 +76,8 @@ namespace ArarGameLibrary.Model
 
         public DateTime UpdateDate { get; set; }
 
+        public bool IsInPerformanceMode { get; set; }
+
         public BaseObject()
         {
             Id = Guid.NewGuid();
@@ -117,6 +121,7 @@ namespace ArarGameLibrary.Model
         public Vector2 Speed { get; set; }
         public SpriteEffects SpriteEffects { get; set; }
 
+        public TestInfo TestInfo { get; set; }
         public Texture2D Texture { get; set; }
 
         public delegate void ChangingSomething();
@@ -155,6 +160,8 @@ namespace ArarGameLibrary.Model
             Effects.Add(new PulsateEffect(this));
 
             ClampManager = new ClampManager(this);
+
+            TestInfo = new TestInfo(this);
         }
 
         public virtual void LoadContent(Texture2D texture) { }
@@ -180,6 +187,8 @@ namespace ArarGameLibrary.Model
                 }
 
                 ClampManager.Update();
+
+                TestInfo.Update();
             }
         }
 
@@ -222,7 +231,7 @@ namespace ArarGameLibrary.Model
                         break;
                 }
 
-                Global.SpriteBatch.Draw(TextureManager.CreateTexture2DByRandomColor((int)Size.X, (int)Size.Y), Position, DestinationRectangle, Color.White);
+                TestInfo.Draw();
             }
         }
 

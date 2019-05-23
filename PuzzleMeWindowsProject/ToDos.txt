@@ -34,3 +34,4 @@
 -seçili parçaların farklı görünmesini sağla
 -pulsating efektini yap
 +İki nokta arası çizgi çeken yapı tasarla ve çerçeve oluştur(Tamamlandı fakat henüz parçalar üzerinde kullanımı ideal görünmüyor)
++23.5.2019 arargamelibraray diye ayrı birr kütüphane oluşturuldu çoğu yapı diğer projelerde de kulllanılmak üzere oraya taşındı

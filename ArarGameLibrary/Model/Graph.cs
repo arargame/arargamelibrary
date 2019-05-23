@@ -34,6 +34,9 @@ namespace ArarGameLibrary.Model
         {
             foreach (var line in Lines)
             {
+                if (IsInPerformanceMode)
+                    line.IsInPerformanceMode = IsInPerformanceMode;
+
                 line.LoadContent();
             }
         }

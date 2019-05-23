@@ -15,6 +15,15 @@ namespace ArarGameLibrary.Model
 
         public Texture2D Texture { get; set; }
 
+        private static Texture2D defaultTexture;
+        public static Texture2D DefaultTexture 
+        {
+            get 
+            {
+                return defaultTexture ?? (defaultTexture = TextureManager.CreateTexture2DBySingleColor(Global.RandomColor(), 1, 1));
+            }
+        }
+
         public Vector2 From { get; set; }
 
         public Vector2 To { get; set; }
@@ -50,7 +59,10 @@ namespace ArarGameLibrary.Model
             //Texture = new Texture2D(Global.SpriteBatch.GraphicsDevice, 1, 1, false, SurfaceFormat.Color);
             //Texture.SetData(new[] { Color.White });
 
-            Texture = TextureManager.CreateTexture2DBySingleColor(Color,1,1);
+            if (IsInPerformanceMode)
+                Texture = DefaultTexture;
+            else
+                Texture = TextureManager.CreateTexture2DBySingleColor(Color, 1, 1);        
         }
 
         public void UnloadContent()
