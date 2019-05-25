@@ -16,12 +16,12 @@ namespace ArarGameLibrary.Effect
 
         public PulsateEffect(Sprite sprite, float lastScale = 1f, float collapseSpeed = 0.05f) : base(sprite)
         {
-            SetTask(new Action(() =>
+            SetTask(() =>
             {
                 Sprite.Scale = General.Pulsate();
-            }));
+            });
 
-            SetEndTask(new Action(() =>
+            SetEndTask(() =>
             {
                 if (Sprite.Scale.ToString("0.0") != LastScale.ToString("0.0"))
                 {
@@ -33,9 +33,7 @@ namespace ArarGameLibrary.Effect
                 {
                     Sprite.Scale = LastScale;
                 }
-
-
-            }));
+            });
 
             SetLastScale(lastScale);
             SetCollapseSpeed(collapseSpeed);
