@@ -16,17 +16,17 @@ namespace ArarGameLibrary.Effect
 
         private Rectangle Rectangle { get; set; }
 
-        public float OffSet { get; set; }
+        public Vector2 OffSet { get; set; }
 
-        public SimpleShadowEffect(Sprite sprite,float offset = 5f) : base(sprite)
+        public SimpleShadowEffect(Sprite sprite,Vector2? offset) : base(sprite)
         {
             Texture = TextureManager.CreateTexture2DBySingleColor(Color.Black, 1, 1);
-
-            OffSet = offset;
+            
+            OffSet = offset ?? new Vector2(0, 0);
 
             SetTask(() => 
             {
-                Rectangle = new Rectangle((int)(Sprite.DestinationRectangle.X + OffSet), (int)(Sprite.DestinationRectangle.Y + OffSet), Sprite.DestinationRectangle.Width, Sprite.DestinationRectangle.Height);
+                Rectangle = new Rectangle((int)(Sprite.DestinationRectangle.X + OffSet.X), (int)(Sprite.DestinationRectangle.Y + OffSet.Y), Sprite.DestinationRectangle.Width, Sprite.DestinationRectangle.Height);
             });
 
             SetEndTask(() => 

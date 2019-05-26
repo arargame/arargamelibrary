@@ -160,7 +160,7 @@ namespace ArarGameLibrary.Model
             Color = Color.White;
 
             Effects.Add(new PulsateEffect(this));
-            Effects.Add(new SimpleShadowEffect(this));
+            Effects.Add(new SimpleShadowEffect(this,new Vector2(5,5)));
 
             ClampManager = new ClampManager(this);
 
