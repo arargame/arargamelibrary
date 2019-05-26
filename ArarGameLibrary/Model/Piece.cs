@@ -1,4 +1,5 @@
-﻿using ArarGameLibrary.Manager;
+﻿using ArarGameLibrary.Effect;
+using ArarGameLibrary.Manager;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -109,6 +110,11 @@ namespace ArarGameLibrary.Model
 
             OnChangeRectangle += Piece_OnChangeRectangle;
 
+            var simpleShadowEffect = EffectManager.Get<SimpleShadowEffect>(Effects);
+
+            if (simpleShadowEffect != null)
+                simpleShadowEffect.OffSet = 10f;
+
             //SetDrawMethodType(6);
         }
 
@@ -139,7 +145,7 @@ namespace ArarGameLibrary.Model
 
             //SelectedTexture = TextureManager.CreateTexture2DBySingleColor(Color.IndianRed,(int)Size.X, (int)Size.Y);
 
-            FontManager = new FontManager("Fonts/MenuFont", "", Position, Color.White, 0f, Vector2.Zero, new Vector2(1, 1), SpriteEffects.None, 0f, Vector2.Zero, () => SetText());
+            FontManager = new FontManager("Fonts/MenuFont", "", Position, Color.White, 0f, Vector2.Zero, new Vector2(1, 1), SpriteEffects.None, 1f, Vector2.Zero, () => SetText());
 
             SetRectangle();
 
@@ -185,7 +191,7 @@ namespace ArarGameLibrary.Model
                 //    Global.SpriteBatch.Draw(SelectedTexture, DestinationRectangle, Color);
             }
 
-            FontManager.Draw();
+            //FontManager.Draw();
 
             //Frame.Draw();
         }
@@ -271,6 +277,8 @@ namespace ArarGameLibrary.Model
 
                 //Pulsate(true);
 
+                SetText("State:" + State);
+
                 ShowSimpleShadow(true);
             }
 
@@ -283,6 +291,7 @@ namespace ArarGameLibrary.Model
 
             ShowSimpleShadow(false);
             //Pulsate(false);
+            SetText("State:" + State);
 
             return this;
         }

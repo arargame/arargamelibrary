@@ -72,5 +72,10 @@ namespace ArarGameLibrary.Effect
 
             return this;
         }
+
+        public static T Get<T>(List<EffectManager> effects) where T : EffectManager
+        {
+            return effects.FirstOrDefault(e => e is T) as T;
+        }
     }
 }

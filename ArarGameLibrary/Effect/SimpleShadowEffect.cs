@@ -16,13 +16,17 @@ namespace ArarGameLibrary.Effect
 
         private Rectangle Rectangle { get; set; }
 
+        public float OffSet { get; set; }
+
         public SimpleShadowEffect(Sprite sprite,float offset = 5f) : base(sprite)
         {
-            Texture = TextureManager.CreateTexture2DBySingleColor(Color.Black,1,1);
+            Texture = TextureManager.CreateTexture2DBySingleColor(Color.Black, 1, 1);
+
+            OffSet = offset;
 
             SetTask(() => 
             {
-                Rectangle = new Rectangle((int)(Sprite.DestinationRectangle.X + offset), (int)(Sprite.DestinationRectangle.Y + offset), Sprite.DestinationRectangle.Width, Sprite.DestinationRectangle.Height);
+                Rectangle = new Rectangle((int)(Sprite.DestinationRectangle.X + OffSet), (int)(Sprite.DestinationRectangle.Y + OffSet), Sprite.DestinationRectangle.Width, Sprite.DestinationRectangle.Height);
             });
 
             SetEndTask(() => 
@@ -32,7 +36,7 @@ namespace ArarGameLibrary.Effect
 
             SetDrawingTask(() => 
             {
-                Global.SpriteBatch.Draw(Texture, Rectangle, Rectangle, Color.White, 0f, Vector2.Zero, SpriteEffects.None, Sprite.LayerDepth + 1);
+                Global.SpriteBatch.Draw(Texture, new Vector2(Rectangle.X,Rectangle.Y), Rectangle, Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
             });
         }
     }

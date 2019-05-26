@@ -86,7 +86,7 @@ namespace PuzzleMeWindowsProject
             image = new Image("WP_20180819_005");
             image.LoadContent();
             image.SetPosition(new Vector2(100,100));
-            image.SetRowAndColumnCount(4);
+            image.SetRowAndColumnCount(4,4);
             image.SetPieceSize(new Vector2(100,100));
             image.SetPiecePosition();
 

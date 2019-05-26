@@ -11,6 +11,10 @@ namespace TestProject
     {
         //52 133 111 255
 
+        Texture2D sample;
+        Texture2D shadow;
+        SpriteFont sampleFont;
+
         Image image;
 
         Texture2D damageTexture;
@@ -58,19 +62,23 @@ namespace TestProject
 
             damageTexture = TextureManager.CreateDamageTexture(sprite.Texture);
 
-            image = new Image("wrokcubeBackground");
+            image = new Image("Measure");
             image.LoadContent();
             image.SetPosition(Global.ViewportCenter-new Vector2(50,50));
             image.SetSize(new Vector2(200,200));
-            image.SetRowAndColumnCount(1,1);
-            image.SetPieceSize(new Vector2(150,150));
-            image.SetPiecePosition(Vector2.Zero);
+            image.SetRowAndColumnCount(2, 4);
+            image.SetPieceSize(new Vector2(50, 50));
+            image.SetPiecePosition(new Vector2(200, 200));
 
             image.Pieces.ForEach(p => p.TestInfo.Show(true).AddParameters("DestinationRectangle"));
 
             image.Pieces.ForEach(p=>p.SetDrawMethodType(5));
 
             //image.Pieces.ForEach(p => p.SetLayerDepth(2));
+
+            sample = TextureManager.CreateTexture2DByRandomColor(100,100);
+            shadow = TextureManager.CreateTexture2DBySingleColor(Color.Black,100,100);
+            sampleFont = Content.Load<SpriteFont>("Fonts/DefaultFont");
 
         }
 
@@ -92,19 +100,19 @@ namespace TestProject
 
             //sprite.Update();
 
-            //piece.Update();
+            piece.Update();
 
-            if (InputManager.Selected(piece.DestinationRectangle))
-            {
-                //if (piece.State == PieceState.UnSelected)
-                //{
-                //    piece.OnSelecting();
-                //}
-                //else
-                //{
-                //    piece.OnDeselecting();
-                //}
-            }
+            //if (InputManager.Selected(piece.DestinationRectangle))
+            //{
+            //    if (piece.State == PieceState.UnSelected)
+            //    {
+            //        piece.OnSelecting();
+            //    }
+            //    else
+            //    {
+            //        piece.OnDeselecting();
+            //    }
+            //}
 
             foreach (var item in image.Pieces)
             {
@@ -133,7 +141,7 @@ namespace TestProject
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            Global.SpriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
+            Global.SpriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend);
 
             //sprite.Draw();
 
@@ -144,6 +152,23 @@ namespace TestProject
             //Global.SpriteBatch.Draw(damageTexture, new Vector2(0, 0), Color.White);
 
             image.Draw();
+
+            //var pieceX1 = image.Pieces[0];
+            //var pieceX2 = image.Pieces[1];
+            //var pieceX3 = image.Pieces[2];
+            //var pieceX4 = image.Pieces[3];
+
+
+            //Global.SpriteBatch.Draw(pieceX1.Texture, pieceX1.DestinationRectangle,Color.White);
+            //Global.SpriteBatch.Draw(pieceX2.Texture, pieceX2.DestinationRectangle, Color.White);
+            //Global.SpriteBatch.Draw(pieceX3.Texture, pieceX3.DestinationRectangle, Color.White);
+            //Global.SpriteBatch.Draw(pieceX4.Texture, pieceX4.DestinationRectangle, Color.White);
+
+            //Global.SpriteBatch.Draw(shadow, new Vector2(20, 20), new Rectangle(20, 20, shadow.Width, shadow.Height), Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+
+            //Global.SpriteBatch.Draw(sample,new Vector2(10,10),new Rectangle(10,10,sample.Width,sample.Height),Color.White,0f,Vector2.Zero,1f,SpriteEffects.None,0.5f);
+
+            //Global.SpriteBatch.DrawString(sampleFont, "Hellow", new Vector2(10,10),Color.Yellow,0f,Vector2.Zero,1f,SpriteEffects.None,1f);
 
             Global.SpriteBatch.End();
 

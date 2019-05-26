@@ -107,6 +107,7 @@ namespace ArarGameLibrary.Model
         public bool IsAlive { get; set; }
         public bool IsPulsating { get; set; }
 
+        //From 0f to 1f where 1f is the top layer
         public float LayerDepth { get; set; }
 
         public Vector2 Origin { get; set; }
@@ -238,7 +239,7 @@ namespace ArarGameLibrary.Model
                     effect.Draw();
                 }
 
-                TestInfo.Draw();
+              //  TestInfo.Draw();
             }
         }
 
@@ -285,7 +286,7 @@ namespace ArarGameLibrary.Model
 
         public void SetLayerDepth(float layerDepth)
         {
-            LayerDepth = LayerDepth;
+            LayerDepth = layerDepth;
         }
 
         public void SetName(string name)
@@ -311,7 +312,7 @@ namespace ArarGameLibrary.Model
         public void SetRectangle()
         {
             DestinationRectangle = new Rectangle((int)Position.X, (int)Position.Y, (int)(Size.X * Scale), (int)(Size.Y * Scale));
-            SourceRectangle = new Rectangle(DestinationRectangle.X,DestinationRectangle.Y,Texture!=null ? Texture.Width : DestinationRectangle.Width,Texture!=null ? Texture.Height : DestinationRectangle.Height);
+            SourceRectangle = new Rectangle(0,0,Texture!=null ? Texture.Width : DestinationRectangle.Width,Texture!=null ? Texture.Height : DestinationRectangle.Height);
             //CollisionRectangle = new Rectangle(Des);
             //SourceRectangle = new Rectangle(animation.FrameBounds.X, animation.FrameBounds.Y, (int)Size.X, (int)Size.Y);
             //            destinationRectangle = new Rectangle((int)(position.X - origin.X), (int)(position.Y - origin.Y), (int)size.X, (int)size.Y);
@@ -379,7 +380,7 @@ namespace ArarGameLibrary.Model
 
         public virtual void SetStartingLayerDepth()
         {
-            SetLayerDepth(0f);
+            SetLayerDepth(0.5f);
         }
 
         public virtual void SetStartingScale()
