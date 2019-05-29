@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ArarGameLibrary.ScreenManagement;
 
-namespace ArarGameLibrary.ScreenManagement.Screens
+namespace PuzzleMeWindowsProject.Screens
 {
     public abstract class Menu : Screen
     {

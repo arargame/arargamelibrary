@@ -51,10 +51,10 @@ namespace TestProject
                                             new Vector2(200, 50),
                                             new Vector2(120, 120));
 
-            piece = new Piece(100,100)
-                .SetPosition(new Vector2(250,250))
-                .SetSize(new Vector2(150,150))
-                .SetBackgroundTextureByRandomColor();
+            piece = new Piece(100, 100)
+                .SetPosition(new Vector2(250, 250))
+                .SetSize(new Vector2(150, 150));
+                //.SetBackgroundTextureByRandomColor();
 
 
             piece.LoadContent();
@@ -62,7 +62,7 @@ namespace TestProject
 
             damageTexture = TextureManager.CreateDamageTexture(sprite.Texture);
 
-            image = new Image("Measure");
+            image = new Image("wrokcubeBackground");
             image.LoadContent();
             image.SetPosition(Global.ViewportCenter-new Vector2(50,50));
             image.SetSize(new Vector2(200,200));
@@ -120,11 +120,11 @@ namespace TestProject
                 {
                     if (item.State == PieceState.UnSelected)
                     {
-                        item.OnSelecting();
+                        //item.OnSelecting();
                     }
                     else
                     {
-                        item.OnDeselecting();
+                        //item.OnDeselecting();
                     }
                 }
             }

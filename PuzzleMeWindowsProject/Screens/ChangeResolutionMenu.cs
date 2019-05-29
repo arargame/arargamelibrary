@@ -1,42 +1,35 @@
 ﻿using ArarGameLibrary.Manager;
-using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ArarGameLibrary.ScreenManagement;
 
-namespace ArarGameLibrary.ScreenManagement.Screens
+namespace PuzzleMeWindowsProject.Screens
 {
-    public class MainMenu : Menu
+    public class ChangeResolutionMenu : Menu
     {
         public override void Initialize()
         {
-            Global.ChangeGameWindowTitle("Main Menu");
+            Global.ChangeGameWindowTitle("Change Resolution");
         }
 
         public override bool Load()
         {
             var collection = new Dictionary<string, Action>();
 
-            collection.Add("New",() =>
+            collection.Add(string.Format("800x480 : {0}", Global.ViewportWidth == 800 && Global.ViewportHeight == 480 ? "Enabled" : "Disabled"), () =>
             {
-                DisableThenAddNew(new GameScreen());
+                ScreenManager.ChangeScreenResolution(800,400);
             });
 
-            collection.Add("Settings", () =>
+            collection.Add("Back", () =>
             {
-                DisableThenAddNew(new SettingsMenu());
+                DisableThenAddNew(new GraphicMenu());
             });
-
-            collection.Add("Exit", () =>
-            {
-                Global.OnExit = true;
-            });
-
 
             Components.AddRange(Button.Sort(collection));
-
 
             return true && base.Load();
         }

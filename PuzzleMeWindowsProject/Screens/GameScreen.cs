@@ -1,15 +1,17 @@
 ﻿using ArarGameLibrary.Manager;
+using ArarGameLibrary.ScreenManagement;
+using PuzzleMeWindowsProject.Manager;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ArarGameLibrary.ScreenManagement.Screens
+namespace PuzzleMeWindowsProject.Screens
 {
     public class GameScreen : Screen
     {
-        public Level Level { get; set; }
+        public GameLevel Level { get; set; }
 
         public override void Initialize()
         {
@@ -18,7 +20,7 @@ namespace ArarGameLibrary.ScreenManagement.Screens
 
         public override bool Load()
         {
-            Level = new Level()
+            Level = new GameLevel()
             {
                 Name = "Level X"
             };

@@ -199,39 +199,42 @@ namespace ArarGameLibrary.Model
         {
             if (IsAlive)
             {
-                switch (DrawMethodType)
+                if (Texture != null)
                 {
-                    case 1:
-                        Global.SpriteBatch.Draw(Texture, DestinationRectangle, Color);
-                        break;
+                    switch (DrawMethodType)
+                    {
+                        case 1:
+                            Global.SpriteBatch.Draw(Texture, DestinationRectangle, Color);
+                            break;
 
-                    case 2:
-                        Global.SpriteBatch.Draw(Texture, Position, Color);
-                        break;
+                        case 2:
+                            Global.SpriteBatch.Draw(Texture, Position, Color);
+                            break;
 
-                    case 3:
-                        Global.SpriteBatch.Draw(Texture, DestinationRectangle, SourceRectangle, Color);
-                        break;
+                        case 3:
+                            Global.SpriteBatch.Draw(Texture, DestinationRectangle, SourceRectangle, Color);
+                            break;
 
-                    case 4:
-                        Global.SpriteBatch.Draw(Texture, Position, SourceRectangle, Color);
-                        break;
+                        case 4:
+                            Global.SpriteBatch.Draw(Texture, Position, SourceRectangle, Color);
+                            break;
 
-                    case 5:
-                        Global.SpriteBatch.Draw(Texture, DestinationRectangle, SourceRectangle, Color, Rotation, Origin, SpriteEffects, LayerDepth);
-                        break;
+                        case 5:
+                            Global.SpriteBatch.Draw(Texture, DestinationRectangle, SourceRectangle, Color, Rotation, Origin, SpriteEffects, LayerDepth);
+                            break;
 
-                    case 6:
-                        Global.SpriteBatch.Draw(Texture, Position, SourceRectangle, Color, Rotation, Origin, Scale, SpriteEffects, LayerDepth);
-                        break;
+                        case 6:
+                            Global.SpriteBatch.Draw(Texture, Position, SourceRectangle, Color, Rotation, Origin, Scale, SpriteEffects, LayerDepth);
+                            break;
 
-                    case 7:
-                        Global.SpriteBatch.Draw(Texture, Position, SourceRectangle, Color, Rotation, Origin, new Vector2(Scale), SpriteEffects, LayerDepth);
-                        break;
+                        case 7:
+                            Global.SpriteBatch.Draw(Texture, Position, SourceRectangle, Color, Rotation, Origin, new Vector2(Scale), SpriteEffects, LayerDepth);
+                            break;
 
-                    default:
-                        Global.SpriteBatch.Draw(Texture, DestinationRectangle, Color);
-                        break;
+                        default:
+                            Global.SpriteBatch.Draw(Texture, DestinationRectangle, Color);
+                            break;
+                    }
                 }
 
                 foreach (var effect in Effects)
@@ -239,8 +242,13 @@ namespace ArarGameLibrary.Model
                     effect.Draw();
                 }
 
-              //  TestInfo.Draw();
+                //  TestInfo.Draw();
             }
+        }
+
+        public T GetEffect<T>() where T : EffectManager
+        {
+            return EffectManager.Get<T>(Effects);
         }
 
         public void Pulsate(bool enable)
@@ -248,6 +256,9 @@ namespace ArarGameLibrary.Model
             IsPulsating = enable;
 
             var pulsateEffect = Effects.FirstOrDefault(e => e is PulsateEffect);
+
+            if (pulsateEffect == null)
+                return;
 
             if (IsPulsating)
                 pulsateEffect.Start();
@@ -259,7 +270,10 @@ namespace ArarGameLibrary.Model
         {
             SimpleShadowVisibility = enable;
 
-            var simpleShadowEffect = Effects.FirstOrDefault(e => e is SimpleShadowEffect);
+            var simpleShadowEffect = GetEffect<SimpleShadowEffect>();
+
+            if (simpleShadowEffect == null)
+                return;
 
             if (SimpleShadowVisibility)
                 simpleShadowEffect.Start();
@@ -311,8 +325,8 @@ namespace ArarGameLibrary.Model
 
         public void SetRectangle()
         {
-            DestinationRectangle = new Rectangle((int)Position.X, (int)Position.Y, (int)(Size.X * Scale), (int)(Size.Y * Scale));
-            SourceRectangle = new Rectangle(0,0,Texture!=null ? Texture.Width : DestinationRectangle.Width,Texture!=null ? Texture.Height : DestinationRectangle.Height);
+            DestinationRectangle = new Rectangle((int)Math.Ceiling(Position.X), (int)Math.Ceiling(Position.Y), (int)Math.Ceiling(Size.X * Scale), (int)Math.Ceiling((Size.Y * Scale)));
+            SourceRectangle = new Rectangle(0, 0, Texture != null ? Texture.Width : DestinationRectangle.Width, Texture != null ? Texture.Height : DestinationRectangle.Height);
             //CollisionRectangle = new Rectangle(Des);
             //SourceRectangle = new Rectangle(animation.FrameBounds.X, animation.FrameBounds.Y, (int)Size.X, (int)Size.Y);
             //            destinationRectangle = new Rectangle((int)(position.X - origin.X), (int)(position.Y - origin.Y), (int)size.X, (int)size.Y);

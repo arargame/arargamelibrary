@@ -51,15 +51,17 @@ namespace ArarGameLibrary.Model
 
         public int ImageNumber = -1;
 
-        public Color BackgroundColor = Color.White;
+        //public Color BackgroundColor = Color.White;
 
-        public Texture2D BackgroundTexture { get; set; }
+        //public Texture2D BackgroundTexture { get; set; }
 
         public Texture2D SelectedTexture { get; set; }
 
         public Vector2 StartingSize { get; set; }
 
         //public Graph Frame { get; set; }
+
+        public Vector2 TemporaryPosition { get; set; }
 
         public PieceState State = PieceState.UnSelected;
 
@@ -113,9 +115,9 @@ namespace ArarGameLibrary.Model
             var simpleShadowEffect = EffectManager.Get<SimpleShadowEffect>(Effects);
 
             if (simpleShadowEffect != null)
-                simpleShadowEffect.OffSet = new Vector2(0, 0);
+                simpleShadowEffect.OffSet = new Vector2(-6, -6);
 
-            //SetDrawMethodType(6);
+            SetDrawMethodType(5);
         }
 
         private void Piece_OnChangeRectangle()
@@ -132,20 +134,11 @@ namespace ArarGameLibrary.Model
 
         public override void LoadContent(Texture2D texture = null)
         {
-            //if (BackgroundTexture == null)
-            //{
-            //    //var color = new Color(Global.Random.Next(0, 255), Global.Random.Next(0, 255), Global.Random.Next(0, 255));
-            //    //var color = new Color(74, 74, 31, 127);
-            //    var color = new Color(178,147,114);
-
-            //    SetBackgroundColor(color);
-            //    SetBackgroundTexture();
-            //    SetBackgroundColor(Color.White * 0.8f);
-            //}
-
             //SelectedTexture = TextureManager.CreateTexture2DBySingleColor(Color.IndianRed,(int)Size.X, (int)Size.Y);
 
-            FontManager = new FontManager("Fonts/MenuFont", "", Position, Color.White, 0f, Vector2.Zero, new Vector2(1, 1), SpriteEffects.None, 1f, Vector2.Zero, () => SetText());
+            //SetTexture(texture ?? TextureManager.CreateTexture2DByRandomColor(1,1));
+
+            FontManager = new FontManager("Fonts/MenuFont", "", Position, Color.Yellow, 0f, Vector2.Zero, new Vector2(1, 1), SpriteEffects.None, 1f, Vector2.Zero, () => SetText());
 
             SetRectangle();
 
@@ -160,6 +153,23 @@ namespace ArarGameLibrary.Model
 
         public override void Update(GameTime gameTime = null)
         {
+            if (State == PieceState.Selected)
+            {
+                SetLayerDepth(0.75f);
+
+                ShowSimpleShadow(true);
+
+                Pulsate(true);
+            }
+            else
+            {
+                SetStartingLayerDepth();
+
+                ShowSimpleShadow(false);
+
+                Pulsate(false);
+            }
+
             FontManager.CalculateCenterVector2(DestinationRectangle);
 
             FontManager.Update();
@@ -172,54 +182,46 @@ namespace ArarGameLibrary.Model
             //if (IsImage)
             //    return;
 
-            if (BackgroundTexture != null)
-            {
-                //SetLayerDepth(State == PieceState.Selected ? 1f : 0f);
+            //if (BackgroundTexture != null && !IsNest)
+            //{
 
-                //Global.SpriteBatch.Draw(BackgroundTexture, Position, SourceRectangle, BackgroundColor, Rotation, Origin, Scale, SpriteEffects, 0f);
-                Global.SpriteBatch.Draw(BackgroundTexture, DestinationRectangle, BackgroundColor);
-            }
+            //    Global.SpriteBatch.Draw(BackgroundTexture, DestinationRectangle, SourceRectangle, BackgroundColor, Rotation, Origin, SpriteEffects, LayerDepth - 0.1f);
+            //    //Global.SpriteBatch.Draw(BackgroundTexture, DestinationRectangle, BackgroundColor);
+            //}
 
-            //Color = new Color(Color, 0.2f);
+            base.Draw();
 
-            if (Texture != null)
-                base.Draw();
-
-            if (!IsEmpty)
-            {
-                //if (State == PieceState.Selected)
-                //    Global.SpriteBatch.Draw(SelectedTexture, DestinationRectangle, Color);
-            }
-
-            //FontManager.Draw();
+            FontManager.Draw();
 
             //Frame.Draw();
         }
 
         public Piece MakeEmpty()
         {
-            SetBackgroundColor(Color.White);
-            SetBackgroundTexture(null);
+            //SetBackgroundColor(Color.White);
+            //SetBackgroundTexture(null);
 
             SetColor(Color.White);
-            SetTexture(TextureManager.CreateTexture2D("Textures/emptyPiece"));
+            // SetTexture(TextureManager.CreateTexture2D("Textures/emptyPiece"));
+            SetTexture(null);
 
             ClearTypes();
             AddType(PieceType.Empty);
 
-            //Frame.ChangeAllLinesColor(Color.Red);
+            var simpleShadowEffect = GetEffect<SimpleShadowEffect>();
+
+            if (simpleShadowEffect != null)
+                simpleShadowEffect.End();
 
             return this;
         }
 
-        public Piece MakeNest(Texture2D backgroundTexture, Color backgroundColor, Texture2D texture, Color color)
+        public Piece MakeNest(Texture2D texture, Color color)
         {
-            SetBackgroundColor(backgroundColor);
-            SetBackgroundTexture(backgroundTexture);
+          //  SetBackgroundTexture(null);
 
-            //SetImageNumber(imageNumber);
+            SetTexture(texture);
             SetColor(color);
-            SetTexture(backgroundTexture);
 
             ClearTypes();
             AddType(PieceType.Nest);
@@ -229,9 +231,10 @@ namespace ArarGameLibrary.Model
 
         public Piece MakeImage(int imageNumber,Texture2D texture) 
         {
-            SetTexture(texture);
-
             SetImageNumber(imageNumber);
+
+            SetTexture(texture);
+            SetColor(Color.White);
 
             ClearTypes();
             AddType(PieceType.Image);
@@ -269,29 +272,32 @@ namespace ArarGameLibrary.Model
             return Types.Any(t => t == type);
         }
 
-        public Piece OnSelecting()
+        public Piece Select()
         {
             if (!HasType(PieceType.Empty) && !HasType(PieceType.Nest))
             {
-                State = PieceState.Selected;
+                if (State == PieceState.UnSelected)
+                {
+                    State = PieceState.Selected;
 
-                //Pulsate(true);
-
-                SetText("State:" + State);
-
-                ShowSimpleShadow(true);
+                    SetPosition(new Vector2(Position.X, Position.Y) + new Vector2(5, 5));
+                }
             }
 
             return this;
         }
 
-        public Piece OnDeselecting()
+        public Piece Unselect()
         {
-            State = PieceState.UnSelected;
+            if(!HasType(PieceType.Empty) && !HasType(PieceType.Nest))
+            {
+                if(State == PieceState.Selected)
+                {
+                    State = PieceState.UnSelected;
 
-            ShowSimpleShadow(false);
-            //Pulsate(false);
-            SetText("State:" + State);
+                    SetPosition(new Vector2(Position.X, Position.Y) + new Vector2(-5, -5));
+                }
+            }
 
             return this;
         }
@@ -303,33 +309,33 @@ namespace ArarGameLibrary.Model
             return this;
         }
 
-        public Piece SetBackgroundTextureByRandomColor()
-        {
-            BackgroundTexture = TextureManager.CreateTexture2DByRandomColor((int)Size.X, (int)Size.Y);
+        //public Piece SetBackgroundTextureByRandomColor()
+        //{
+        //    BackgroundTexture = TextureManager.CreateTexture2DByRandomColor((int)Size.X, (int)Size.Y);
 
-            return this;
-        }
+        //    return this;
+        //}
 
-        public Piece SetBackgroundColor(Color color)
-        {
-            BackgroundColor = color;
+        //public Piece SetBackgroundColor(Color color)
+        //{
+        //    BackgroundColor = color;
 
-            return this;
-        }
+        //    return this;
+        //}
 
-        public Piece SetBackgroundTexture()
-        {
-            BackgroundTexture = TextureManager.CreateTexture2DBySingleColor(BackgroundColor, (int)Size.X, (int)Size.Y);
+        //public Piece SetBackgroundTexture()
+        //{
+        //    BackgroundTexture = TextureManager.CreateTexture2DBySingleColor(BackgroundColor, (int)Size.X, (int)Size.Y);
 
-            return this;
-        }
+        //    return this;
+        //}
 
-        public Piece SetBackgroundTexture(Texture2D texture)
-        {
-            BackgroundTexture = texture;
+        //public Piece SetBackgroundTexture(Texture2D texture)
+        //{
+        //    BackgroundTexture = texture;
 
-            return this;
-        }
+        //    return this;
+        //}
 
         public new Piece SetColor(Color color)
         {
@@ -345,11 +351,16 @@ namespace ArarGameLibrary.Model
             return this;
         }
 
+        public new Piece SetLayerDepth(float layerDepth)
+        {
+            base.SetLayerDepth(layerDepth);
+
+            return this;
+        }
+
         public Piece SetNumber(int number)
         {
             Number = number;
-
-            //FontManager.SetText(Number.ToString());
 
             return this;
         }
@@ -378,7 +389,16 @@ namespace ArarGameLibrary.Model
 
         public string SetText(string text = null)
         {
+            if (IsNest)
+                return string.Empty;
+
+            //return Number + " - " + string.Join(",", Types.Select(t=>t.ToString())); 
+
             return text ?? string.Format("({0},{1})={2}",RowNumber,ColumnNumber,Number);//$"({RowNumber},{ColumnNumber})={Number}";
+
+            var e = GetEffect<SimpleShadowEffect>();
+
+            return e.IsActive.ToString();
 
             //return text ?? $"{ImageNumber}";
         }
@@ -403,7 +423,6 @@ namespace ArarGameLibrary.Model
 
         public Piece TopNeighbor
         {
-            //return pieceList.FirstOrDefault(p => p.Number == (Number - Container.ColumnCount));
             get
             {
                 return Container.Pieces.FirstOrDefault(p => p.Number == (Number - Container.ColumnCount));
@@ -412,7 +431,6 @@ namespace ArarGameLibrary.Model
 
         public Piece BottomNeighbor
         {
-            //return pieceList.FirstOrDefault(p => p.Number == (Number + Container.ColumnCount));
             get
             {
                 return Container.Pieces.FirstOrDefault(p => p.Number == (Number + Container.ColumnCount));
@@ -421,18 +439,14 @@ namespace ArarGameLibrary.Model
 
         public Piece LeftNeighbor
         {
-            //return ColumnNumber!=0 ? pieceList.FirstOrDefault(p => p.Number == (Number - 1)) : null;
             get
             {
                 return ColumnNumber != 0 ? Container.Pieces.FirstOrDefault(p => p.Number == (Number - 1)) : null;
             }
         }
 
-        ///?????
         public Piece RightNeighbor
         {
-            //return Container!=null && ColumnNumber!=Container.ColumnCount-1 ? pieceList.FirstOrDefault(p => p.Number == (Number + 1)) : null;
-
             get
             {
                 return Container != null && ColumnNumber != Container.ColumnCount - 1 ? Container.Pieces.FirstOrDefault(p => p.Number == Number + 1) : null;
@@ -466,21 +480,11 @@ namespace ArarGameLibrary.Model
                 return false;
         }
 
-        public static void Replace(Piece selectedPiece,Piece previouslySelectedPiece,List<Piece> Pieces)
+        public static void Replace(Piece selectedPiece, Piece previouslySelectedPiece, List<Piece> Pieces)
         {
-            //var emptyPiece = Pieces[selectedPiece.RowNumber, selectedPiece.ColumnNumber];
-            //var tempPiece = emptyPiece;
-            //var filledPiece = Pieces[previouslySelectedPiece.RowNumber, previouslySelectedPiece.ColumnNumber];
-            //emptyPiece = filledPiece;
-            //filledPiece = tempPiece;
-
             var emptyPiece = Pieces.FirstOrDefault(p => p.RowNumber == selectedPiece.RowNumber && p.ColumnNumber == selectedPiece.ColumnNumber);
-            //Pieces[selectedPiece.RowNumber, selectedPiece.ColumnNumber].MemberwiseClone() as Piece;
-
             var filledPiece = Pieces.FirstOrDefault(p => p.RowNumber == previouslySelectedPiece.RowNumber && p.ColumnNumber == previouslySelectedPiece.ColumnNumber);
-                //Pieces[previouslySelectedPiece.RowNumber, previouslySelectedPiece.ColumnNumber].MemberwiseClone() as Piece;
 
-            
             var tempPositon = emptyPiece.Position;
             emptyPiece.Position = filledPiece.Position;
             filledPiece.Position = tempPositon;
@@ -493,21 +497,6 @@ namespace ArarGameLibrary.Model
             var tempNumber = emptyPiece.Number;
             emptyPiece.SetNumber(filledPiece.Number);
             filledPiece.SetNumber(tempNumber);
-
-            emptyPiece.SetText();
-            filledPiece.SetText();
-
-            //if (filledPiece.IsNest)
-            //{
-            //    var tempTexture = emptyPiece.Texture;
-
-            //    emptyPiece.SetTexture(filledPiece.Texture);
-
-            //    filledPiece.SetTexture(tempTexture);
-            //}
-
-            //Pieces[emptyPiece.RowNumber, emptyPiece.ColumnNumber] = emptyPiece;
-            //Pieces[filledPiece.RowNumber, filledPiece.ColumnNumber] = filledPiece;
         }
 
         public static Piece[,] To2DPieceArray(Vector2 pieceSize, int rowCount, int columnCount, Vector2? startingPoint = null)
@@ -525,7 +514,7 @@ namespace ArarGameLibrary.Model
                     array[i, k] = new Piece()
                                         .SetPosition(piecePosition)
                                         .SetSize(pieceSize)
-                                        .SetTexture(TextureManager.CreateTexture2DBySingleColor(Color.Blue,1,1))
+                                        .SetTexture(TextureManager.CreateTexture2DByRandomColor(1,1))
                                         .SetColor(Color.White)
                                         .SetRowAndColumnNumber(i, k)
                                         .SetNumber(number)
@@ -539,17 +528,16 @@ namespace ArarGameLibrary.Model
         public static Piece CreateACopy(Piece previous)
         {
             var newPiece = new Piece()
+                                .SetColor(previous.Color)
+                                .SetImageNumber(previous.ImageNumber)
+                                .SetNumber(previous.Number)
                                 .SetPosition(previous.Position)
+                                .SetRowAndColumnNumber(previous.RowNumber, previous.ColumnNumber)
                                 .SetSize(previous.Size)
                                 .SetState(previous.State)
-                                .AddType(previous.Types.ToArray())
-                                .SetBackgroundColor(previous.BackgroundColor)
-                                .SetBackgroundTexture(previous.BackgroundTexture)
-                                .SetColor(previous.Color)
                                 .SetTexture(previous.Texture)
-                                .SetRowAndColumnNumber(previous.RowNumber, previous.ColumnNumber)
-                                .SetNumber(previous.Number)
-                                .SetImageNumber(previous.ImageNumber);
+                                .AddType(previous.Types.ToArray());
+                                
 
             newPiece.LoadContent();
 

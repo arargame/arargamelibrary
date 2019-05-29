@@ -1,4 +1,5 @@
 ﻿using ArarGameLibrary.Manager;
+using ArarGameLibrary.ScreenManagement;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
@@ -6,35 +7,37 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ArarGameLibrary.ScreenManagement.Screens
+namespace PuzzleMeWindowsProject.Screens
 {
-    public class SettingsMenu : Menu
+    public class MainMenu : Menu
     {
         public override void Initialize()
         {
-            Global.ChangeGameWindowTitle("Settings");
+            Global.ChangeGameWindowTitle("Main Menu");
         }
 
         public override bool Load()
         {
             var collection = new Dictionary<string, Action>();
 
-            collection.Add("Graphic", (() =>
+            collection.Add("New",() =>
             {
-                DisableThenAddNew(new GraphicMenu());
-            }));
-
-            collection.Add("Sound", () =>
-            {
-                DisableThenAddNew(new SoundMenu());
+                DisableThenAddNew(new GameScreen());
             });
 
-            collection.Add("Back", () =>
+            collection.Add("Settings", () =>
             {
-                DisableThenAddNew(new MainMenu());
+                DisableThenAddNew(new SettingsMenu());
             });
+
+            collection.Add("Exit", () =>
+            {
+                Global.OnExit = true;
+            });
+
 
             Components.AddRange(Button.Sort(collection));
+
 
             return true && base.Load();
         }

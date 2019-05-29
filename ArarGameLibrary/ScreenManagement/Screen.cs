@@ -17,7 +17,7 @@ namespace ArarGameLibrary.ScreenManagement
         Preparing
     }
 
-    public abstract class Screen : BaseObject,IDisposable
+    public abstract class Screen : BaseObject, IDisposable
     {
         private IntPtr nativeResource = Marshal.AllocHGlobal(100);
 
@@ -75,7 +75,7 @@ namespace ArarGameLibrary.ScreenManagement
             if (ScreenState == ScreenState.Frozen)
                 return;
 
-            if(ScreenState ==  ScreenState.Preparing)
+            if (ScreenState == ScreenState.Preparing)
                 CheckWhetherIsReady();
         }
 

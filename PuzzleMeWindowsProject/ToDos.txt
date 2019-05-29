@@ -38,3 +38,5 @@
 +simpleshadoweffect i alphaıs sıfır olanlar haricindeki piksellerden oluşacak gölgelendirmeye çevir(geliştirme)
 +25.5.2019 layerdepth sorunu giderildi,çizdirme sırası ayarlandı
 +layerdepth için enum ayarlanabilir bütün objelerde kullanılmak üzere(0,0.25,0.5,0.75,1) gibi
++26.5.2019 Board-Piece çalışmalar yapıldı Select-Deselect fonksiyonlarındaki sorunlar giderildi
+-Time Manager,Sound Manager yapılarına ihtiyaç var

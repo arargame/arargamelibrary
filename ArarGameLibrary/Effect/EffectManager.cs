@@ -11,7 +11,7 @@ namespace ArarGameLibrary.Effect
     {
         public Sprite Sprite { get; set; }
 
-        private bool IsActive { get; set; }
+        public bool IsActive { get; set; }
 
         private Action Task;
         private Action EndTask;

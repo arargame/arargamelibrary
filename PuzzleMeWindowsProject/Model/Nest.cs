@@ -28,13 +28,11 @@ namespace PuzzleMeWindowsProject.Model
 
         public Board Board { get; set; }
 
-        Image image;
 
         public Nest(Board board, Image image)
         {
             //NestPieces = new List<NestPiece>();
 
-            this.image = image;
 
             Pieces = new List<Piece>();
 
@@ -131,7 +129,7 @@ namespace PuzzleMeWindowsProject.Model
                 {
                     var img = image.Pieces.FirstOrDefault(ip => ip.ImageNumber == piece.ImageNumber);
 
-                    piece.MakeNest(img.Texture,Color.White,null,Color.White);
+                    piece.MakeNest(img.Texture,Color.White);
                 }
             }
 

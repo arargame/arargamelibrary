@@ -1,4 +1,5 @@
 ﻿using ArarGameLibrary.Manager;
+using ArarGameLibrary.ScreenManagement;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -7,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ArarGameLibrary.ScreenManagement.Screens
+namespace PuzzleMeWindowsProject.Screens
 {
     public class PauseMenu : Menu
     {

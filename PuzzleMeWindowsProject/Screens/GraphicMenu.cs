@@ -1,11 +1,12 @@
 ﻿using ArarGameLibrary.Manager;
+using ArarGameLibrary.ScreenManagement;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ArarGameLibrary.ScreenManagement.Screens
+namespace PuzzleMeWindowsProject.Screens
 {
     public class GraphicMenu : Menu
     {

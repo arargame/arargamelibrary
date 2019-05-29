@@ -8,7 +8,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using GameLevel = PuzzleMeWindowsProject.Manager.GameLevel;
 
 namespace PuzzleMeWindowsProject.Model
 {
@@ -16,29 +15,29 @@ namespace PuzzleMeWindowsProject.Model
     {
         public GameLevel Level { get; set; }
 
-        //public Image Image { get; set; }
-
         public int RowCount { get; set; }
 
         public int ColumnCount { get; set; }
 
         public Vector2 PieceSize { get; set; }
 
-        //public Piece[,] Pieces { get; set; }
         public List<Piece> Pieces { get; set; }
 
-        public Board(int rowCount, int columnCount)
+        public Vector2 Size { get; set; }
+
+        public Board(int rowCount, int columnCount, Vector2 size)
         {
-            //Pieces = new Piece[rowCount, columnCount];
             RowCount = rowCount;
             ColumnCount = columnCount;
+            Size = size;
 
             Initialize();
         }
 
         public void Initialize()
         {
-            PieceSize = new Vector2((float)Global.ViewportWidth / ColumnCount, (float)Global.ViewportHeight / RowCount);
+            //Burada board ın sınırları çizilmeis gerekiyor ,bütün ekrana göre hesaplanmamalı
+            PieceSize = new Vector2((int)(Size.X / ColumnCount),(int)(Size.Y / RowCount));
 
 
             //Board'un başlangıç pozisyonu belirlenebilir
@@ -46,7 +45,7 @@ namespace PuzzleMeWindowsProject.Model
 
             foreach (var piece in Pieces)
             {
-                piece.OnDeselecting()
+                piece.Unselect()
                     .SetContainer(this);
             }
         }
@@ -57,7 +56,7 @@ namespace PuzzleMeWindowsProject.Model
             {
                 piece.LoadContent();
 
-                piece.SetText();
+                piece.SetDrawMethodType(5);
             }
 
             var emptyPieceNumber = Global.Random.Next(0, Pieces.OfType<Piece>().Count());
@@ -77,12 +76,12 @@ namespace PuzzleMeWindowsProject.Model
                 if (InputManager.Selected(piece.DestinationRectangle))
                 {
                     if (!pieceList.Any(p => p.State == PieceState.Selected))
-                        piece.OnSelecting();
+                        piece.Select();
                     else
                     {
                         var previouslySelectedPiece = pieceList.FirstOrDefault(p => p.State == PieceState.Selected);
 
-                        previouslySelectedPiece.OnDeselecting();
+                        previouslySelectedPiece.Unselect();
 
                         if (previouslySelectedPiece.Id != piece.Id)
                         {
@@ -91,17 +90,15 @@ namespace PuzzleMeWindowsProject.Model
                                 Piece.Replace(piece, previouslySelectedPiece, Pieces);
                             }
                             else
-                                piece.OnSelecting();
+                                piece.Select();
                         }
                     }
                 }
-
+                
                 piece.Update();
             }
 
             UnSelectOthersPieces();
-
-            // Image.Update();
         }
 
         public void Draw(SpriteBatch spriteBatch = null)
@@ -110,20 +107,11 @@ namespace PuzzleMeWindowsProject.Model
             {
                 piece.Draw();
             }
-
-            //Image.Draw();
         }
 
         public void UnloadContent()
         {
             throw new NotImplementedException();
-        }
-
-        public Board SetImage(Image image)
-        {
-            //Image = image;
-
-            return this;
         }
 
         public void UnSelectOthersPieces()
@@ -135,13 +123,29 @@ namespace PuzzleMeWindowsProject.Model
                 var selectedPiece = pieceList.FirstOrDefault(p => p.State == PieceState.Selected);
 
                 if (selectedPiece != null && piece.Id != selectedPiece.Id)
-                    piece.OnDeselecting();
+                    piece.Unselect();
             }
         }
 
         public Piece GetPiece(int rowNumber, int columnNumber)
         {
             return Pieces.FirstOrDefault(p => p.RowNumber == rowNumber && p.ColumnNumber == columnNumber);
+        }
+
+        public Board SpreadImagePiecesOnTheBoard(Image image)
+        {
+            var spreadedImagePieces = General.PopulateListRandomlyFromAnother<Piece>(Pieces.Where(p => !p.IsEmpty).ToList(), image.Pieces.Count);
+
+            for (int i = 0; i < image.Pieces.Count; i++)
+            {
+                var imagePiece = image.Pieces[i];
+
+                spreadedImagePieces[i].Id = imagePiece.Id;
+
+                spreadedImagePieces[i].MakeImage(imagePiece.ImageNumber, imagePiece.Texture);
+            }
+
+            return this;
         }
     }
 }

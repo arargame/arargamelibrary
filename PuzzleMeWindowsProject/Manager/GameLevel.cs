@@ -1,4 +1,5 @@
-﻿using ArarGameLibrary.Manager;
+﻿using ArarGameLibrary.Effect;
+using ArarGameLibrary.Manager;
 using ArarGameLibrary.Model;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -13,8 +14,13 @@ namespace PuzzleMeWindowsProject.Manager
 {
     public class GameLevel : Level
     {
-        static int MaxPieceWidth = 50;
-        static int MaxPieceHeight = 50;
+        const float RightSideRatio = 12.5f;
+
+        const int MaxPieceWidth = 87;
+        const int MaxPieceHeight = 60;
+
+        const int MinRowCount = 3;
+        const int MinColumnCount = 3;
 
         Image Image { get; set; }
 
@@ -22,11 +28,7 @@ namespace PuzzleMeWindowsProject.Manager
 
         Nest Nest { get; set; }
 
-        public static int MinRowCount = 3;
-        public static int MaxRowCount = Global.ViewportHeight / MaxPieceHeight;
-
-        public static int MinColumnCount = 3;
-        public static int MaxColumnCount = Global.ViewportWidth / MaxPieceWidth;
+        List<Piece> BoardPiecesOnNest { get; set; }
 
         public GameLevel()
         {
@@ -35,52 +37,107 @@ namespace PuzzleMeWindowsProject.Manager
 
         public override void Initialize()
         {
-            //Board = new Board(Global.Random.Next(MinRowCount,MaxRowCount),Global.Random.Next(MinColumnCount,MaxColumnCount));
+            var navBarWidth = Global.ViewportWidth * RightSideRatio / 100;
+            var boardWidth = Global.ViewportWidth - navBarWidth;
 
-            Board = new Board(8,8);
+            var maxRowCount = (int)Global.ViewportHeight / MaxPieceHeight;
+            var maxColumnCount = (int)boardWidth / MaxPieceWidth;
+
+            var boardColumnCount = MathHelper.Clamp(maxColumnCount, MinColumnCount, maxColumnCount);
+            var boardRowCount = MathHelper.Clamp(maxRowCount, MinRowCount, maxRowCount);
+
+            Board = new Board(boardRowCount,boardColumnCount, new Vector2(boardWidth, Global.ViewportHeight));
 
             Image = new Image("Textures/shutterstock_360399314");
+
+            BoardPiecesOnNest = new List<Piece>();
+
+            base.Initialize();
         }
 
 
         public override void LoadContent(Texture2D texture = null)
         {
-            Board.LoadContent();
-
             Image.LoadContent();
 
             Image.SetRowAndColumnCount(2);
 
-            //spreadedimage preparing
-            var spreadedImagePieces = General.PopulateListRandomlyFromAnother<Piece>(Board.Pieces.Where(p => !p.IsEmpty).ToList(), Image.Pieces.Count);
+            Board.LoadContent();
 
-            for (int i = 0; i < Image.Pieces.Count; i++)
-            {
-                var imagePiece = Image.Pieces[i];
+            Board.SpreadImagePiecesOnTheBoard(Image);
 
-                spreadedImagePieces[i].Id = imagePiece.Id;
+            Nest = new Nest(Board, Image);
 
-                spreadedImagePieces[i].MakeImage(imagePiece.ImageNumber, imagePiece.Texture);
-            }
+            Nest.Pieces.ForEach(p => p.SetDrawMethodType(1));
 
-            Nest = new Nest(Board,Image);
+            Nest.Pieces.ForEach(p => p.SetColor(Color.Gray));
+
+            //Board.Pieces.Where(p=>!p.IsEmpty).ToList().ForEach(p=>p.SetColor(new Color(p.Color,0.5f)));
+
+            base.LoadContent();
         }
 
         public override void Update(GameTime gameTime = null)
         {
-            //Nest.Update();
+            Nest.Update();
 
             Board.Update();
 
             if (InputManager.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.R))
                 LoadContent();
+
+            foreach (var boardPiece in Board.Pieces)
+            {
+                foreach (var nestPiece in Nest.Pieces)
+                {
+                    if (boardPiece.Number == nestPiece.Number)
+                    {
+                        if (!BoardPiecesOnNest.Any(np => np.Number == boardPiece.Number))
+                            BoardPiecesOnNest.Add(boardPiece);
+                    }
+                }
+            }
+
+
+            var outOfNest = BoardPiecesOnNest.Select(bp => bp.Number).Except(Nest.Pieces.Select(np => np.Number)).FirstOrDefault();
+
+            BoardPiecesOnNest.RemoveAll(np => np.Number == outOfNest);
+
+            var outsidePiecesOfNest = Board.Pieces.Where(bp => !BoardPiecesOnNest.Any(np => np.Number == bp.Number)).ToList();
+
+
+            foreach (var piece in Board.Pieces)
+            {
+                var simpleShadowEffect = piece.GetEffect<SimpleShadowEffect>();
+
+                if (outsidePiecesOfNest.Any(ep => ep.Number == piece.Number))
+                {
+                    piece.SetColor(new Color(piece.Color, 1f));
+
+                    if (simpleShadowEffect != null && !piece.IsEmpty)
+                        simpleShadowEffect.Start();
+                }
+                else
+                {
+                    piece.SetColor(new Color(piece.Color, 0.75f));
+
+                    if (simpleShadowEffect != null)
+                        simpleShadowEffect.End();
+                }
+            }
         }
 
         public override void Draw(SpriteBatch spriteBatch = null)
         {
-            //Nest.Draw();
+            Nest.Draw();
 
             Board.Draw();
+
+            var imagePieces = Board.Pieces.Where(p => p.IsImage).ToList();
+
+
+
+            base.Draw();
         }
 
 

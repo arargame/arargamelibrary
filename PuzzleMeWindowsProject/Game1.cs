@@ -1,11 +1,12 @@
-﻿using ArarGameLibrary.Manager;
+﻿using ArarGameLibrary.Effect;
+using ArarGameLibrary.Manager;
 using ArarGameLibrary.Model;
-using ArarGameLibrary.ScreenManagement.Screens;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using PuzzleMeWindowsProject.Manager;
 using PuzzleMeWindowsProject.Model;
+using PuzzleMeWindowsProject.Screens;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,26 +21,12 @@ namespace PuzzleMeWindowsProject
     {
         Animation animation;
 
-        Graph graph;
-
-        Texture2D texture1;
-        Texture2D texture2;
-
-        TextureManager textureManager;
-
-        Vector2 position = new Vector2(0,0);
-
         Image image;
 
-        Color bgColor = Color.Black;
+        Board board;
 
-        List<Piece> Pieces;
-
-        SpriteFont sFont;
-
-        private FrameManager frameManager = new FrameManager();
-
-        Piece samplePiece;
+        Nest nest;
+     
         
         public Game1()
         {
@@ -81,49 +68,24 @@ namespace PuzzleMeWindowsProject
         /// </summary>
         protected override void LoadContent()
         {
-            textureManager = new TextureManager().Load(Content.Load<Texture2D>("WP_20180819_005"));
-
             image = new Image("WP_20180819_005");
             image.LoadContent();
             image.SetPosition(new Vector2(100,100));
-            image.SetRowAndColumnCount(4,4);
-            image.SetPieceSize(new Vector2(100,100));
+            image.SetRowAndColumnCount(2, 2);
+            image.SetPieceSize(new Vector2(100, 100));
             image.SetPiecePosition();
 
+            board = new Board(8,8,new Vector2(Global.ViewportWidth-100,Global.ViewportHeight));
+            board.LoadContent();
+            board.SpreadImagePiecesOnTheBoard(image);
 
-            texture1 = Content.Load<Texture2D>("Textures/shutterstock_360399314");
-            texture2 = TextureManager.Crop(texture1,new Rectangle(0,0,50,50));
-
-
-            var list = new List<Vector2>();
-
-            for (int i = 0; i < 100; i++)
-            {
-                //Thread.Sleep(10);
-
-                Random r = new Random();
-
-                list.Add(new Vector2(r.Next(400),r.Next(400)));
-            }
-
-            //new Vector2(10, 10), new Vector2(100, 10), new Vector2(100, 100), new Vector2(10, 100)
-            graph = new Graph(true).PopulatePoints(list.ToArray())
-                                .PopulateLines(Color.Blue);
-
-            graph.LoadContent();
+            nest = new Nest(board,image);
+            nest.Pieces.ForEach(p => p.SetDrawMethodType(1));
 
             animation = new Animation(TextureManager.CreateTexture2D("Textures/runningcat"),Vector2.Zero,new Vector2(300,250),4,2,8);
             animation.LoadContent();
 
-            //animation.SetPieceSize(new Vector2(100,100));
-
-            sFont = Content.Load<SpriteFont>("Fonts/MenuFont");
-
-            samplePiece = new Piece()
-                .SetPosition(new Vector2(0, 0))
-                .SetSize(new Vector2(100, 100));
-
-            samplePiece.LoadContent();
+            InputManager.IsActive = true;
         }
 
         /// <summary>
@@ -152,27 +114,13 @@ namespace PuzzleMeWindowsProject
 
             //gameTime.IsRunningSlowly
 
-            image.Update();
-
-            animation.Update();
-
-            var amount = 5;
-
-            if (Keyboard.GetState().IsKeyDown(Keys.Up))
-                position.Y -= amount;
-            if (Keyboard.GetState().IsKeyDown(Keys.Down))
-                position.Y += amount;
-            if (Keyboard.GetState().IsKeyDown(Keys.Left))
-                position.X -= amount;
-            if (Keyboard.GetState().IsKeyDown(Keys.Right))
-                position.X += amount;
+           // board.Update();
+       //     image.Update();
+         //   nest.Update();
 
 
-            samplePiece.Update();
-            if (InputManager.Selected(samplePiece.DestinationRectangle))
-            {
-                samplePiece.Pulsate(!samplePiece.IsPulsating);
-            }
+
+            //animation.Update();
 
             base.Update(gameTime);
         }
@@ -183,55 +131,28 @@ namespace PuzzleMeWindowsProject
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(bgColor);
+            GraphicsDevice.Clear(Color.White);
+
+            Global.SpriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend);
 
 
-            //image.Draw();
-
-
-            //Global.SpriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
-
-
-            //Global.SpriteBatch.Draw(texture2, new Rectangle(0, 0, texture1.Width, texture1.Height), Color.White);
-            
-            //Global.SpriteBatch.End();
-
-            Global.SpriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
-
-
-            var scale = General.Pulsate(6);
-
-            ////float frameRate = 1 / (float)gameTime.ElapsedGameTime.TotalSeconds;
-            ////var fm = FontManager.Create(string.Format("FPS : {0} = 1 / {1} , IsRunningSlowly : {2}",frameRate,(float)gameTime.ElapsedGameTime.TotalSeconds,gameTime.IsRunningSlowly),new Vector2(10,10),Color.Bisque);
-            ////fm.Draw();
-
-            ////var deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
-
-            ////frameManager.Update(deltaTime);
-
-            ////Global.SpriteBatch.DrawString(fm.Font,"fps : "+frameManager.AverageFramesPerSecond,new Vector2(50,50),Color.Blue);
-
-             ScreenManager.Draw();
-            //graph.Draw();
-            // image.Draw();
-
+            ScreenManager.Draw();
 
             //foreach (var piece in image.Pieces)
             //{
             //    piece.Draw();
             //}
-
-            //var pi = image.Pieces[10];
-            //Global.SpriteBatch.Draw(pi.Texture,pi.Position,new Rectangle(0,0,pi.Texture.Width/2,pi.Texture.Height/2),pi.Color);
-            //Global.SpriteBatch.Draw(image.Texture, pi.Position,new Rectangle(250,250,100,100), pi.Color);
-            //Global.SpriteBatch.Draw(image.Texture, new Vector2(pi.Position.X+100,pi.Position.Y), new Rectangle(350, 250, 100, 100), pi.Color);
-
-            //Global.SpriteBatch.Draw(pi.Texture, new Rectangle(pi.DestinationRectangle.X, pi.DestinationRectangle.Y, (int)(pi.DestinationRectangle.Width * scale), (int)(pi.DestinationRectangle.Height * scale)), Color.White);
-
-            //Global.SpriteBatch.Draw(image.Texture, pi.Position,pi.SourceRectangle, pi.Color, pi.Rotation, pi.Origin, new Vector2(pi.Scale), pi.SpriteEffects, pi.LayerDepth);
-
-
+         //   board.Draw();
+          //  nest.Draw();
+           //  image.Draw();
             //  animation.Draw();
+
+            //var emptyPiece = board.Pieces.SingleOrDefault(p => p.IsEmpty);
+
+            //emptyPiece.Draw();
+
+           // Global.SpriteBatch.Draw(emptyPiece.Texture,new Rectangle(0,0,50,50),new Rectangle(0,0,emptyPiece.Texture.Width,emptyPiece.Texture.Height),Color.White,0f,Vector2.Zero,SpriteEffects.None,1f);
+
             Global.SpriteBatch.End();
 
             base.Draw(gameTime);

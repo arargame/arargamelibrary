@@ -31,12 +31,13 @@ namespace ArarGameLibrary.Effect
 
             SetEndTask(() => 
             {
-            
+                Rectangle = Sprite.DestinationRectangle;
             });
 
             SetDrawingTask(() => 
             {
-                Global.SpriteBatch.Draw(Texture, new Vector2(Rectangle.X,Rectangle.Y), Rectangle, Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+                if(IsActive)
+                Global.SpriteBatch.Draw(Texture, new Vector2(Rectangle.X, Rectangle.Y), Rectangle, Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, Sprite.LayerDepth - 0.5f);
             });
         }
     }

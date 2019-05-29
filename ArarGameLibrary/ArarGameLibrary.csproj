@@ -71,14 +71,6 @@
     <Compile Include="ScreenManagement\Component.cs" />
     <Compile Include="ScreenManagement\LightDrop.cs" />
     <Compile Include="ScreenManagement\Screen.cs" />
-    <Compile Include="ScreenManagement\Screens\ChangeResolutionMenu.cs" />
-    <Compile Include="ScreenManagement\Screens\GameScreen.cs" />
-    <Compile Include="ScreenManagement\Screens\GraphicMenu.cs" />
-    <Compile Include="ScreenManagement\Screens\MainMenu.cs" />
-    <Compile Include="ScreenManagement\Screens\Menu.cs" />
-    <Compile Include="ScreenManagement\Screens\PauseMenu.cs" />
-    <Compile Include="ScreenManagement\Screens\SettingsMenu.cs" />
-    <Compile Include="ScreenManagement\Screens\SoundMenu.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
