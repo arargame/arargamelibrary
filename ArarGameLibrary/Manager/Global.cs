@@ -1,4 +1,5 @@
 ﻿using ArarGameLibrary.Model;
+using ArarGameLibrary.ScreenManagement;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -27,6 +28,8 @@ namespace ArarGameLibrary.Manager
         public static SpriteBatch SpriteBatch { get; set; }
 
         public static bool OnExit { get; set; }
+
+        public static Theme Theme = new Theme(ThemeMode.Dark);
 
         public static void ChangeGameWindowTitle(string title)
         {

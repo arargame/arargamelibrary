@@ -102,6 +102,13 @@ namespace ArarGameLibrary.Manager
             return this;
         }
 
+        public FontManager SetLayerDepth(float LayerDepth)
+        {
+            LayerDepth = LayerDepth;
+
+            return this;
+        }
+
         public FontManager SetPosition(Vector2 position)
         {
             Position = position;

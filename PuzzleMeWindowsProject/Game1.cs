@@ -1,6 +1,8 @@
 ﻿using ArarGameLibrary.Effect;
+using ArarGameLibrary.Extension;
 using ArarGameLibrary.Manager;
 using ArarGameLibrary.Model;
+using ArarGameLibrary.ScreenManagement;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -26,7 +28,11 @@ namespace PuzzleMeWindowsProject
         Board board;
 
         Nest nest;
-     
+
+        Button button;
+
+        Frame graph;
+
         
         public Game1()
         {
@@ -53,11 +59,14 @@ namespace PuzzleMeWindowsProject
             Global.GraphicsDevice = GraphicsDevice;
             Global.Random = new Random();
             Global.SpriteBatch = new SpriteBatch(GraphicsDevice);
+            Global.Theme = new Theme(ThemeMode.White);
 
             InputManager.IsMouseVisible = IsMouseVisible = true;
             ScreenManager.SetFullScreen(false);
 
+
             ScreenManager.Add(new MainMenu());
+            
 
             base.Initialize();
         }
@@ -86,6 +95,11 @@ namespace PuzzleMeWindowsProject
             animation.LoadContent();
 
             InputManager.IsActive = true;
+
+            button = new Button("Helloww!!",new Vector2(100,100));
+            button.LoadContent();
+            graph = new Frame(button.DestinationRectangle.TopLeftEdge(),button.DestinationRectangle.TopRightEdge(),button.DestinationRectangle.BottomRightEdge(),button.DestinationRectangle.BottomLeftEdge(),Color.Red);
+            graph.LoadContent();
         }
 
         /// <summary>
@@ -107,18 +121,20 @@ namespace PuzzleMeWindowsProject
             Global.GameTime = gameTime;
 
             InputManager.Update();
-            ScreenManager.Update();
+             ScreenManager.Update();
+
+            //button.Update();
 
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Global.OnExit)
                 Exit();
 
             //gameTime.IsRunningSlowly
 
-           // board.Update();
-       //     image.Update();
-         //   nest.Update();
+            // board.Update();
+            //     image.Update();
+            //   nest.Update();
 
-
+            //graph.Update();
 
             //animation.Update();
 
@@ -131,13 +147,14 @@ namespace PuzzleMeWindowsProject
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.White);
+            GraphicsDevice.Clear(Global.Theme.GetColor());
 
             Global.SpriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend);
 
 
             ScreenManager.Draw();
-
+            //button.Draw();
+            //graph.Draw();
             //foreach (var piece in image.Pieces)
             //{
             //    piece.Draw();

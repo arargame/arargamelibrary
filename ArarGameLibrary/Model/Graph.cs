@@ -48,10 +48,10 @@ namespace ArarGameLibrary.Model
 
         public void Update(GameTime gameTime = null)
         {
-            //foreach (var line in Lines)
-            //{
-            //    line.Update();
-            //}
+            foreach (var line in Lines)
+            {
+                line.Update();
+            }
         }
 
         public void Draw(SpriteBatch spriteBatch = null)

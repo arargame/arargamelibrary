@@ -1,5 +1,7 @@
 ﻿using ArarGameLibrary.Manager;
 using ArarGameLibrary.ScreenManagement;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using PuzzleMeWindowsProject.Manager;
 using System;
 using System.Collections.Generic;
@@ -30,7 +32,7 @@ namespace PuzzleMeWindowsProject.Screens
             return true; 
         }
 
-        public override void Update()
+        public override void Update(GameTime gameTime = null)
         {
             base.Update();
 
@@ -43,7 +45,7 @@ namespace PuzzleMeWindowsProject.Screens
             }
         }
 
-        public override void Draw()
+        public override void Draw(SpriteBatch spriteBatch = null)
         {
             if (ScreenState == ScreenState.Active)
             {

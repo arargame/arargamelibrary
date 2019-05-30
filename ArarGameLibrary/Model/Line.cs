@@ -9,16 +9,16 @@ using System.Threading.Tasks;
 
 namespace ArarGameLibrary.Model
 {
-    public class Line : BaseObject,IXna
+    public class Line : BaseObject, IXna
     {
         public Color Color { get; set; }
 
         public Texture2D Texture { get; set; }
 
         private static Texture2D defaultTexture;
-        public static Texture2D DefaultTexture 
+        public static Texture2D DefaultTexture
         {
-            get 
+            get
             {
                 return defaultTexture ?? (defaultTexture = TextureManager.CreateTexture2DBySingleColor(Global.RandomColor(), 1, 1));
             }
@@ -62,7 +62,7 @@ namespace ArarGameLibrary.Model
             if (IsInPerformanceMode)
                 Texture = DefaultTexture;
             else
-                Texture = TextureManager.CreateTexture2DBySingleColor(Color, 1, 1);        
+                Texture = TextureManager.CreateTexture2DBySingleColor(Color, 1, 1);
         }
 
         public void UnloadContent()
@@ -72,7 +72,6 @@ namespace ArarGameLibrary.Model
 
         public void Update(GameTime gameTime = null)
         {
-            throw new NotImplementedException();
         }
 
         public void Draw(SpriteBatch spriteBatch = null)
@@ -81,7 +80,7 @@ namespace ArarGameLibrary.Model
 
             var scale = new Vector2(Lenght, Thickness);
 
-            Global.SpriteBatch.Draw(Texture, From, null, Color, Angle, origin, scale, SpriteEffects.None, 0);
+            Global.SpriteBatch.Draw(Texture, From, null, Color.White, Angle, origin, scale, SpriteEffects.None, 1);
         }
 
         public Line ChangeColor(Color color)

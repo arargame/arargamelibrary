@@ -35,12 +35,12 @@ namespace PuzzleMeWindowsProject.Screens
             return true && base.Load();
         }
 
-        public override void Update()
+        public override void Update(GameTime gameTime = null)
         {
             base.Update();
         }
 
-        public override void Draw()
+        public override void Draw(SpriteBatch spriteBatch = null)
         {
             Global.SpriteBatch.Draw(TransparentBackground,new Rectangle(0,0,Global.ViewportWidth,Global.ViewportHeight),Color.White);
 

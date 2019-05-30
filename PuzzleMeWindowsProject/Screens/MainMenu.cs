@@ -38,7 +38,6 @@ namespace PuzzleMeWindowsProject.Screens
 
             Components.AddRange(Button.Sort(collection));
 
-
             return true && base.Load();
         }
     }

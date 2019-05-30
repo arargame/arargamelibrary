@@ -51,7 +51,6 @@
     <Compile Include="Screens\GameScreen.cs" />
     <Compile Include="Screens\GraphicMenu.cs" />
     <Compile Include="Screens\MainMenu.cs" />
-    <Compile Include="Screens\Menu.cs" />
     <Compile Include="Screens\PauseMenu.cs" />
     <Compile Include="Screens\SettingsMenu.cs" />
     <Compile Include="Screens\SoundMenu.cs" />

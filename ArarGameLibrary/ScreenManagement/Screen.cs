@@ -1,5 +1,7 @@
 ﻿using ArarGameLibrary.Manager;
 using ArarGameLibrary.Model;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +11,23 @@ using System.Threading.Tasks;
 
 namespace ArarGameLibrary.ScreenManagement
 {
+    public interface IScreen : IBaseObject,IXna
+    {
+        IScreen PreviousScreen { get; set; }
+
+        ScreenState ScreenState { get; set; }
+
+        void CheckWhetherIsReady();
+
+        void DisableThenAddNew(IScreen newScreen);
+
+        IScreen Activate();
+
+        IScreen Freeze(IScreen newScreen);
+
+        IScreen SetPreviousScreen(IScreen previousScreen);
+    }
+
     public enum ScreenState
     {
         Active,
@@ -17,11 +36,11 @@ namespace ArarGameLibrary.ScreenManagement
         Preparing
     }
 
-    public abstract class Screen : BaseObject, IDisposable
+    public abstract class Screen : BaseObject,IScreen, IDisposable
     {
         private IntPtr nativeResource = Marshal.AllocHGlobal(100);
 
-        public Screen PreviousScreen { get; set; }
+        public IScreen PreviousScreen { get; set; }
 
         public ScreenState ScreenState { get; set; }
 
@@ -65,12 +84,14 @@ namespace ArarGameLibrary.ScreenManagement
 
         public abstract bool Load();
 
+        public virtual void LoadContent(Texture2D texture = null) { }
+
         public virtual void UnloadContent()
         {
             Dispose();
         }
 
-        public virtual void Update()
+        public virtual void Update(GameTime gameTime = null)
         {
             if (ScreenState == ScreenState.Frozen)
                 return;
@@ -79,16 +100,16 @@ namespace ArarGameLibrary.ScreenManagement
                 CheckWhetherIsReady();
         }
 
-        public abstract void Draw();
+        public virtual void Draw(SpriteBatch spriteBatch = null) { }
 
-        public void DisableThenAddNew(Screen newScreen)
+        public void DisableThenAddNew(IScreen newScreen)
         {
             ScreenState = ScreenState.Inactive;
 
             ScreenManager.Add(newScreen);
         }
 
-        public Screen Freeze(Screen newScreen)
+        public IScreen Freeze(IScreen newScreen)
         {
             ScreenState = ScreenState.Frozen;
 
@@ -99,7 +120,7 @@ namespace ArarGameLibrary.ScreenManagement
             return this;
         }
 
-        public Screen Activate()
+        public IScreen Activate()
         {
             ScreenState = ScreenManagement.ScreenState.Active;
 
@@ -110,7 +131,7 @@ namespace ArarGameLibrary.ScreenManagement
 
         //public abstract void ExitScreen();
 
-        public Screen SetPreviousScreen(Screen previousScreen)
+        public IScreen SetPreviousScreen(IScreen previousScreen)
         {
             PreviousScreen = previousScreen;
 

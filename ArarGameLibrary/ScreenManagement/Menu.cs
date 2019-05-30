@@ -3,13 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ArarGameLibrary.Manager;
 using ArarGameLibrary.ScreenManagement;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
-namespace PuzzleMeWindowsProject.Screens
+namespace ArarGameLibrary.ScreenManagement
 {
     public abstract class Menu : Screen
     {
-        public List<Component> Components = new List<Component>();
+        public List<IComponent> Components = new List<IComponent>();
 
         private LightDrop[] Drops = new LightDrop[15];
 
@@ -20,12 +23,14 @@ namespace PuzzleMeWindowsProject.Screens
                 Drops[i] = new LightDrop();
 
                 Drops[i].LoadContent();
+
+                Drops[i].SetColor(Global.Theme.Mode==ThemeMode.White ? Theme.GetDefaultColorByMode(ThemeMode.Dark) : Theme.GetDefaultColorByMode(ThemeMode.White));
             }
 
             return true;
         }
 
-        public override void Update()
+        public override void Update(GameTime gameTime = null)
         {
             base.Update();
 
@@ -43,7 +48,7 @@ namespace PuzzleMeWindowsProject.Screens
             }
         }
 
-        public override void Draw()
+        public override void Draw(SpriteBatch spriteBatch = null)
         {
             if (ScreenState == ScreenState.Active)
             {

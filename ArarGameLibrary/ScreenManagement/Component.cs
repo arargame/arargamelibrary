@@ -9,8 +9,19 @@ using System.Threading.Tasks;
 
 namespace ArarGameLibrary.ScreenManagement
 {
-    public abstract class Component : Sprite
+    public interface IComponent : IXna
     {
+        IScreen Screen { get; set; }
+
+        bool IsHovering { get; set; }
+
+        void OnClick(Action action);
+    }
+
+    public abstract class Component : Sprite , IComponent
+    {
+        public IScreen Screen { get; set; }
+
         public bool IsHovering { get; set; }
 
         public Action ClickAction;
@@ -31,6 +42,13 @@ namespace ArarGameLibrary.ScreenManagement
                 if (ClickAction != null)
                     ClickAction.Invoke();
             }
+        }
+
+        public Component SetScreen(IScreen screen)
+        {
+            Screen = screen;
+
+            return this;
         }
     }
 }

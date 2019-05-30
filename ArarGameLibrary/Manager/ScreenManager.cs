@@ -9,13 +9,13 @@ namespace ArarGameLibrary.Manager
 {
     public class ScreenManager
     {
-        public static List<Screen> Screens = new List<Screen>();
+        public static List<IScreen> Screens = new List<IScreen>();
 
         public ScreenManager() { }
 
-        public static void Add(Screen screen)
+        public static void Add(IScreen screen)
         {
-            if(!Screens.Any(s=>s.Id==screen.Id))
+            if (!Screens.Any(s => s.Id == screen.Id))
                 Screens.Add(screen);
         }
 
