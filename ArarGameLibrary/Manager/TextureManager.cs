@@ -11,6 +11,8 @@ namespace ArarGameLibrary.Manager
 {
     public class TextureManager
     {
+        private static Dictionary<Color, Texture2D> TextureCollectionByColor = new Dictionary<Color, Texture2D>();
+
         public Texture2D Texture { get; set; }
 
         public TextureManager Load(Texture2D texture)
@@ -50,12 +52,7 @@ namespace ArarGameLibrary.Manager
             return newTexture;
         }
 
-        public static Texture2D CreateTexture2DByRandomColor(int width, int height)
-        {
-            return CreateTexture2DBySingleColor(Global.RandomColor(), width, height);
-        }
-
-        public static Texture2D CreateTexture2DByColorArray(Color[] colorArray, int width, int height, bool mipmap = false, SurfaceFormat surfaceFormat = SurfaceFormat.Color)
+        public static Texture2D CreateTexture2DByColorArray(Color[] colorArray, int width=1, int height=1, bool mipmap = false, SurfaceFormat surfaceFormat = SurfaceFormat.Color)
         {
             var texture = new Texture2D(Global.GraphicsDevice, width, height, mipmap, surfaceFormat);
 
@@ -64,12 +61,22 @@ namespace ArarGameLibrary.Manager
             return texture;
         }
 
-        public static Texture2D CreateTexture2DBySingleColor(Color color,int width,int height)
+        public static Texture2D CreateTexture2DByRandomColor(int width = 1, int height = 1)
+        {
+            return CreateTexture2DBySingleColor(Global.RandomColor(), width, height);
+        }
+
+        public static Texture2D CreateTexture2DBySingleColor(Color color,int width = 1,int height = 1)
         {
             Texture2D newTexture = null;
 
             try
             {
+                if (TextureCollectionByColor.ContainsKey(color))
+                {
+                    return TextureCollectionByColor[color];
+                }
+
                 Color[] colors = new Color[width * height];
 
                 for (int i = 0; i < colors.Length; i++)
@@ -85,6 +92,8 @@ namespace ArarGameLibrary.Manager
             {   
                 throw ex;
             }
+
+            TextureCollectionByColor.Add(color, newTexture);
 
             return newTexture;
         }

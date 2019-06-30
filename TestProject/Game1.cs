@@ -1,5 +1,6 @@
 ﻿using ArarGameLibrary.Manager;
 using ArarGameLibrary.Model;
+using ArarGameLibrary.ScreenManagement;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -24,6 +25,8 @@ namespace TestProject
         Piece piece;
 
         TestInfo ti;
+
+        Container container;
 
         public Game1()
         {
@@ -80,6 +83,9 @@ namespace TestProject
             shadow = TextureManager.CreateTexture2DBySingleColor(Color.Black,100,100);
             sampleFont = Content.Load<SpriteFont>("Fonts/DefaultFont");
 
+            container = new Container();
+            container.MakeFrameVisible(true);
+
         }
 
         protected override void UnloadContent()
@@ -131,7 +137,7 @@ namespace TestProject
 
             ti.Update();
 
-            image.Update();
+            //image.Update();
 
             base.Update(gameTime);
         }
@@ -151,7 +157,7 @@ namespace TestProject
 
             //Global.SpriteBatch.Draw(damageTexture, new Vector2(0, 0), Color.White);
 
-            image.Draw();
+            //image.Draw();
 
             //var pieceX1 = image.Pieces[0];
             //var pieceX2 = image.Pieces[1];

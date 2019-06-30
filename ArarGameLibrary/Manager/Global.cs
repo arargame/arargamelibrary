@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace ArarGameLibrary.Manager
 {
-    public class Global
+    public static class Global
     {
         public static ContentManager Content { get; set; }
 
@@ -44,6 +44,8 @@ namespace ArarGameLibrary.Manager
             }
         }
 
+        public static readonly int DefaultViewportWidth = 800;
+
         public static int ViewportWidth
         {
             get
@@ -51,6 +53,8 @@ namespace ArarGameLibrary.Manager
                 return GraphicsDevice.Viewport.Width;
             }
         }
+
+        public static readonly int DefaultViewportHeight = 480;
 
         public static int ViewportHeight
         {
@@ -65,6 +69,14 @@ namespace ArarGameLibrary.Manager
             get
             {
                 return new Vector2((float)(ViewportWidth / 2), (float)(ViewportHeight / 2));
+            }
+        }
+
+        public static Vector2 Scale
+        {
+            get
+            {
+                return new Vector2(ViewportWidth * 1f / DefaultViewportWidth, ViewportHeight * 1f / DefaultViewportHeight);
             }
         }
 
@@ -105,7 +117,17 @@ namespace ArarGameLibrary.Manager
 
         public static Color RandomColor(bool isOpaque = true)
         {
-            return new Color(Random.Next(0, 256), Random.Next(0, 256), Random.Next(0, 256), isOpaque ? 255 : Random.Next(0, 256));
+            return new Color(RandomNext(0,256), RandomNext(0, 256), RandomNext(0, 256), isOpaque ? 255 : RandomNext(0, 256));
+        }
+
+        public static int RandomNext(int minValue,int maxValue)
+        {
+            return Random.Next(minValue, maxValue);
+        }
+
+        public static float DeltaTime(this GameTime gameTime)
+        {
+            return gameTime.ElapsedGameTime.Milliseconds / 1000f;
         }
     }
 }

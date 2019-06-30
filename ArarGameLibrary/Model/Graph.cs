@@ -16,6 +16,8 @@ namespace ArarGameLibrary.Model
 
         public bool IsClosedType { get; set; }
 
+        public Color LineColor { get; set; }
+
         public Graph(bool isClosedType = false)
         {
             Lines = new List<Line>();

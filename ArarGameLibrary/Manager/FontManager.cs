@@ -102,9 +102,9 @@ namespace ArarGameLibrary.Manager
             return this;
         }
 
-        public FontManager SetLayerDepth(float LayerDepth)
+        public FontManager SetLayerDepth(float layerDepth)
         {
-            LayerDepth = LayerDepth;
+            LayerDepth = layerDepth;
 
             return this;
         }

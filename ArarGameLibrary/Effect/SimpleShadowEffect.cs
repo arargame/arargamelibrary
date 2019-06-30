@@ -16,7 +16,7 @@ namespace ArarGameLibrary.Effect
 
         private Rectangle Rectangle { get; set; }
 
-        public Vector2 OffSet { get; set; }
+        public Vector2 OffSet { get; private set; }
 
         public SimpleShadowEffect(Sprite sprite,Vector2? offset) : base(sprite)
         {
@@ -39,6 +39,13 @@ namespace ArarGameLibrary.Effect
                 if(IsActive)
                 Global.SpriteBatch.Draw(Texture, new Vector2(Rectangle.X, Rectangle.Y), Rectangle, Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, Sprite.LayerDepth - 0.5f);
             });
+        }
+
+        public SimpleShadowEffect SetOffset(Vector2 offset)
+        {
+            OffSet = offset;
+
+            return this;
         }
     }
 }

@@ -20,9 +20,9 @@ namespace PuzzleMeWindowsProject.Screens
         {
             var collection = new Dictionary<string, Action>();
 
-            collection.Add("New",() =>
+            collection.Add("Play",() =>
             {
-                DisableThenAddNew(new GameScreen());
+                DisableThenAddNew(new EpisodesMenu());
             });
 
             collection.Add("Settings", () =>

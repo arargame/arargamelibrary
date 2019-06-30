@@ -8,35 +8,50 @@
 -boş piece için uygun image tasarla
 +selected efekti yap
 +board ta Image kullan
--image tammalanacağı alan board un üzerinde rastgele bir konumda oluşacak
--bu alan board tan en veya boy anlamında maksimum bir küçük olması lazım
++image tammalanacağı alan board un üzerinde rastgele bir konumda oluşacak
++bu alan board tan en veya boy anlamında maksimum bir küçük olması lazım
 +image ın parçaları board üzerine rastgele dağılmış olmalı
 -board ile ilgili ayarlar level nesnesinden gelecek
 -image ın parçaları board üzerinde belirtilen alanda image ı tamamlarsa level tamamlanır
--Level üzerinde board için image ın toplanma konumu ve boyutu ile ilgili ayarları tutan nesne(Image olabilir)
++Level üzerinde board için image ın toplanma konumu ve boyutu ile ilgili ayarları tutan nesne(Image olabilir)Nest yapıldı
 -easy-hard seçeneklerine göre image ın tamamlanacağı yerde görselin gri kopyası parça bazlı yardımcı olabilir
--max min piece and board size ları ayarla
++max min piece and board size ları ayarla
 -kenardan siyah arka planla açılır kapanır görseli hatırlatan bir sistem
--Parça değişimlerinde Nest parçası ile diğerlerinin değişimine dikkat et(26.3.2019)
--midlayer color,backgroundcolor vb incele fazlalıklar olabilir
++Parça değişimlerinde Nest parçası ile diğerlerinin değişimine dikkat et(26.3.2019)Gerek kalmadı
++midlayer color,backgroundcolor vb incele fazlalıklar olabilir-backgroud texture vb katmanlar kaldırıldı
 +nest pieces ler görünüm olarak hazırlandı(27.3.2019)
--nest ile değişimlerde sıkıntılar mevcut
++nest ile değişimlerde sıkıntılar mevcut
 +fontmanager settext sıkıntısını çöz(31.3.2019)
--seçili parçayı ön plana çıkaracak çalışmalar yap,size değişimi ve z ekseninde oynama gibi(31.3.2019)
--(13.4.2019)animasyon sınıfı tasarla
++seçili parçayı ön plana çıkaracak çalışmalar yap,size değişimi ve z ekseninde oynama gibi(31.3.2019)pulsating yapıldı ,simple shadow effect yapıldı
++(13.4.2019)animasyon sınıfı tasarla
 -herhangi bir yere kolaycana yazı yazdırabileceğim bir yapı
--20.4.2019 21:16 pulsate fonksiyonu sprite ın içine enjekte ediliyor bununla ilgili draw fonksiyonunda kullanılacak propertyler sağlanıyor
--piece lerin gerçekten bir taş gibi pozisyonel yer değişimleri üzerine düşünülmesi lazım hafızada yer değiştirme mantıklı görünmüyor
--21.04.2019 00:46 PulsateEffect tamamlandı,testler yapıldı,Board üzerindeki piecelerde test edilecek
--23.4.2019 23.30 mevcut yapılar tekrar gözden geçriliyor.Bazı sıknıtılar meydana geldi.Selected object öncesi bütün yapılar gözden geçriliyor.
--Board un parçaları göstereceği kısmın durumu düşünülmeli örneğin bir başlangıç noktasına ihtiyaç var ki ona göre parçalar hesaplansın
++20.4.2019 21:16 pulsate fonksiyonu sprite ın içine enjekte ediliyor bununla ilgili draw fonksiyonunda kullanılacak propertyler sağlanıyor
++piece lerin gerçekten bir taş gibi pozisyonel yer değişimleri üzerine düşünülmesi lazım hafızada yer değiştirme mantıklı görünmüyor
++21.04.2019 00:46 PulsateEffect tamamlandı,testler yapıldı,Board üzerindeki piecelerde test edilecek
++23.4.2019 23.30 mevcut yapılar tekrar gözden geçriliyor.Bazı sıknıtılar meydana geldi.Selected object öncesi bütün yapılar gözden geçriliyor.
++Board un parçaları göstereceği kısmın durumu düşünülmeli örneğin bir başlangıç noktasına ihtiyaç var ki ona göre parçalar hesaplansın
 -Board içerisnde diğer aksiyonlar için pencereler sistemi düşün örneğin kenardan açılır kapanır veya sürekli açık duran bir ipucu ekranı vb
--seçili parçaların farklı görünmesini sağla
--pulsating efektini yap
++seçili parçaların farklı görünmesini sağla
++pulsating efektini yap
 +İki nokta arası çizgi çeken yapı tasarla ve çerçeve oluştur(Tamamlandı fakat henüz parçalar üzerinde kullanımı ideal görünmüyor)
 +23.5.2019 arargamelibraray diye ayrı birr kütüphane oluşturuldu çoğu yapı diğer projelerde de kulllanılmak üzere oraya taşındı
-+simpleshadoweffect i alphaıs sıfır olanlar haricindeki piksellerden oluşacak gölgelendirmeye çevir(geliştirme)
+-simpleshadoweffect i alphaıs sıfır olanlar haricindeki piksellerden oluşacak gölgelendirmeye çevir(geliştirme)
 +25.5.2019 layerdepth sorunu giderildi,çizdirme sırası ayarlandı
 +layerdepth için enum ayarlanabilir bütün objelerde kullanılmak üzere(0,0.25,0.5,0.75,1) gibi
 +26.5.2019 Board-Piece çalışmalar yapıldı Select-Deselect fonksiyonlarındaki sorunlar giderildi
 -Time Manager,Sound Manager yapılarına ihtiyaç var
+-1.6.2019 Align fonksiyonunun içine liste atılaiblir halini yap ve liste içindeki elementler birbirine göre öteleme yapsın ek olarka normal aligment ayarlansın container a göre
+-1.6.2019 alt satıra geçeceğini bilmesi laızm overflow true özelliğini tasarla
+-Episode seçmelik bir screen tasarlanacak
+-Her bir episode için bir görsel ve başlat butonu içeren container
+-bu container veya herhangi bir çizdirliebiir objenin alignment fonksiyonelliği
+-row,column yapıları container içerisidne
+-selectable,clickable object yapısı lazım,selectable rectangle kavramı?
+-level initial screen
+-level completed screen
+-pause screen tamamla
+-player nesnesi
+-player nesnesnin oyun sonu bilgileri json şimdlik depolayan bir sistem
+-log yapısının eklenmesi
+-sound screen tasarımı
+-how to play yapısı üzerine düşün?

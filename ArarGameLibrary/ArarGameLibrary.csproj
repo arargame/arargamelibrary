@@ -69,9 +69,12 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Model\Sprite.cs" />
     <Compile Include="ScreenManagement\Button.cs" />
+    <Compile Include="ScreenManagement\Column.cs" />
     <Compile Include="ScreenManagement\Component.cs" />
+    <Compile Include="ScreenManagement\Container.cs" />
     <Compile Include="ScreenManagement\LightDrop.cs" />
     <Compile Include="ScreenManagement\Menu.cs" />
+    <Compile Include="ScreenManagement\Row.cs" />
     <Compile Include="ScreenManagement\Screen.cs" />
     <Compile Include="ScreenManagement\Theme.cs" />
   </ItemGroup>

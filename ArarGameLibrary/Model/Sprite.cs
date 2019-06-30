@@ -1,4 +1,5 @@
 ﻿using ArarGameLibrary.Effect;
+using ArarGameLibrary.Extension;
 using ArarGameLibrary.Manager;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -43,9 +44,11 @@ namespace ArarGameLibrary.Model
         Rectangle CollisionRectangle { get; set; }
         Color Color { get; set; }
 
-        Rectangle DestinationRectangle { get; set; }
+        Rectangle DestinationRectangle { get; }
 
+        bool IsActive { get; set; }
         bool IsAlive { get; set; }
+        bool IsVisible { get; set; }
 
         float LayerDepth { get; set; }
 
@@ -60,8 +63,17 @@ namespace ArarGameLibrary.Model
         Rectangle SourceRectangle { get; set; }
         Vector2 Speed { get; set; }
         SpriteEffects SpriteEffects { get; set; }
+        SpriteBatch SpriteBatch { get; set; }
 
         Texture2D Texture { get; set; }
+    }
+
+    public interface IClickableIbject
+    {
+        bool IsClickable { get; set; }
+        bool IsHovering { get; set; }
+        bool IsSelecting { get; set; }
+        void SetClickable(bool enable);
     }
 
     public abstract class BaseObject : IBaseObject, ICloneable
@@ -92,7 +104,7 @@ namespace ArarGameLibrary.Model
     }
 
 
-    public abstract class Sprite : BaseObject, IDrawableObject
+    public abstract class Sprite : BaseObject, IDrawableObject, IClickableIbject
     {
         #region Properties
 
@@ -100,12 +112,22 @@ namespace ArarGameLibrary.Model
         public Color Color { get; set; }
         public ClampManager ClampManager { get; set; }
 
-        public Rectangle DestinationRectangle { get; set; }
+        public Rectangle DestinationRectangle
+        {
+            get
+            {
+                return new Rectangle((int)Math.Ceiling(Position.X), (int)Math.Ceiling(Position.Y), (int)Math.Ceiling(Size.X * Scale), (int)Math.Ceiling((Size.Y * Scale)));
+            }
+        }
         public int DrawMethodType { get; set; }
 
-
+        public bool IsActive { get; set; }
         public bool IsAlive { get; set; }
+        public bool IsClickable { get; set; }
         public bool IsPulsating { get; set; }
+        public bool IsHovering { get; set; }
+        public bool IsSelecting { get; set; }
+        public bool IsVisible { get; set; }
 
         //From 0f to 1f where 1f is the top layer
         public float LayerDepth { get; set; }
@@ -122,6 +144,7 @@ namespace ArarGameLibrary.Model
         public Rectangle SourceRectangle { get; set; }
         public Vector2 Speed { get; set; }
         public SpriteEffects SpriteEffects { get; set; }
+        public SpriteBatch SpriteBatch { get; set; }
 
         public TestInfo TestInfo { get; set; }
         public Texture2D Texture { get; set; }
@@ -148,11 +171,11 @@ namespace ArarGameLibrary.Model
         {
             OnChangeRectangle += SetRectangle;
 
-            IsAlive = true;
+            IsActive = IsAlive = IsVisible = true;
 
             SetStartingSettings();
 
-            DestinationRectangle = new Rectangle((int)Position.X, (int)Position.Y, (int)Size.X, (int)Size.Y);
+            //DestinationRectangle = new Rectangle((int)Position.X, (int)Position.Y, (int)Size.X, (int)Size.Y);
             //destinationRectangle = new Rectangle((int)(position.X - origin.X), (int)(position.Y - origin.Y), (int)size.X, (int)size.Y);
 
             SourceRectangle = new Rectangle(0, 0, (int)Size.X, (int)Size.Y);
@@ -165,15 +188,20 @@ namespace ArarGameLibrary.Model
             ClampManager = new ClampManager(this);
 
             TestInfo = new TestInfo(this);
+
+            SpriteBatch = Global.SpriteBatch;
         }
 
-        public virtual void LoadContent(Texture2D texture) { }
+        public virtual void LoadContent(Texture2D texture = null)
+        {
+            SetTexture(texture);
+        }
 
         public virtual void UnloadContent() { }
 
         public virtual void Update(GameTime gameTime = null)
         {
-            if (IsAlive)
+            if (IsActive)
             {
                 SetRectangle();
 
@@ -192,47 +220,55 @@ namespace ArarGameLibrary.Model
                 ClampManager.Update();
 
                 TestInfo.Update();
+
+                if (IsClickable)
+                {
+                    IsHovering = InputManager.IsHovering(DestinationRectangle);
+                    IsSelecting = InputManager.Selected(DestinationRectangle);
+                }
             }
         }
 
         public virtual void Draw(SpriteBatch spriteBatch = null)
         {
-            if (IsAlive)
+            SetSpriteBatch(spriteBatch);
+
+            if (IsActive && IsVisible)
             {
                 if (Texture != null)
                 {
                     switch (DrawMethodType)
                     {
                         case 1:
-                            Global.SpriteBatch.Draw(Texture, DestinationRectangle, Color);
+                            SpriteBatch.Draw(Texture, DestinationRectangle, Color);
                             break;
 
                         case 2:
-                            Global.SpriteBatch.Draw(Texture, Position, Color);
+                            SpriteBatch.Draw(Texture, Position, Color);
                             break;
 
                         case 3:
-                            Global.SpriteBatch.Draw(Texture, DestinationRectangle, SourceRectangle, Color);
+                            SpriteBatch.Draw(Texture, DestinationRectangle, SourceRectangle, Color);
                             break;
 
                         case 4:
-                            Global.SpriteBatch.Draw(Texture, Position, SourceRectangle, Color);
+                            SpriteBatch.Draw(Texture, Position, SourceRectangle, Color);
                             break;
 
                         case 5:
-                            Global.SpriteBatch.Draw(Texture, DestinationRectangle, SourceRectangle, Color, Rotation, Origin, SpriteEffects, LayerDepth);
+                            SpriteBatch.Draw(Texture, DestinationRectangle, SourceRectangle, Color, Rotation, Origin, SpriteEffects, LayerDepth);
                             break;
 
                         case 6:
-                            Global.SpriteBatch.Draw(Texture, Position, SourceRectangle, Color, Rotation, Origin, Scale, SpriteEffects, LayerDepth);
+                            SpriteBatch.Draw(Texture, Position, SourceRectangle, Color, Rotation, Origin, Scale, SpriteEffects, LayerDepth);
                             break;
 
                         case 7:
-                            Global.SpriteBatch.Draw(Texture, Position, SourceRectangle, Color, Rotation, Origin, new Vector2(Scale), SpriteEffects, LayerDepth);
+                            SpriteBatch.Draw(Texture, Position, SourceRectangle, Color, Rotation, Origin, new Vector2(Scale), SpriteEffects, LayerDepth);
                             break;
 
                         default:
-                            Global.SpriteBatch.Draw(Texture, DestinationRectangle, Color);
+                            SpriteBatch.Draw(Texture, DestinationRectangle, Color);
                             break;
                     }
                 }
@@ -244,6 +280,14 @@ namespace ArarGameLibrary.Model
 
                 //  TestInfo.Draw();
             }
+        }
+
+        public void Align(Vector2 offset, Rectangle? parentRect = null)
+        {
+            if (parentRect == null)
+                parentRect = Global.ViewportRect;
+
+            SetPosition(new Vector2((int)(parentRect.Value.Position().X + offset.X), (int)(parentRect.Value.Position().Y + offset.Y)));
         }
 
         public T GetEffect<T>() where T : EffectManager
@@ -282,6 +326,21 @@ namespace ArarGameLibrary.Model
         }
 
         #region SetFunctions
+
+        public void SetActive(bool enable)
+        {
+            IsActive = enable;
+        }
+
+        public void SetAlive(bool enable)
+        {
+            IsAlive = enable;
+        }
+
+        public void SetClickable(bool enable)
+        {
+            IsClickable = enable;
+        }
 
         public void SetColor(Color color)
         {
@@ -325,7 +384,6 @@ namespace ArarGameLibrary.Model
 
         public void SetRectangle()
         {
-            DestinationRectangle = new Rectangle((int)Math.Ceiling(Position.X), (int)Math.Ceiling(Position.Y), (int)Math.Ceiling(Size.X * Scale), (int)Math.Ceiling((Size.Y * Scale)));
             SourceRectangle = new Rectangle(0, 0, Texture != null ? Texture.Width : DestinationRectangle.Width, Texture != null ? Texture.Height : DestinationRectangle.Height);
             //CollisionRectangle = new Rectangle(Des);
             //SourceRectangle = new Rectangle(animation.FrameBounds.X, animation.FrameBounds.Y, (int)Size.X, (int)Size.Y);
@@ -356,6 +414,17 @@ namespace ArarGameLibrary.Model
             Speed = speed;
         }
 
+        public void SetSpriteBatch(GraphicsDevice graphicsDevice = null)
+        {
+            SpriteBatch = new SpriteBatch(graphicsDevice ?? Global.GraphicsDevice);
+        }
+
+        public void SetSpriteBatch(SpriteBatch spriteBatch = null)
+        {
+            if(spriteBatch!=null)
+                SpriteBatch = spriteBatch;
+        }
+
         public void SetSpriteEffects(SpriteEffects effects)
         {
             SpriteEffects = effects;
@@ -371,6 +440,11 @@ namespace ArarGameLibrary.Model
             Texture = texture;
         }
 
+        public void SetVisible(bool enable)
+        {
+            IsVisible = enable;
+        }
+
         #endregion
 
 
@@ -378,6 +452,8 @@ namespace ArarGameLibrary.Model
 
         private void SetStartingSettings()
         {
+            SetClickable(false);
+
             SetStartingLayerDepth();
 
             SetOrigin();

@@ -14,12 +14,12 @@ namespace ArarGameLibrary.ScreenManagement
     {
         public override void SetStartingPosition()
         {
-            SetPosition(new Vector2(Global.Random.Next(0, Global.ViewportWidth), Global.Random.Next(-100, 0)));
+            SetPosition(new Vector2(Global.RandomNext(0, Global.ViewportWidth), Global.RandomNext(-100, 0)));
         }
 
         public override void SetStartingSpeed()
         {
-            SetSpeed(new Vector2(Global.Random.Next(-3, 3), Global.Random.Next(1, 3)));
+            SetSpeed(new Vector2(Global.RandomNext(-3, 3), Global.RandomNext(1, 3)));
         }
 
         public override void SetStartingSize()

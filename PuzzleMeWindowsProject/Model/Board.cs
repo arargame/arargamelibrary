@@ -59,7 +59,7 @@ namespace PuzzleMeWindowsProject.Model
                 piece.SetDrawMethodType(5);
             }
 
-            var emptyPieceNumber = Global.Random.Next(0, Pieces.OfType<Piece>().Count());
+            var emptyPieceNumber = Global.RandomNext(0, Pieces.OfType<Piece>().Count());
 
             var emptyPiece = Pieces.OfType<Piece>().FirstOrDefault(p => p.Number == emptyPieceNumber);
 

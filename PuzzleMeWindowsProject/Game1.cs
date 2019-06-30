@@ -33,6 +33,10 @@ namespace PuzzleMeWindowsProject
 
         Frame graph;
 
+        Texture2D sample;
+
+        Container container;
+
         
         public Game1()
         {
@@ -98,8 +102,59 @@ namespace PuzzleMeWindowsProject
 
             button = new Button("Helloww!!",new Vector2(100,100));
             button.LoadContent();
-            graph = new Frame(button.DestinationRectangle.TopLeftEdge(),button.DestinationRectangle.TopRightEdge(),button.DestinationRectangle.BottomRightEdge(),button.DestinationRectangle.BottomLeftEdge(),Color.Red);
+            graph = Frame.Create(button.DestinationRectangle,Color.Red);
             graph.LoadContent();
+
+            sample = TextureManager.CreateTexture2DByRandomColor(1,1);
+
+            container = new Container();
+            container.SetSize(new Vector2(200,150));
+            //container.SetColor(Color.MonoGameOrange);
+            container.SetMargin(new Vector2(10,10));
+
+            container.AddChild(new Button("",Vector2.Zero));
+
+            var row = new Row();
+            row.MakeFrameVisible(true);
+            //row.SetTexture(TextureManager.CreateTexture2DByRandomColor());
+            row.SetFrame(Color.Black);
+
+            var column1 = new Column();
+            column1.SetTexture(TextureManager.CreateTexture2DBySingleColor(Color.Red,1,1));
+
+            var column2 = new Column();
+            column2.SetTexture(TextureManager.CreateTexture2DBySingleColor(Color.Green, 1, 1));
+
+            var column3 = new Column();
+            column3.SetTexture(TextureManager.CreateTexture2DBySingleColor(Color.Blue, 1, 1));
+
+            row.AddColumn(column1,30);
+            row.AddColumn(column2, 30);
+            row.AddColumn(column3, 30);
+
+            container.AddRow(row, 1, 80);
+
+            var row2 = new Row();
+            row2.MakeFrameVisible(true);
+            row2.SetTexture(TextureManager.CreateTexture2DBySingleColor(Color.Black, 1, 1));
+            //row2.SetFrame(Color.White);
+
+            container.AddRow(row2, 2, 20);
+
+            container.PrepareRows();
+
+            foreach (var cr in container.Rows)
+            {
+                foreach (var rc in cr.Columns)
+                {
+                    rc.AddImage(TextureManager.CreateTexture2DByRandomColor(1,1));
+                }
+            }
+            //Card screen yqap/Level selecting screen
+
+
+         //   container.ShowSimpleShadow(true);
+          //  container.GetEffect<SimpleShadowEffect>().SetOffset(new Vector2(-5,-5));
         }
 
         /// <summary>
@@ -127,7 +182,7 @@ namespace PuzzleMeWindowsProject
 
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Global.OnExit)
                 Exit();
-
+           // container.Update();
             //gameTime.IsRunningSlowly
 
             // board.Update();
@@ -147,10 +202,12 @@ namespace PuzzleMeWindowsProject
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
+
             GraphicsDevice.Clear(Global.Theme.GetColor());
 
             Global.SpriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend);
 
+            //container.Draw();
 
             ScreenManager.Draw();
             //button.Draw();
@@ -159,16 +216,16 @@ namespace PuzzleMeWindowsProject
             //{
             //    piece.Draw();
             //}
-         //   board.Draw();
-          //  nest.Draw();
-           //  image.Draw();
+            //   board.Draw();
+            //  nest.Draw();
+            //  image.Draw();
             //  animation.Draw();
 
             //var emptyPiece = board.Pieces.SingleOrDefault(p => p.IsEmpty);
 
             //emptyPiece.Draw();
 
-           // Global.SpriteBatch.Draw(emptyPiece.Texture,new Rectangle(0,0,50,50),new Rectangle(0,0,emptyPiece.Texture.Width,emptyPiece.Texture.Height),Color.White,0f,Vector2.Zero,SpriteEffects.None,1f);
+            // Global.SpriteBatch.Draw(emptyPiece.Texture,new Rectangle(0,0,50,50),new Rectangle(0,0,emptyPiece.Texture.Width,emptyPiece.Texture.Height),Color.White,0f,Vector2.Zero,SpriteEffects.None,1f);
 
             Global.SpriteBatch.End();
 

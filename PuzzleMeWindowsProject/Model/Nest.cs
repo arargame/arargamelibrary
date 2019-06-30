@@ -87,9 +87,9 @@ namespace PuzzleMeWindowsProject.Model
 
             do
             {
-                var rowNumber = Global.Random.Next(0, board.RowCount - image.RowCount + 1);
+                var rowNumber = Global.RandomNext(0, board.RowCount - image.RowCount + 1);
 
-                var columnNumber = Global.Random.Next(0, board.ColumnCount - image.ColumnCount + 1);
+                var columnNumber = Global.RandomNext(0, board.ColumnCount - image.ColumnCount + 1);
 
                 isCalculated = board.Pieces.OfType<Piece>().Any(p => p.RowNumber == rowNumber && p.ColumnNumber == columnNumber);
 

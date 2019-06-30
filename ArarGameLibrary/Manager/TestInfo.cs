@@ -45,12 +45,7 @@ namespace ArarGameLibrary.Manager
                 {
                     case "DestinationRectangle":
 
-                        var drP1 = new Vector2(DrawableObject.DestinationRectangle.X, DrawableObject.DestinationRectangle.Y);
-                        var drP2 = new Vector2(DrawableObject.DestinationRectangle.Right,drP1.Y);
-                        var drP3 = new Vector2(DrawableObject.DestinationRectangle.Right,DrawableObject.DestinationRectangle.Bottom);
-                        var drP4 = new Vector2(DrawableObject.DestinationRectangle.X, drP3.Y);
-
-                        DestinationRectangleFrame = new Frame(drP1, drP2, drP3, drP4, Color.Beige);
+                        DestinationRectangleFrame = Frame.Create(DrawableObject.DestinationRectangle,Color.Beige);
                         DestinationRectangleFrame.IsInPerformanceMode = true;
                         DestinationRectangleFrame.LoadContent();
 

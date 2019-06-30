@@ -115,7 +115,7 @@ namespace ArarGameLibrary.Model
             var simpleShadowEffect = EffectManager.Get<SimpleShadowEffect>(Effects);
 
             if (simpleShadowEffect != null)
-                simpleShadowEffect.OffSet = new Vector2(-6, -6);
+                simpleShadowEffect.SetOffset(new Vector2(-6, -6));
 
             SetDrawMethodType(5);
         }

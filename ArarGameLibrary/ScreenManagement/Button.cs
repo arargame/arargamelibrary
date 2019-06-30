@@ -19,15 +19,11 @@ namespace ArarGameLibrary.ScreenManagement
 
         FontManager FontManager { get; set; }
 
-        Frame Frame { get; set; }
-
-        bool IsFrameVisible { get; set; }
-
         Color ThemeColor { get; set; }
 
         Color OppositeColor { get; set; }
 
-        public Button(string text, Vector2 position, Color? textColor = null, bool isFrameVisible = true)
+        public Button(string text, Vector2 position, Color? textColor = null)
         {
             var padding = new Vector2(25, 10);
 
@@ -44,9 +40,7 @@ namespace ArarGameLibrary.ScreenManagement
 
             Button_OnChangeRectangle();
 
-            OnChangeRectangle += Button_OnChangeRectangle;
-
-            IsFrameVisible = isFrameVisible;
+            OnChangeRectangle += Button_OnChangeRectangle;            
         }
 
         public override void LoadContent(Texture2D texture = null)
@@ -84,26 +78,20 @@ namespace ArarGameLibrary.ScreenManagement
             InnerTextureSize.Y = Size.Y;
 
             FontManager.Update();
-
-            if(IsFrameVisible)
-                Frame.Update();
         }
 
         public override void Draw(SpriteBatch spriteBatch = null)
         {
-          //  base.Draw();
+            base.Draw();
 
             Global.SpriteBatch.Draw(InnerTexture, new Rectangle((int)Position.X, (int)Position.Y, (int)InnerTextureSize.X, (int)InnerTextureSize.Y), Color.White);
 
             FontManager.Draw();
-
-            if (IsFrameVisible)
-                Frame.Draw();
         }
 
         private void Button_OnChangeRectangle()
         {
-            Frame = new Frame(DestinationRectangle.TopLeftEdge(), DestinationRectangle.TopRightEdge(), DestinationRectangle.BottomRightEdge(), DestinationRectangle.BottomLeftEdge(), OppositeColor);
+            Frame = Frame.Create(DestinationRectangle, OppositeColor);
 
             Frame.LoadContent();
         }
@@ -125,7 +113,9 @@ namespace ArarGameLibrary.ScreenManagement
 
             foreach (var item in collection)
             {
-                var button = new Button(item.Key, Vector2.Zero, textColor, isFrameVisible);
+                var button = new Button(item.Key, Vector2.Zero, textColor);
+
+                button.MakeFrameVisible(true);
 
                 button.OnClick(item.Value);
 
