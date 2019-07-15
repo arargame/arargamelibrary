@@ -31,7 +31,7 @@ namespace PuzzleMeWindowsProject.Screens
             var row1 = new Row();
             row1.MakeFrameVisible(true);
           //  row1.SetTexture(TextureManager.CreateTexture2DByRandomColor());
-            row1.SetFrame(Color.Black);
+            row1.SetFrame(Color.Tan);
 
             var column1 = new Column();
             column1.SetTexture(TextureManager.CreateTexture2DBySingleColor(Color.Red, 1, 1));
@@ -53,24 +53,24 @@ namespace PuzzleMeWindowsProject.Screens
             var row2 = new Row();
             row2.MakeFrameVisible(true);
             row2.SetTexture(TextureManager.CreateTexture2DByRandomColor());
-            row2.SetFrame(Color.Black);
+            row2.SetFrame(Color.Tan);
 
             leftSideContainer.AddRow(row2, 2, 33);
 
             var row3 = new Row();
             row3.MakeFrameVisible(true);
             row3.SetTexture(TextureManager.CreateTexture2DByRandomColor());
-            row3.SetFrame(Color.Black);
+            row3.SetFrame(Color.Tan);
 
             leftSideContainer.AddRow(row3, 1, 33);
 
             leftSideContainer.PrepareRows(true);
            
 
-            var rightSideContainer = new Container();
-            rightSideContainer.SetTexture(TextureManager.CreateTexture2DBySingleColor(Color.Tan));
-            rightSideContainer.SetPosition(new Vector2(leftSideContainer.Position.X + leftSideContainer.Size.X, leftSideContainer.Position.Y));
-            rightSideContainer.SetSize(new Vector2(sizeX2, Global.ViewportHeight));
+            //var rightSideContainer = new Container();
+            //rightSideContainer.SetTexture(TextureManager.CreateTexture2DBySingleColor(Color.Tan));
+            //rightSideContainer.SetPosition(new Vector2(leftSideContainer.Position.X + leftSideContainer.Size.X, leftSideContainer.Position.Y));
+            //rightSideContainer.SetSize(new Vector2(sizeX2, Global.ViewportHeight));
 
 
 
@@ -79,12 +79,33 @@ namespace PuzzleMeWindowsProject.Screens
             //container.SetTexture(TextureManager.CreateTexture2DByRandomColor(1,1));
             //container.SetMargin(new Vector2(10, 10));
 
+            leftSideContainer.SetVisible(false);
             AddChild(leftSideContainer);
-            AddChild(rightSideContainer);
+     //       AddChild(rightSideContainer);
 
             //rightSideContainer.SetVisible(false);
 
+            //var scrollBarRow = new Row();
+            //scrollBarRow.SetFrame(Color.Black,2f);
+            //scrollBarRow.MakeFrameVisible(true);
 
+            //var columnX = new Column();
+            //columnX.SetTexture(TextureManager.CreateTexture2DByRandomColor());
+            //scrollBarRow.AddColumn(columnX,80);
+
+            ////rightSideContainer.AddChild(scrollBar);
+            //rightSideContainer.SetName("rightSideContainer");
+            //rightSideContainer.AddRow(scrollBarRow, 1, 33);
+            //rightSideContainer.PrepareRows(true);
+
+            var scrollBar = new ScrollBar(3,3);
+            scrollBar.LoadContent(TextureManager.CreateTexture2DBySingleColor(Color.Tan));
+            scrollBar.SetPosition(new Vector2(leftSideContainer.Position.X + leftSideContainer.Size.X, leftSideContainer.Position.Y));
+            scrollBar.SetSize(new Vector2(sizeX2, Global.ViewportHeight));
+            scrollBar.SetFrame(Color.Red, 2f);
+            scrollBar.SetName("ScrollBar");
+            scrollBar.PrepareRows(true);
+            AddChild(scrollBar);
         }
     }
 

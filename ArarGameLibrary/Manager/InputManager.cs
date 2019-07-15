@@ -72,19 +72,35 @@ namespace ArarGameLibrary.Manager
             return CurrentKeyboardState.IsKeyUp(key);
         }
 
-        public static bool IsLeftClicked()
+        public static bool IsLeftClicked
         {
-            return CurrentMouseState.LeftButton == ButtonState.Pressed && PreviousMouseState.LeftButton == ButtonState.Released;
+            get
+            {
+                return CurrentMouseState.LeftButton == ButtonState.Pressed && PreviousMouseState.LeftButton == ButtonState.Released;
+            }
+        }
+
+        public static bool IsPressing
+        {
+            get
+            {
+                return CurrentMouseState.LeftButton == ButtonState.Pressed && PreviousMouseState.LeftButton != ButtonState.Released;
+            }
         }
 
         public static bool Selected(Rectangle selectedRectangle)
         {
-            return IsHovering(selectedRectangle) && IsLeftClicked();
+            return IsHovering(selectedRectangle) && IsLeftClicked;
         }
 
         public static bool IsHovering(Rectangle target)
         {
             return CursorRectangle.Intersects(target);
+        }
+
+        public static bool IsDragging(Rectangle draggingRectangle)
+        {
+            return IsHovering(draggingRectangle) && IsPressing;
         }
     }
 }

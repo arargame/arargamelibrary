@@ -21,27 +21,14 @@ namespace PuzzleMeWindowsProject
     /// </summary>
     public class Game1 : Game
     {
-        Animation animation;
-
-        Image image;
-
-        Board board;
-
-        Nest nest;
-
-        Button button;
-
-        Frame graph;
-
-        Texture2D sample;
-
-        Container container;
+        ScrollBar scrollBar;
+        FontManager font;
+        Column testColumn;
+        string message = "";
 
         
         public Game1()
         {
-            var f = (float)100 / 3;
-
             Global.Graphics = new GraphicsDeviceManager(this);
 
             Content.RootDirectory = "Content";
@@ -81,80 +68,29 @@ namespace PuzzleMeWindowsProject
         /// </summary>
         protected override void LoadContent()
         {
-            image = new Image("WP_20180819_005");
-            image.LoadContent();
-            image.SetPosition(new Vector2(100,100));
-            image.SetRowAndColumnCount(2, 2);
-            image.SetPieceSize(new Vector2(100, 100));
-            image.SetPiecePosition();
-
-            board = new Board(8,8,new Vector2(Global.ViewportWidth-100,Global.ViewportHeight));
-            board.LoadContent();
-            board.SpreadImagePiecesOnTheBoard(image);
-
-            nest = new Nest(board,image);
-            nest.Pieces.ForEach(p => p.SetDrawMethodType(1));
-
-            animation = new Animation(TextureManager.CreateTexture2D("Textures/runningcat"),Vector2.Zero,new Vector2(300,250),4,2,8);
-            animation.LoadContent();
+            font = FontManager.Create("IsLeftpressing : " + InputManager.IsPressing, new Vector2(200, 200), Color.Black);
+            font.SetChangeTextEvent(()=>
+            {
+                return "IsLeftpressing : " + InputManager.IsPressing + " " + " Position:" + testColumn.Position.ToString()+" MouseCursor:"+InputManager.CursorPosition.ToString();
+            });
 
             InputManager.IsActive = true;
 
-            button = new Button("Helloww!!",new Vector2(100,100));
-            button.LoadContent();
-            graph = Frame.Create(button.DestinationRectangle,Color.Red);
-            graph.LoadContent();
 
-            sample = TextureManager.CreateTexture2DByRandomColor(1,1);
+            scrollBar = new ScrollBar(3, 3);
+            scrollBar.LoadContent(TextureManager.CreateTexture2DBySingleColor(Color.Tan));
+            scrollBar.SetPosition(new Vector2(0,0));
+            scrollBar.SetSize(new Vector2(100, Global.ViewportHeight));
+            scrollBar.SetFrame(Color.Black);
+            scrollBar.SetName("ScrollBar");
+            scrollBar.PrepareRows(true);
 
-            container = new Container();
-            container.SetSize(new Vector2(200,150));
-            //container.SetColor(Color.MonoGameOrange);
-            container.SetMargin(new Vector2(10,10));
+            testColumn = new Column();
 
-            container.AddChild(new Button("",Vector2.Zero));
-
-            var row = new Row();
-            row.MakeFrameVisible(true);
-            //row.SetTexture(TextureManager.CreateTexture2DByRandomColor());
-            row.SetFrame(Color.Black);
-
-            var column1 = new Column();
-            column1.SetTexture(TextureManager.CreateTexture2DBySingleColor(Color.Red,1,1));
-
-            var column2 = new Column();
-            column2.SetTexture(TextureManager.CreateTexture2DBySingleColor(Color.Green, 1, 1));
-
-            var column3 = new Column();
-            column3.SetTexture(TextureManager.CreateTexture2DBySingleColor(Color.Blue, 1, 1));
-
-            row.AddColumn(column1,30);
-            row.AddColumn(column2, 30);
-            row.AddColumn(column3, 30);
-
-            container.AddRow(row, 1, 80);
-
-            var row2 = new Row();
-            row2.MakeFrameVisible(true);
-            row2.SetTexture(TextureManager.CreateTexture2DBySingleColor(Color.Black, 1, 1));
-            //row2.SetFrame(Color.White);
-
-            container.AddRow(row2, 2, 20);
-
-            container.PrepareRows();
-
-            foreach (var cr in container.Rows)
-            {
-                foreach (var rc in cr.Columns)
-                {
-                    rc.AddImage(TextureManager.CreateTexture2DByRandomColor(1,1));
-                }
-            }
-            //Card screen yqap/Level selecting screen
-
-
-         //   container.ShowSimpleShadow(true);
-          //  container.GetEffect<SimpleShadowEffect>().SetOffset(new Vector2(-5,-5));
+            testColumn.SetTexture(TextureManager.CreateTexture2DByRandomColor());
+            testColumn.SetSize(new Vector2(100,100));
+            testColumn.SetPosition(new Vector2(200,200));
+            testColumn.SetDragable(true);
         }
 
         /// <summary>
@@ -176,22 +112,24 @@ namespace PuzzleMeWindowsProject
             Global.GameTime = gameTime;
 
             InputManager.Update();
-             ScreenManager.Update();
+            //ScreenManager.Update();
 
-            //button.Update();
+            scrollBar.Update();
+            font.Update();
+
+            testColumn.Update();
+
+            message = "InputManager.IsPressing : " + InputManager.IsPressing;
+            message += "\n previousMouseState:" + InputManager.PreviousMouseState.LeftButton;
+            message += "\n currentMouseState:"+InputManager.CurrentMouseState.LeftButton;
+
+            if (testColumn.IsDragging)
+            {
+                message += "dragging:" + testColumn.IsDragging+"\n selecting:"+testColumn.IsSelecting; 
+            }
 
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Global.OnExit)
                 Exit();
-           // container.Update();
-            //gameTime.IsRunningSlowly
-
-            // board.Update();
-            //     image.Update();
-            //   nest.Update();
-
-            //graph.Update();
-
-            //animation.Update();
 
             base.Update(gameTime);
         }
@@ -207,25 +145,11 @@ namespace PuzzleMeWindowsProject
 
             Global.SpriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend);
 
-            //container.Draw();
-
-            ScreenManager.Draw();
-            //button.Draw();
-            //graph.Draw();
-            //foreach (var piece in image.Pieces)
-            //{
-            //    piece.Draw();
-            //}
-            //   board.Draw();
-            //  nest.Draw();
-            //  image.Draw();
-            //  animation.Draw();
-
-            //var emptyPiece = board.Pieces.SingleOrDefault(p => p.IsEmpty);
-
-            //emptyPiece.Draw();
-
-            // Global.SpriteBatch.Draw(emptyPiece.Texture,new Rectangle(0,0,50,50),new Rectangle(0,0,emptyPiece.Texture.Width,emptyPiece.Texture.Height),Color.White,0f,Vector2.Zero,SpriteEffects.None,1f);
+            testColumn.Draw();
+            Global.SpriteBatch.DrawString(font.Font,message,new Vector2(350,350),Color.DarkSeaGreen);
+            scrollBar.Draw();
+            font.Draw();
+            //ScreenManager.Draw();
 
             Global.SpriteBatch.End();
 

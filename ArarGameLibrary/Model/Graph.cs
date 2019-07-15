@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace ArarGameLibrary.Model
 {
-    public class Graph : BaseObject, IXna
+    public class Graph : DrawableObject 
     {
         public List<Line> Lines { get; set; }
 
@@ -25,14 +25,16 @@ namespace ArarGameLibrary.Model
             Points = new LinkedList<Vector2>();
 
             IsClosedType = isClosedType;
+
+            SetVisible(true);
         }
 
-        public void Initialize()
+        public override void Initialize()
         {
 
         }
 
-        public void LoadContent(Texture2D texture = null)
+        public override void LoadContent(Texture2D texture = null)
         {
             foreach (var line in Lines)
             {
@@ -43,24 +45,31 @@ namespace ArarGameLibrary.Model
             }
         }
 
-        public void UnloadContent()
+        public override void UnloadContent()
         {
 
         }
 
-        public void Update(GameTime gameTime = null)
+        public override void Update(GameTime gameTime = null)
         {
-            foreach (var line in Lines)
+            if (IsVisible)
             {
-                line.Update();
+                foreach (var line in Lines)
+                {
+                    line.SetVisible(IsVisible);
+                    line.Update();
+                }
             }
         }
 
-        public void Draw(SpriteBatch spriteBatch = null)
+        public override void Draw(SpriteBatch spriteBatch = null)
         {
-            foreach (var line in Lines)
+            if (IsVisible)
             {
-                line.Draw();
+                foreach (var line in Lines)
+                {
+                    line.Draw();
+                }
             }
         }
 

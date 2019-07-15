@@ -10,18 +10,18 @@ namespace ArarGameLibrary.Model
 {
     public class Frame : Graph
     {
-        public Frame(Vector2 point1, Vector2 point2, Vector2 point3, Vector2 point4 , Color lineColor) : base(true)
+        public Frame(Vector2 point1, Vector2 point2, Vector2 point3, Vector2 point4 , Color lineColor , float thickness = 1f) : base(true)
         {
             PopulatePoints(point1,point2,point3,point4);
 
-            PopulateLines(lineColor);
+            PopulateLines(lineColor,thickness);
 
             LineColor = lineColor;
         }
 
-        public static Frame Create(Rectangle rect,Color lineColor)
+        public static Frame Create(Rectangle rect,Color lineColor, float thickness = 1f)
         {
-            return new Frame(rect.TopLeftEdge(), rect.TopRightEdge(), rect.BottomRightEdge(), rect.BottomLeftEdge(), lineColor);
+            return new Frame(rect.TopLeftEdge(), rect.TopRightEdge(), rect.BottomRightEdge(), rect.BottomLeftEdge(), lineColor,thickness);
         }
     }
 }

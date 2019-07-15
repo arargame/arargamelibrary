@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace ArarGameLibrary.ScreenManagement
 {
-    public interface IComponent : IXna, IDrawableObject
+    public interface IComponent :  IDrawableObject
     {
         IScreen Screen { get; set; }
 
@@ -38,8 +38,6 @@ namespace ArarGameLibrary.ScreenManagement
 
         public Frame Frame { get; set; }
 
-        public bool IsFrameVisible { get; private set; }
-
         //public bool IsStretching { get; private set; }
 
 
@@ -63,18 +61,21 @@ namespace ArarGameLibrary.ScreenManagement
         {
             base.Update();
 
-            if (IsSelecting)
+            if (IsActive)
             {
-                if (ClickAction != null)
-                    ClickAction.Invoke();
-            }
+                if (IsSelecting)
+                {
+                    if (ClickAction != null)
+                        ClickAction.Invoke();
+                }
 
-            if (IsFrameVisible && Frame!=null)
-                Frame.Update();
+                if (Frame != null)
+                    Frame.Update();
 
-            foreach (var children in Child)
-            {
-                children.Update(gameTime);
+                foreach (var children in Child)
+                {
+                    children.Update(gameTime);
+                }
             }
         }
 
@@ -82,12 +83,15 @@ namespace ArarGameLibrary.ScreenManagement
         {
             base.Draw(spriteBatch);
 
-            if (IsFrameVisible && Frame!=null)
-                Frame.Draw();
-
-            foreach (var children in Child)
+            if (IsActive && IsVisible)
             {
-                children.Draw(spriteBatch);
+                if (Frame != null)
+                    Frame.Draw();
+
+                foreach (var children in Child)
+                {
+                    children.Draw(spriteBatch);
+                }
             }
         }
 
@@ -116,18 +120,29 @@ namespace ArarGameLibrary.ScreenManagement
 
         public Component MakeFrameVisible(bool enable)
         {
-            IsFrameVisible = enable;
+            if (Frame != null)
+                Frame.SetVisible(enable);
 
             return this;
         }
 
-        public Component SetFrame(Color lineColor)
+        public Component SetFrame(Color lineColor, float thickness = 1f)
         {
-            Frame = Frame.Create(DestinationRectangle, lineColor);
+            //if (DestinationRectangle.IsEmpty)
+            //    throw new Exception("Prepare 'Position' and 'Size' properties before you set 'Frame'");
+
+            Frame = Frame.Create(DestinationRectangle, lineColor, thickness);
 
             Frame.LoadContent();
 
             return this;
+        }
+
+        public override void SetVisible(bool enable)
+        {
+            base.SetVisible(enable);
+
+            //Child.ForEach(c=>c.SetVisible(enable));
         }
 
         //public Component Stretch(bool enable)
@@ -136,7 +151,7 @@ namespace ArarGameLibrary.ScreenManagement
 
         //    var size = Parent != null ? Parent.Size : Global.ViewportRect.Size();
         //    var position = Parent != null ? Parent.Position + new Vector2(10,10) : Global.ViewportRect.Position();
-            
+
         //    SetPosition(position);
         //    SetSize(size);
 

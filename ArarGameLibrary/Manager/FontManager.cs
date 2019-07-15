@@ -102,6 +102,13 @@ namespace ArarGameLibrary.Manager
             return this;
         }
 
+        public FontManager SetChangeTextEvent(Func<string> changeTextEvent)
+        {
+            ChangeTextEvent = changeTextEvent;
+
+            return this;
+        }
+
         public FontManager SetLayerDepth(float layerDepth)
         {
             LayerDepth = layerDepth;

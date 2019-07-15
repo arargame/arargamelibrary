@@ -18,10 +18,6 @@ namespace TestProject
 
         Image image;
 
-        Texture2D damageTexture;
-
-        DrawableObject sprite;
-
         Piece piece;
 
         TestInfo ti;
@@ -50,9 +46,9 @@ namespace TestProject
 
         protected override void LoadContent()
         {
-            sprite = new DrawableObject(Content.Load<Texture2D>("grsl1"),
-                                            new Vector2(200, 50),
-                                            new Vector2(120, 120));
+            //sprite = new DrawableObject(Content.Load<Texture2D>("grsl1"),
+            //                                new Vector2(200, 50),
+            //                                new Vector2(120, 120));
 
             piece = new Piece(100, 100)
                 .SetPosition(new Vector2(250, 250))
@@ -63,7 +59,6 @@ namespace TestProject
             piece.LoadContent();
             ti = new TestInfo(piece).AddParameters("DestinationRectangle");
 
-            damageTexture = TextureManager.CreateDamageTexture(sprite.Texture);
 
             image = new Image("wrokcubeBackground");
             image.LoadContent();

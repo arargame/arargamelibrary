@@ -9,12 +9,8 @@ using System.Threading.Tasks;
 
 namespace ArarGameLibrary.Model
 {
-    public class Line : BaseObject, IXna
+    public class Line : DrawableObject
     {
-        public Color Color { get; set; }
-
-        public Texture2D Texture { get; set; }
-
         public Vector2 From { get; set; }
 
         public Vector2 To { get; set; }
@@ -38,14 +34,14 @@ namespace ArarGameLibrary.Model
             Initialize();
         }
 
-        public void Initialize()
+        public override void Initialize()
         {
             Lenght = Vector2.Distance(From, To);
 
             Angle = (float)Math.Atan2(To.Y - From.Y, To.X - From.X);
         }
 
-        public void LoadContent(Texture2D texture = null)
+        public override void LoadContent(Texture2D texture = null)
         {
             //Texture = new Texture2D(Global.SpriteBatch.GraphicsDevice, 1, 1, false, SurfaceFormat.Color);
             //Texture.SetData(new[] { Color.White });
@@ -53,22 +49,25 @@ namespace ArarGameLibrary.Model
             Texture = TextureManager.CreateTexture2DBySingleColor(Color, 1, 1);
         }
 
-        public void UnloadContent()
+        public override void UnloadContent()
         {
             throw new NotImplementedException();
         }
 
-        public void Update(GameTime gameTime = null)
+        public override void Update(GameTime gameTime = null)
         {
         }
 
-        public void Draw(SpriteBatch spriteBatch = null)
+        public override void Draw(SpriteBatch spriteBatch = null)
         {
-            var origin = new Vector2(0f, 0.0f);
+            if (IsVisible)
+            {
+                var origin = new Vector2(0f, 0.0f);
 
-            var scale = new Vector2(Lenght, Thickness);
+                var scale = new Vector2(Lenght, Thickness);
 
-            Global.SpriteBatch.Draw(Texture, From, null, Color.White, Angle, origin, scale, SpriteEffects.None, 1);
+                Global.SpriteBatch.Draw(Texture, From, null, Color.White, Angle, origin, scale, SpriteEffects.None, 1);
+            }
         }
 
         public Line ChangeColor(Color color)

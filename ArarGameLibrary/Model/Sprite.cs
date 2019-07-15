@@ -11,21 +11,6 @@ using System.Threading.Tasks;
 
 namespace ArarGameLibrary.Model
 {
-    public interface IBaseObject
-    {
-        Guid Id { get; set; }
-
-        string Name { get; set; }
-
-        string Description { get; set; }
-
-        DateTime CreateDate { get; set; }
-
-        DateTime UpdateDate { get; set; }
-
-        bool IsInPerformanceMode { get; set; }
-    }
-
     public interface IXna
     {
         void Initialize();
@@ -39,72 +24,20 @@ namespace ArarGameLibrary.Model
         void Draw(SpriteBatch spriteBatch = null);
     }
 
-    public interface IDrawableObject : IXna
-    {
-        Rectangle CollisionRectangle { get; set; }
-        Color Color { get; set; }
-
-        Rectangle DestinationRectangle { get; }
-
-        bool IsActive { get; set; }
-        bool IsAlive { get; set; }
-        bool IsVisible { get; set; }
-
-        float LayerDepth { get; set; }
-
-        Vector2 Origin { get; set; }
-
-        Vector2 Position { get; set; }
-
-        float Rotation { get; set; }
-
-        float Scale { get; set; }
-        Vector2 Size { get; set; }
-        Rectangle SourceRectangle { get; set; }
-        Vector2 Speed { get; set; }
-        SpriteEffects SpriteEffects { get; set; }
-        SpriteBatch SpriteBatch { get; set; }
-
-        Texture2D Texture { get; set; }
-    }
-
-    public interface IClickableIbject
+    public interface IClickableObject
     {
         bool IsClickable { get; set; }
+        bool IsDragable { get; set; }
+        bool IsDragging { get; set; }
         bool IsHovering { get; set; }
         bool IsSelecting { get; set; }
         void SetClickable(bool enable);
-    }
-
-    public abstract class BaseObject : IBaseObject, ICloneable
-    {
-        public Guid Id { get; set; }
-
-        public string Name { get; set; }
-
-        public string Description { get; set; }
-
-        public DateTime CreateDate { get; set; }
-
-        public DateTime UpdateDate { get; set; }
-
-        public bool IsInPerformanceMode { get; set; }
-
-        public BaseObject()
-        {
-            Id = Guid.NewGuid();
-
-            CreateDate = UpdateDate = DateTime.Now;
-        }
-
-        public Object Clone()
-        {
-            return MemberwiseClone();
-        }
+        void SetDragable(bool enable);
+        Vector2 DroppingRange { get; set; }
     }
 
 
-    public abstract class Sprite : BaseObject, IDrawableObject, IClickableIbject
+    public abstract class Sprite : BaseObject, IDrawableObject, IClickableObject
     {
         #region Properties
 
@@ -120,10 +53,13 @@ namespace ArarGameLibrary.Model
             }
         }
         public int DrawMethodType { get; set; }
+        public Vector2 DroppingRange { get; set; }
 
         public bool IsActive { get; set; }
         public bool IsAlive { get; set; }
         public bool IsClickable { get; set; }
+        public bool IsDragable { get; set; }
+        public bool IsDragging { get; set; }
         public bool IsPulsating { get; set; }
         public bool IsHovering { get; set; }
         public bool IsSelecting { get; set; }
@@ -221,11 +157,28 @@ namespace ArarGameLibrary.Model
 
                 TestInfo.Update();
 
-                if (IsClickable)
+                if (IsClickable || IsDragable)
                 {
                     IsHovering = InputManager.IsHovering(DestinationRectangle);
                     IsSelecting = InputManager.Selected(DestinationRectangle);
+                    IsDragging = InputManager.IsDragging(DestinationRectangle);
                 }
+
+
+
+                //if (IsDragging)
+                //{
+                //    if(DroppingRange==Vector2.Zero)
+                //        DroppingRange = InputManager.CursorPosition - Position;
+
+                //    var range = InputManager.CursorPosition - DroppingRange;
+
+                //    SetPosition(range);
+                //}
+                //else
+                //{
+                //    DroppingRange = Vector2.Zero;
+                //}
             }
         }
 
@@ -352,6 +305,11 @@ namespace ArarGameLibrary.Model
             Description = description;
         }
 
+        public void SetDragable(bool enable)
+        {
+            IsDragable = enable;
+        }
+
         public void SetDrawMethodType(int methodType)
         {
             DrawMethodType = methodType;
@@ -440,7 +398,7 @@ namespace ArarGameLibrary.Model
             Texture = texture;
         }
 
-        public void SetVisible(bool enable)
+        public virtual void SetVisible(bool enable)
         {
             IsVisible = enable;
         }

@@ -59,6 +59,7 @@
     <Compile Include="Manager\TestInfo.cs" />
     <Compile Include="Manager\TextureManager.cs" />
     <Compile Include="Model\Animation.cs" />
+    <Compile Include="Model\BaseObject.cs" />
     <Compile Include="Model\Frame.cs" />
     <Compile Include="Model\DrawableObject.cs" />
     <Compile Include="Model\Graph.cs" />
@@ -76,6 +77,7 @@
     <Compile Include="ScreenManagement\Menu.cs" />
     <Compile Include="ScreenManagement\Row.cs" />
     <Compile Include="ScreenManagement\Screen.cs" />
+    <Compile Include="ScreenManagement\ScrollBar.cs" />
     <Compile Include="ScreenManagement\Theme.cs" />
   </ItemGroup>
   <ItemGroup>
