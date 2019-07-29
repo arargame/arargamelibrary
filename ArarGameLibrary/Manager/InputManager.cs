@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using ArarGameLibrary.Model;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,8 @@ namespace ArarGameLibrary.Manager
 {
     public class InputManager
     {
+        public static Sprite DraggingObject { get; set; }
+
         public static bool IsActive { get; set; }
 
         public static KeyboardState CurrentKeyboardState { get; set; }
@@ -98,9 +101,24 @@ namespace ArarGameLibrary.Manager
             return CursorRectangle.Intersects(target);
         }
 
-        public static bool IsDragging(Rectangle draggingRectangle)
+        public static bool IsDragging(Sprite sprite)
         {
-            return IsHovering(draggingRectangle) && IsPressing;
+            if (!IsPressing)
+            {
+                DraggingObject = null;
+
+                return false;
+            }
+
+            if (IsHovering(sprite.DestinationRectangle) && DraggingObject == null)
+                DraggingObject = sprite;
+
+            //DraggingObject = IsHovering(sprite.DestinationRectangle) && DraggingObject == null ? DraggingObject = sprite : null ;
+
+
+            return DraggingObject!= null && DraggingObject.Id == sprite.Id;
+
+            //return IsPressing;//IsHovering(draggingRectangle) &&
         }
     }
 }

@@ -120,6 +120,7 @@ namespace ArarGameLibrary.Model
 
             Effects.Add(new PulsateEffect(this));
             Effects.Add(new SimpleShadowEffect(this,new Vector2(5,5)));
+            Effects.Add(new DraggingEffect(this));
 
             ClampManager = new ClampManager(this);
 
@@ -161,25 +162,26 @@ namespace ArarGameLibrary.Model
                 {
                     IsHovering = InputManager.IsHovering(DestinationRectangle);
                     IsSelecting = InputManager.Selected(DestinationRectangle);
-                    IsDragging = InputManager.IsDragging(DestinationRectangle);
+
+                    if (IsDragable)
+                        Drag(InputManager.IsDragging(this));
                 }
-
-
-
-                //if (IsDragging)
-                //{
-                //    if(DroppingRange==Vector2.Zero)
-                //        DroppingRange = InputManager.CursorPosition - Position;
-
-                //    var range = InputManager.CursorPosition - DroppingRange;
-
-                //    SetPosition(range);
-                //}
-                //else
-                //{
-                //    DroppingRange = Vector2.Zero;
-                //}
             }
+        }
+
+        public void Drag(bool enable)
+        {
+            IsDragging = enable;
+
+            var draggingEffect = GetEffect<DraggingEffect>();
+
+            if (draggingEffect == null)
+                return;
+
+            if (IsDragging)
+                draggingEffect.Start();
+            else
+                draggingEffect.End();
         }
 
         public virtual void Draw(SpriteBatch spriteBatch = null)
@@ -252,7 +254,7 @@ namespace ArarGameLibrary.Model
         {
             IsPulsating = enable;
 
-            var pulsateEffect = Effects.FirstOrDefault(e => e is PulsateEffect);
+            var pulsateEffect = GetEffect<PulsateEffect>();
 
             if (pulsateEffect == null)
                 return;

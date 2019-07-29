@@ -24,9 +24,13 @@ namespace PuzzleMeWindowsProject
         ScrollBar scrollBar;
         FontManager font;
         Column testColumn;
+        Column testColumn2;
         string message = "";
+        Vector2 startPointOfDragging;
+        Vector2 startPointOfDragging2;
 
-        
+
+
         public Game1()
         {
             Global.Graphics = new GraphicsDeviceManager(this);
@@ -68,7 +72,7 @@ namespace PuzzleMeWindowsProject
         /// </summary>
         protected override void LoadContent()
         {
-            font = FontManager.Create("IsLeftpressing : " + InputManager.IsPressing, new Vector2(200, 200), Color.Black);
+            font = FontManager.Create("IsLeftpressing : " + InputManager.IsPressing, new Vector2(200, 70), Color.Black);
             font.SetChangeTextEvent(()=>
             {
                 return "IsLeftpressing : " + InputManager.IsPressing + " " + " Position:" + testColumn.Position.ToString()+" MouseCursor:"+InputManager.CursorPosition.ToString();
@@ -91,6 +95,15 @@ namespace PuzzleMeWindowsProject
             testColumn.SetSize(new Vector2(100,100));
             testColumn.SetPosition(new Vector2(200,200));
             testColumn.SetDragable(true);
+            testColumn.SetClickable(true);
+
+            testColumn2 = new Column();
+
+            testColumn2.SetTexture(TextureManager.CreateTexture2DByRandomColor());
+            testColumn2.SetSize(new Vector2(75, 100));
+            testColumn2.SetPosition(new Vector2(75, 150));
+            testColumn2.SetDragable(true);
+            testColumn2.SetClickable(true);
         }
 
         /// <summary>
@@ -118,15 +131,38 @@ namespace PuzzleMeWindowsProject
             font.Update();
 
             testColumn.Update();
+            testColumn2.Update();
 
-            message = "InputManager.IsPressing : " + InputManager.IsPressing;
-            message += "\n previousMouseState:" + InputManager.PreviousMouseState.LeftButton;
-            message += "\n currentMouseState:"+InputManager.CurrentMouseState.LeftButton;
 
-            if (testColumn.IsDragging)
-            {
-                message += "dragging:" + testColumn.IsDragging+"\n selecting:"+testColumn.IsSelecting; 
-            }
+            message = "";
+            message += "\n IsHovering:"+InputManager.IsHovering(testColumn.DestinationRectangle);
+            message += "\nIsDragging:" + testColumn.IsDragging;
+            message += "\nISDragging2" + testColumn2.IsDragging;
+            message += "\ntestColumn.GetEffect<DraggingEffect>().IsActive" + testColumn.GetEffect<DraggingEffect>().IsActive;
+            message += "\ntestColumn2.GetEffect<DraggingEffect>().IsActive" + testColumn2.GetEffect<DraggingEffect>().IsActive;
+
+            //if (testColumn.IsDragging)
+            //{
+            //    if (startPointOfDragging == Vector2.Zero)
+            //        startPointOfDragging = InputManager.CursorPosition - testColumn.Position;
+
+            //    testColumn.SetPosition(InputManager.CursorPosition - startPointOfDragging);
+            //}
+            //else
+            //    startPointOfDragging = Vector2.Zero;
+
+            //if (testColumn2.IsDragging)
+            //{
+            //    if (startPointOfDragging2 == Vector2.Zero)
+            //        startPointOfDragging2 = InputManager.CursorPosition - testColumn2.Position;
+
+            //    testColumn2.SetPosition(InputManager.CursorPosition - startPointOfDragging2);
+            //}
+            //else
+            //    startPointOfDragging2 = Vector2.Zero;
+
+            message += "\nDraggingObject.ID:" + (InputManager.DraggingObject != null ? InputManager.DraggingObject.Id : (Guid?)null);
+            message+= "\nselecting:"+ testColumn.IsSelecting;
 
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Global.OnExit)
                 Exit();
@@ -146,7 +182,8 @@ namespace PuzzleMeWindowsProject
             Global.SpriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend);
 
             testColumn.Draw();
-            Global.SpriteBatch.DrawString(font.Font,message,new Vector2(350,350),Color.DarkSeaGreen);
+            testColumn2.Draw();
+            Global.SpriteBatch.DrawString(font.Font,message,new Vector2(350,250),Color.DarkSeaGreen);
             scrollBar.Draw();
             font.Draw();
             //ScreenManager.Draw();
