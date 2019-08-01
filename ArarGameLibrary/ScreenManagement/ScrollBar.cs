@@ -50,7 +50,19 @@ namespace ArarGameLibrary.ScreenManagement
             ItemToScroll.SetLayerDepth(Rows.FirstOrDefault().LayerDepth+0.0001f);
             ItemToScroll.SetDragable(true);
 
+            OnChangeRectangle += ScrollBar_OnChangeRectangle;
+
             base.LoadContent(texture);
+        }
+
+        private void ScrollBar_OnChangeRectangle()
+        {
+            var co = new ClampObject("Position.X", Position.X, Position.X);
+
+            if (!ItemToScroll.ClampManager.ContainsKey("Position.X"))
+                ItemToScroll.ClampManager.Add(co);
+            else
+                ItemToScroll.ClampManager.RefreshClampObject(co.PropertyName,co.Min,co.Max);
         }
 
         public override void Update(GameTime gameTime = null)

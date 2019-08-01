@@ -24,6 +24,20 @@ namespace ArarGameLibrary.Manager
 
             Max = max;
         }
+
+        public ClampObject SetMin(float min)
+        {
+            Min = min;
+
+            return this;
+        }
+
+        public ClampObject SetMax(float max)
+        {
+            Max = max;
+
+            return this;
+        }
     }
 
     public class ClampManager
@@ -35,6 +49,11 @@ namespace ArarGameLibrary.Manager
         public ClampManager(Sprite sprite)
         {
             Sprite = sprite;
+        }
+
+        public bool ContainsKey(string property)
+        {
+            return ClampObjects.Any(co=>co.PropertyName == property);
         }
 
         public ClampManager Add(params ClampObject[] clampObjects)
@@ -50,12 +69,33 @@ namespace ArarGameLibrary.Manager
             return this;
         }
 
+        public ClampManager RefreshClampObject(string propertyName,float min,float max)
+        {
+            var co = ClampObjects.FirstOrDefault(c => c.PropertyName == propertyName);
+
+            if (co == null)
+                return this;
+            else
+                co.SetMin(min)
+                    .SetMax(max);
+
+            return this;
+        }
+
         public void Update()
         {
             foreach (var co in ClampObjects)
             {
                 switch (co.PropertyName)
                 {
+                    case "Position.X":
+                        Sprite.Position = new Vector2(MathHelper.Clamp(Sprite.Position.X,co.Min,co.Max),Sprite.Position.Y);
+                        break;
+
+                    case "Position.Y":
+                        Sprite.Position = new Vector2(Sprite.Position.X,MathHelper.Clamp(Sprite.Position.Y, co.Min, co.Max));
+                        break;
+
                     case "Size.X":
                         Sprite.Size = new Vector2(MathHelper.Clamp(Sprite.Size.X, co.Min, co.Max), Sprite.Size.Y);
                         break;
