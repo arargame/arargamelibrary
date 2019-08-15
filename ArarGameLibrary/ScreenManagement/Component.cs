@@ -168,6 +168,8 @@ namespace ArarGameLibrary.ScreenManagement
         {
             Parent = parent;
 
+            SetLayerDepth(Parent.LayerDepth + 0.01f);
+
             return this;
         }
 
@@ -180,8 +182,11 @@ namespace ArarGameLibrary.ScreenManagement
             return this;
         }
 
-        public List<T> GetChildAs<T>() where T : IComponent
+        public List<T> GetChildAs<T>(Func<T, bool> predicate = null) where T : IComponent
         {
+            if (predicate != null)
+                return Child.OfType<T>().Where(predicate).ToList();
+
             return Child.OfType<T>().ToList();
         }
     }

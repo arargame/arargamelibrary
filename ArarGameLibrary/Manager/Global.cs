@@ -64,6 +64,7 @@ namespace ArarGameLibrary.Manager
             }
         }
 
+
         public static Vector2 ViewportCenter
         {
             get

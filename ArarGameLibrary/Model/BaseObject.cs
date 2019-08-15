@@ -46,5 +46,13 @@ namespace ArarGameLibrary.Model
         {
             return MemberwiseClone();
         }
+
+        public string MemberInfoName
+        {
+            get
+            {
+                return GetType().Name;
+            }
+        }
     }
 }

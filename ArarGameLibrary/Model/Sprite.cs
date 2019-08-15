@@ -105,6 +105,8 @@ namespace ArarGameLibrary.Model
 
         public virtual void Initialize()
         {
+            SetName(MemberInfoName);
+
             OnChangeRectangle += SetRectangle;
 
             IsActive = IsAlive = IsVisible = true;
@@ -263,6 +265,11 @@ namespace ArarGameLibrary.Model
                 pulsateEffect.Start();
             else
                 pulsateEffect.End();
+        }
+
+        public void RefreshRectangle()
+        {
+            OnChangeRectangle();
         }
 
         public void ShowSimpleShadow(bool enable)
