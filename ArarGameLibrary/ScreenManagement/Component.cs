@@ -20,6 +20,10 @@ namespace ArarGameLibrary.ScreenManagement
         Component SetParent(IComponent parent);
 
         Component AddChild(params IComponent[] child);
+
+        List<T> GetChildAs<T>(Func<T, bool> predicate = null) where T : IComponent;
+
+        List<T> GetParentAs<T>(Func<T, bool> predicate = null) where T : IComponent;
     }
 
     public abstract class Component : Sprite , IComponent
@@ -182,12 +186,54 @@ namespace ArarGameLibrary.ScreenManagement
             return this;
         }
 
+        //public List<T> GetChildAs2<T>(Func<T, bool> predicate = null) where T : IComponent
+        //{
+        //    if (predicate != null)
+        //        return Child.OfType<T>().Where(predicate).ToList();
+
+        //    return Child.OfType<T>().ToList();
+        //}
+
         public List<T> GetChildAs<T>(Func<T, bool> predicate = null) where T : IComponent
         {
-            if (predicate != null)
-                return Child.OfType<T>().Where(predicate).ToList();
+            var list = new List<T>();
 
-            return Child.OfType<T>().ToList();
+            if (predicate != null)
+            {
+                list.AddRange(Child.OfType<T>().Where(predicate));
+            }
+            else
+            {
+                list.AddRange(Child.OfType<T>());
+            }
+
+            foreach (var children in Child)
+            {
+                list.AddRange(children.GetChildAs<T>(predicate));
+            }
+
+            return list;
+        }
+
+        public List<T> GetParentAs<T>(Func<T, bool> predicate = null) where T : IComponent
+        {
+            var list = new List<T>();
+
+            while(Parent!=null)
+            {
+                if(Parent is T)
+                    list.Add((T)Parent);
+                else 
+                    list.AddRange(Parent.GetParentAs<T>(predicate));
+            }
+
+
+            if (predicate != null && list.Count > 0)
+            {
+                return list.Where(predicate).ToList();
+            }
+
+            return list;
         }
     }
 }

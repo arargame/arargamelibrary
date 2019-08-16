@@ -81,11 +81,6 @@ namespace PuzzleMeWindowsProject
             InputManager.IsActive = true;
 
 
-            scrollBar = new ScrollBar(3, 3, Vector2.Zero, new Vector2(Global.ViewportWidth, Global.ViewportHeight));
-            scrollBar.LoadContent(TextureManager.CreateTexture2DBySingleColor(Color.Tan));
-            //scrollBar.SetFrame(Color.Yellow,2f);
-            //scrollBar.PrepareRows(true);
-            scrollBar.RefreshRectangle();
 
             var scrollBarColumns = new Column[4];
             for (int i = 0; i < scrollBarColumns.Length; i++)
@@ -96,7 +91,17 @@ namespace PuzzleMeWindowsProject
 
                 scrollBarColumns[i].SetTexture(TextureManager.CreateTexture2DByRandomColor());
             }
-            scrollBar.PrepareList(columns:scrollBarColumns);
+
+            scrollBar = new ScrollBar(3, 1, 2.5f, scrollBarColumns);
+            scrollBar.LoadContent(TextureManager.CreateTexture2DBySingleColor(Color.Tan));
+            //scrollBar.SetFrame(Color.Yellow,2f);
+            //scrollBar.PrepareRows(true);
+
+
+
+            //scrollBar.SetListContainer(columns: scrollBarColumns);
+            scrollBar.RefreshRectangle();
+
 
             //testColumn = new Column();
 

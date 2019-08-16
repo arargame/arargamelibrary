@@ -56,3 +56,4 @@
 -sound screen tasarımı
 -how to play yapısı üzerine düşün?
 -mouse un hover olaylarında mesela sol üst köşesi içni sıkıntı yok fakat sağ alt köşesine kadar temasını düşün nasıl olmalı?
+-scrollarupdate için bir koşul olduğunda bir keree çalışacak bir yapı gerekiyor update-draw gibi fonksiyonların içinde gerekli

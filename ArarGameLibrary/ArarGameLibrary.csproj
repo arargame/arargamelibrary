@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Effect\BarScrollingEffect.cs" />
     <Compile Include="Effect\DraggingEffect.cs" />
     <Compile Include="Effect\EffectManager.cs" />
     <Compile Include="Effect\PulsateEffect.cs" />
