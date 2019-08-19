@@ -181,7 +181,7 @@ namespace ArarGameLibrary.ScreenManagement
         {
             Child.AddRange(child);
 
-            child.ToList().ForEach(c=>c.SetParent(this));
+            child.ToList().ForEach(c => c.SetParent(this));
 
             return this;
         }
@@ -212,7 +212,7 @@ namespace ArarGameLibrary.ScreenManagement
                 list.AddRange(children.GetChildAs<T>(predicate));
             }
 
-            return list;
+            return list.ToList();
         }
 
         public List<T> GetParentAs<T>(Func<T, bool> predicate = null) where T : IComponent
@@ -233,7 +233,7 @@ namespace ArarGameLibrary.ScreenManagement
                 return list.Where(predicate).ToList();
             }
 
-            return list;
+            return list.ToList();
         }
     }
 }

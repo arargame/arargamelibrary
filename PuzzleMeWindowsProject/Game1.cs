@@ -80,19 +80,17 @@ namespace PuzzleMeWindowsProject
 
             InputManager.IsActive = true;
 
-
-
-            var scrollBarColumns = new Column[4];
+            var scrollBarColumns = new Column[16];
             for (int i = 0; i < scrollBarColumns.Length; i++)
             {
                 scrollBarColumns[i] = new Column();
 
-                scrollBarColumns[i].SetFrame(Color.Black);
+                //scrollBarColumns[i].SetFrame(Color.Black);
 
-                scrollBarColumns[i].SetTexture(TextureManager.CreateTexture2DByRandomColor());
+                //scrollBarColumns[i].SetTexture(TextureManager.CreateTexture2DByRandomColor());
             }
 
-            scrollBar = new ScrollBar(3, 1, 2.5f, scrollBarColumns);
+            scrollBar = new ScrollBar(3, 3, 2.5f, scrollBarColumns);
             scrollBar.LoadContent(TextureManager.CreateTexture2DBySingleColor(Color.Tan));
             //scrollBar.SetFrame(Color.Yellow,2f);
             //scrollBar.PrepareRows(true);

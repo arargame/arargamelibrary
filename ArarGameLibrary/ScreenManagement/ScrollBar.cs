@@ -47,11 +47,21 @@ namespace ArarGameLibrary.ScreenManagement
 
         public float ScrollContainerWidthRatio { get; set; }
 
+        public int MaxRowPageCount
+        {
+            get
+            {
+                return Convert.ToInt32(Math.Ceiling((decimal)MaxRowsCount / RowsCountToShow));
+            }
+        }
+
+        public Column[] Columns { get; set; }
+
         public ScrollBar(int rowsCountToShow = 4, int columnsCountPerRow = 3, float scrollContainerWidthRatio = 2.5f, params Column[] columns)
         {
             OnChangeRectangle += ScrollBar_OnChangeRectangle;
 
-            MaxRowsCount = columns.Length != 0 ? columns.Length : rowsCountToShow;
+            MaxRowsCount = columns.Length != 0 ? Convert.ToInt32(Math.Ceiling((decimal)columns.Length / columnsCountPerRow)) : rowsCountToShow;
 
             RowsCountToShow = rowsCountToShow;
 
@@ -59,27 +69,13 @@ namespace ArarGameLibrary.ScreenManagement
 
             ScrollContainerWidthRatio = scrollContainerWidthRatio;
 
+            SetColumns(columns);
+
             LoadListContainer();
 
             LoadScrollContainer();
-
-            var rowRatio = (float)100 / RowsCountToShow;
-            var columnRatio = (float)100 / ColumnsCountPerRow;
-
-            for (int i = 0; i < RowsCountToShow; i++)
-            {
-                if (columns.Length == 0)
-                    continue;
-
-                var columnsToAdd = columns.Skip(ColumnsCountPerRow * i)
-                                    .Take(ColumnsCountPerRow)
-                                    .ToList();
-
-                var row = new Row();
-                columnsToAdd.ForEach(c => row.AddColumn(c, columnRatio));
-                ListContainer.AddRow(row, i, rowRatio);
-            }
         }
+
 
 
         public override void Initialize()
@@ -99,14 +95,68 @@ namespace ArarGameLibrary.ScreenManagement
             base.LoadContent(texture);
         }
 
-        private void LoadListContainer()
+        public void LoadListContainer(int page = 0)
         {
-            var listContainer = new Container();
-            listContainer.SetName("ListContainer");
-            listContainer.SetFrame(Color.Blue);
-            listContainer.SetTexture(TextureManager.CreateTexture2DByRandomColor());
+            if (ListContainer == null)
+            {
+                var listContainer = new Container();
+                listContainer.SetName("ListContainer");
+                listContainer.SetFrame(Color.Blue);
+                listContainer.SetTexture(TextureManager.CreateTexture2DByRandomColor());
 
-            AddChild(listContainer);
+                AddChild(listContainer);
+            }
+
+            //ListContainer.Rows.ForEach(r => r.SetActive(false));
+            //ListContainer.Rows.Clear();
+
+            var rowRatio = (float)100 / RowsCountToShow;
+            var columnRatio = (float)100 / ColumnsCountPerRow;
+
+            if (!ListContainer.Rows.Any())
+            {
+                for (int i = 0; i < MaxRowsCount; i++)
+                {
+                    if (Columns.Length == 0)
+                        continue;
+
+                    var columnsToAdd = Columns.Skip(ColumnsCountPerRow * i)
+                                        .Take(ColumnsCountPerRow)
+                                        .ToList();
+
+                    var row = new Row();
+                    row.SetFrame(Color.White);
+                    row.SetTexture(TextureManager.CreateTexture2DByRandomColor());
+                    columnsToAdd.ForEach(c => row.AddColumn(c, columnRatio));
+                    columnsToAdd.ForEach(c => c.SetTexture(TextureManager.CreateTexture2DByRandomColor()));
+                    ListContainer.AddRow(row, i, rowRatio);
+                }
+            }
+
+            ListContainer.Rows.ForEach(r => r.SetActive(false));
+
+            var collection = ListContainer.Rows.Skip(RowsCountToShow * page)
+                                    .Take(RowsCountToShow)
+                                    .ToList();
+
+            var counter = 0;
+            foreach (var item in collection)
+            {
+                item.SetActive(true);
+                item.TestInfo.Show(true);
+                item.TestInfo.Font.SetText(((RowsCountToShow * page) + counter++).ToString());
+            }
+
+            RefreshRectangle();
+
+            //var index = 0;
+            //var collection = rows.Skip(RowsCountToShow * index)
+            //                        .Take(RowsCountToShow)
+            //                        .Select(r => new
+            //                        {
+            //                            Page = index++,
+            //                            Rows = r
+            //                        }).ToList();
         }
 
         private void LoadScrollContainer()
@@ -118,14 +168,14 @@ namespace ArarGameLibrary.ScreenManagement
 
             AddChild(scrollContainer);
             //62 62 66 255
-            for (int i = 0; i < MaxRowsCount; i++)
+            for (int i = 0; i < MaxRowPageCount; i++)
             {
                 var row = new Row();
                 row.SetFrame(Color.Black, 2f);
                 row.SetTexture(TextureManager.CreateTexture2DBySingleColor(new Color(62,62,66,255)));
                 row.MakeFrameVisible(true);
 
-                var heightRatio = (float)1 / MaxRowsCount * 100;
+                var heightRatio = (float)1 / MaxRowPageCount * 100;
 
                 scrollContainer.AddRow(row, i, heightRatio);
             }
@@ -144,14 +194,20 @@ namespace ArarGameLibrary.ScreenManagement
         {
             var scrollContainerSizeX = (float)Size.X * ScrollContainerWidthRatio / 100;
 
-            ListContainer.SetPosition(Position);
-            ListContainer.SetSize(new Vector2(Size.X - scrollContainerSizeX, Size.Y));
+            if (ListContainer!=null)
+            {
+                ListContainer.SetPosition(Position);
+                ListContainer.SetSize(new Vector2(Size.X - scrollContainerSizeX, Size.Y));
+                ListContainer.PrepareRows(floatTo: "left");
+            }
 
-            ScrollContainer.SetPosition(new Vector2(Position.X + Size.X - scrollContainerSizeX, Position.Y));
-            ScrollContainer.SetSize(new Vector2(scrollContainerSizeX, Size.Y));
+            if (ScrollContainer != null)
+            {
+                ScrollContainer.SetPosition(new Vector2(Position.X + Size.X - scrollContainerSizeX, Position.Y));
+                ScrollContainer.SetSize(new Vector2(scrollContainerSizeX, Size.Y));
+                ScrollContainer.PrepareRows(isCentralized: true);
+            }
 
-            ListContainer.PrepareRows(floatTo: "left");
-            ScrollContainer.PrepareRows(isCentralized: true);
 
             if (Bar != null)
             {
@@ -179,25 +235,36 @@ namespace ArarGameLibrary.ScreenManagement
 
             base.Update(gameTime);
 
+            var barScrollingEffect = GetEffect<BarScrollingEffect>();
+
             if (Bar.IsDragging)
             {
-                var counter = 1;
+                var counter =0;
+                var counter2 = 0;
 
-                var maxOverlapped = ScrollContainer.Rows.Select(row => new
+                var xxx = ScrollContainer.Rows.Select(row => new
                 {
-                    Number = counter++,
+                    BlockNumber = counter2++,
+                    OverlappedAreaHeight = Rectangle.Intersect(Bar.DestinationRectangle, row.DestinationRectangle).Height
+                }).ToList();
+
+                var maxOverlapAmongBarAndBlock = ScrollContainer.Rows.Select(row => new
+                {
+                    BlockNumber = counter++,
                     OverlappedAreaHeight = Rectangle.Intersect(Bar.DestinationRectangle, row.DestinationRectangle).Height
                 })
                 .OrderByDescending(o => o.OverlappedAreaHeight)
                 .FirstOrDefault();
 
-                var barScrollingEffect = GetEffect<BarScrollingEffect>();
-
-                if (barScrollingEffect.PageNumber != maxOverlapped.Number)
+                if (barScrollingEffect.PageNumber != maxOverlapAmongBarAndBlock.BlockNumber)
+                {
                     barScrollingEffect.Start();
-                else
-                    barScrollingEffect.End();
-
+                    barScrollingEffect.SetPageNumber(maxOverlapAmongBarAndBlock.BlockNumber);
+                }
+            }
+            else
+            {
+                barScrollingEffect.End();
             }
         }
 
@@ -206,35 +273,12 @@ namespace ArarGameLibrary.ScreenManagement
             base.Draw(spriteBatch);
         }
 
-        public ScrollBar SetListContainer2(params Column[] columns)
+        public ScrollBar SetColumns(Column[] columns)
         {
-            //var list = GetChildAs<Container>(c => c.Id == List.Id);
-
-            //List.SetPosition(new Vector2(0, 0));
-            //List.SetSize(new Vector2(Global.ViewportWidth, Global.ViewportHeight));
-            //List.SetFrame(Color.Black);
-            //List.SetTexture(TextureManager.CreateTexture2DByRandomColor());
-
-            //MaxRowsCount = columns.Length;
-
-            //var rowRatio = (float)100 / RowsCountToShow;
-            //var columnRatio = (float)100 / ColumnsCountPerRow;
-
-            //for (int i = 0; i < RowsCountToShow; i++)
-            //{
-            //    if (columns == null)
-            //        continue;
-
-            //    var columnsToAdd = columns.Skip(ColumnsCountPerRow * i)
-            //                        .Take(ColumnsCountPerRow)
-            //                        .ToList();
-
-            //    var row = new Row();
-            //    columnsToAdd.ForEach(c => row.AddColumn(c, columnRatio));
-            //    ListContainer.AddRow(row, i, rowRatio);
-            //}
+            Columns = columns;
 
             return this;
         }
+
     }
 }

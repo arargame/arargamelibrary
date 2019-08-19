@@ -58,11 +58,13 @@ namespace ArarGameLibrary.ScreenManagement
             var maxHeight = Size.Y;
             var takenHeight = 0f;
 
-            if (Rows.Sum(r => r.HeightRatio) > 100)
-            {
-                var averageHeightPerRow = 100 / Rows.Count;
+            var rowList = Rows.Where(r => r.IsActive).ToList();
 
-                Rows.ForEach(r=>r.SetHeightRatio(averageHeightPerRow));
+            if (rowList.Sum(r => r.HeightRatio) > 100)
+            {
+                var averageHeightPerRow = 100 / rowList.Count;
+
+                rowList.ForEach(r => r.SetHeightRatio(averageHeightPerRow));
             }
 
             //for (int i = 0; i < Rows.Count; i++)
@@ -78,7 +80,7 @@ namespace ArarGameLibrary.ScreenManagement
             //    takenHeight += r.Size.Y;
             //}
 
-            foreach (var row in Rows)
+            foreach (var row in rowList)
             {
                 row.SetPosition(new Vector2(row.Parent.Position.X, row.Parent.Position.Y + takenHeight));
                 row.SetSize(new Vector2(row.Parent.Size.X, maxHeight * row.HeightRatio / 100));

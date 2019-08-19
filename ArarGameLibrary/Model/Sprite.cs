@@ -235,7 +235,7 @@ namespace ArarGameLibrary.Model
                     effect.Draw();
                 }
 
-                //  TestInfo.Draw();
+                TestInfo.Draw();
             }
         }
 

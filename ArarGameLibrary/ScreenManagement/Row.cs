@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using ArarGameLibrary.Manager;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;

@@ -19,9 +19,14 @@ namespace ArarGameLibrary.Manager
 
         private bool IsVisible { get; set; }
 
+        public FontManager Font { get; set; }
+
         public TestInfo(IDrawableObject drawableObject)
         {
             DrawableObject = drawableObject;
+
+            Font = FontManager.Create(DrawableObject.GetType().Name,Vector2.Zero,Color.White);
+            Font.SetLayerDepth(DrawableObject.LayerDepth + 0.1f);
         }
 
         public TestInfo AddParameters(params string[] parameters)
@@ -55,6 +60,10 @@ namespace ArarGameLibrary.Manager
                         break;
                 }       
             }
+
+            Font.SetPosition(DrawableObject.Position + new Vector2(10, 10));
+            
+            Font.Update();
         }
 
         public void Draw()
@@ -74,6 +83,8 @@ namespace ArarGameLibrary.Manager
                         break;
                 }       
             }
+
+            Font.Draw();
         }
 
         public TestInfo Show(bool enable)
