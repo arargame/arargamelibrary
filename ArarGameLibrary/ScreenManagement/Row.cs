@@ -119,7 +119,7 @@ namespace ArarGameLibrary.ScreenManagement
 
                 column.SetPosition(new Vector2(positionX,positionY));
                 column.SetSize(new Vector2(sizeX,sizeY));
-                column.SetLayerDepth(LayerDepth + 0.01f);
+                column.IncreaseLayerDepth();
             }
         }
     }

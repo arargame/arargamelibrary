@@ -29,6 +29,8 @@ namespace PuzzleMeWindowsProject
         Vector2 startPointOfDragging;
         Vector2 startPointOfDragging2;
 
+        Container container;
+
 
 
         public Game1()
@@ -116,6 +118,45 @@ namespace PuzzleMeWindowsProject
             //testColumn2.SetPosition(new Vector2(75, 150));
             //testColumn2.SetDragable(true);
             //testColumn2.SetClickable(true);
+
+            container = new Container();
+            container.SetTexture(TextureManager.CreateTexture2DBySingleColor(Color.Beige));
+            container.SetSize(new Vector2(300,200));
+            container.SetMargin(new Vector2(10,10));
+
+            var row = new Row();
+            row.SetTexture(TextureManager.CreateTexture2DBySingleColor(new Color(36,220,151)));
+            container.AddRow(row,100);
+            var r1c1 = new Column();
+            r1c1.SetTexture(TextureManager.CreateTexture2DByRandomColor());
+            row.AddColumn(r1c1,30);
+
+            var r1c2 = new Column();
+            r1c2.SetTexture(TextureManager.CreateTexture2DByRandomColor());
+            row.AddColumn(r1c2, 30);
+
+            var r1c3 = new Column();
+            r1c3.SetTexture(TextureManager.CreateTexture2DByRandomColor());
+            row.AddColumn(r1c3, 30);
+
+
+
+            var row2 = new Row();
+            row2.SetTexture(TextureManager.CreateTexture2DByRandomColor());
+            container.AddRow(row2, 100);
+
+            var row3 = new Row();
+            row3.SetTexture(TextureManager.CreateTexture2DByRandomColor());
+            container.AddRow(row3, 100);
+
+            var row4 = new Row();
+            row4.SetTexture(TextureManager.CreateTexture2DByRandomColor());
+            container.AddRow(row4, 100);
+                        
+            container.PrepareRows();
+
+            row.PrepareColumns(true,"right");
+            var c = 0;
         }
 
         /// <summary>
@@ -139,14 +180,15 @@ namespace PuzzleMeWindowsProject
             InputManager.Update();
             //ScreenManager.Update();
 
+
             scrollBar.Update();
             font.Update();
 
             //testColumn.Update();
             //testColumn2.Update();
+            container.Update();
 
-
-            message = "";
+            message = "" + InputManager.IsMouseScrolling;
             //message += "\n IsHovering:"+InputManager.IsHovering(testColumn.DestinationRectangle);
             //message += "\nIsDragging:" + testColumn.IsDragging;
             //message += "\nISDragging2" + testColumn2.IsDragging;
@@ -183,7 +225,7 @@ namespace PuzzleMeWindowsProject
             //{
             //    item.Draw();
             //}
-
+            //container.Draw();
 
             font.Draw();
             //ScreenManager.Draw();

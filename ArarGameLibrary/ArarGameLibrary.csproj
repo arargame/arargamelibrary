@@ -50,6 +50,9 @@
     <Compile Include="Effect\EffectManager.cs" />
     <Compile Include="Effect\PulsateEffect.cs" />
     <Compile Include="Effect\SimpleShadowEffect.cs" />
+    <Compile Include="Event\DraggingEvent.cs" />
+    <Compile Include="Event\EventManager.cs" />
+    <Compile Include="Event\MouseScrollEvent.cs" />
     <Compile Include="Manager\ClampManager.cs" />
     <Compile Include="Manager\FontManager.cs" />
     <Compile Include="Manager\FrameManager.cs" />

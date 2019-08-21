@@ -44,7 +44,7 @@ namespace ArarGameLibrary.ScreenManagement
            base.Draw(spriteBatch);
         }
 
-        public Container AddRow(Row row, int drawOrder, float heightRatio)
+        public Container AddRow(Row row,float heightRatio)
         {
             AddChild(row);
 
@@ -67,18 +67,6 @@ namespace ArarGameLibrary.ScreenManagement
                 rowList.ForEach(r => r.SetHeightRatio(averageHeightPerRow));
             }
 
-            //for (int i = 0; i < Rows.Count; i++)
-            //{
-            //    var r = Rows[i];
-
-            //    r.SetPosition(new Vector2(r.Parent.Position.X, r.Parent.Position.Y + takenHeight));
-            //    r.SetSize(new Vector2(r.Parent.Size.X, maxHeight * r.HeightRatio / 100));
-
-            //    if (r.Frame != null)
-            //        r.SetFrame(r.Frame.LineColor);
-
-            //    takenHeight += r.Size.Y;
-            //}
 
             foreach (var row in rowList)
             {
@@ -90,12 +78,10 @@ namespace ArarGameLibrary.ScreenManagement
 
                 takenHeight += row.Size.Y;
 
-                row.SetLayerDepth(LayerDepth + 0.01f);
+                row.IncreaseLayerDepth();
 
                 row.PrepareColumns(isCentralized, floatTo);
             }
-
-            //Rows.ForEach(r => r.PrepareColumns(isCentralized, floatTo));
 
             return this;
         }

@@ -112,7 +112,7 @@ namespace ArarGameLibrary.Model
 
             OnChangeRectangle += Piece_OnChangeRectangle;
 
-            var simpleShadowEffect = EffectManager.Get<SimpleShadowEffect>(Effects);
+            var simpleShadowEffect = GetEffect<SimpleShadowEffect>();
 
             if (simpleShadowEffect != null)
                 simpleShadowEffect.SetOffset(new Vector2(-6, -6));

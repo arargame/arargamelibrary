@@ -8,6 +8,7 @@ using ArarGameLibrary.Model;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ArarGameLibrary.Effect;
+using ArarGameLibrary.Event;
 
 namespace ArarGameLibrary.ScreenManagement
 {
@@ -87,6 +88,21 @@ namespace ArarGameLibrary.ScreenManagement
             SetSize(new Vector2(Global.ViewportWidth, Global.ViewportHeight));
 
             Effects.Add(new BarScrollingEffect(this));
+
+            Events.Add(new MouseScrollEvent(sprite: this,
+                whenScrollStateIsUp: () => 
+                {
+                    var mouseScrollValue = (Bar.Size.Y / 4);
+
+                    Bar.SetPosition(new Vector2(Bar.Position.X, MathHelper.Clamp(Bar.Position.Y - mouseScrollValue, ScrollContainer.Position.Y, ScrollContainer.Position.Y + ScrollContainer.Size.Y - Bar.Size.Y)));
+                },
+                whenScrollStateIsDown: () => 
+                {
+                    var mouseScrollValue = (Bar.Size.Y / 4);
+
+                    Bar.SetPosition(new Vector2(Bar.Position.X, MathHelper.Clamp(Bar.Position.Y + mouseScrollValue, ScrollContainer.Position.Y, ScrollContainer.Position.Y + ScrollContainer.Size.Y - Bar.Size.Y)));
+                },
+                whenScrollStateIsIdle: null));
         }
 
 
@@ -107,9 +123,6 @@ namespace ArarGameLibrary.ScreenManagement
                 AddChild(listContainer);
             }
 
-            //ListContainer.Rows.ForEach(r => r.SetActive(false));
-            //ListContainer.Rows.Clear();
-
             var rowRatio = (float)100 / RowsCountToShow;
             var columnRatio = (float)100 / ColumnsCountPerRow;
 
@@ -125,11 +138,11 @@ namespace ArarGameLibrary.ScreenManagement
                                         .ToList();
 
                     var row = new Row();
-                    row.SetFrame(Color.White);
-                    row.SetTexture(TextureManager.CreateTexture2DByRandomColor());
+                    //row.SetFrame(Color.White);
+                    //row.SetTexture(TextureManager.CreateTexture2DByRandomColor());
                     columnsToAdd.ForEach(c => row.AddColumn(c, columnRatio));
                     columnsToAdd.ForEach(c => c.SetTexture(TextureManager.CreateTexture2DByRandomColor()));
-                    ListContainer.AddRow(row, i, rowRatio);
+                    ListContainer.AddRow(row,rowRatio);
                 }
             }
 
@@ -147,71 +160,63 @@ namespace ArarGameLibrary.ScreenManagement
                 item.TestInfo.Font.SetText(((RowsCountToShow * page) + counter++).ToString());
             }
 
-            RefreshRectangle();
 
-            //var index = 0;
-            //var collection = rows.Skip(RowsCountToShow * index)
-            //                        .Take(RowsCountToShow)
-            //                        .Select(r => new
-            //                        {
-            //                            Page = index++,
-            //                            Rows = r
-            //                        }).ToList();
+            var scrollContainerSizeX = (float)Size.X * ScrollContainerWidthRatio / 100;
+            ListContainer.SetPosition(Position);
+            ListContainer.SetSize(new Vector2(Size.X - scrollContainerSizeX, Size.Y));
+
+            RefreshRectangle();
         }
 
         private void LoadScrollContainer()
         {
+            var scrollContainerSizeX = (float)Size.X * ScrollContainerWidthRatio / 100;
+
             var scrollContainer = new Container();
             scrollContainer.SetName("ScrollContainer");
             scrollContainer.SetFrame(Color.Black);
             scrollContainer.SetTexture(TextureManager.CreateTexture2DByRandomColor());
+            scrollContainer.SetPosition(new Vector2(Position.X + Size.X - scrollContainerSizeX, Position.Y));
+            scrollContainer.SetSize(new Vector2(scrollContainerSizeX, Size.Y));
 
             AddChild(scrollContainer);
-            //62 62 66 255
+
             for (int i = 0; i < MaxRowPageCount; i++)
             {
                 var row = new Row();
-                row.SetFrame(Color.Black, 2f);
+                //row.SetFrame(Color.Black, 2f);
                 row.SetTexture(TextureManager.CreateTexture2DBySingleColor(new Color(62,62,66,255)));
-                row.MakeFrameVisible(true);
 
                 var heightRatio = (float)1 / MaxRowPageCount * 100;
 
-                scrollContainer.AddRow(row, i, heightRatio);
+                scrollContainer.AddRow(row,heightRatio);
             }
 
-            var scrollContainerRows = scrollContainer.GetChildAs<Row>();
+            var bar = new Column();
+            bar.SetName("Bar");
+            bar.SetTexture(TextureManager.CreateTexture2DBySingleColor(new Color(104, 104, 104, 255)));
+            bar.SetDragable(true);
 
-            var itemToScroll = new Column();
-            itemToScroll.SetName("Bar");
-            itemToScroll.SetTexture(TextureManager.CreateTexture2DBySingleColor(new Color(104, 104, 104, 255)));
-            scrollContainerRows.FirstOrDefault().AddColumn(itemToScroll, 100);
-            //itemToScroll.SetLayerDepth(Rows.FirstOrDefault().LayerDepth + 0.0001f);
-            itemToScroll.SetDragable(true);
+            var scrollContainerRows = scrollContainer.GetChildAs<Row>();
+            scrollContainerRows.FirstOrDefault().AddColumn(bar, 70);
+
+            scrollContainer.PrepareRows(isCentralized: true);
+
+            RefreshRectangle();
         }
 
         private void ScrollBar_OnChangeRectangle()
         {
-            var scrollContainerSizeX = (float)Size.X * ScrollContainerWidthRatio / 100;
-
             if (ListContainer!=null)
             {
-                ListContainer.SetPosition(Position);
-                ListContainer.SetSize(new Vector2(Size.X - scrollContainerSizeX, Size.Y));
-                ListContainer.PrepareRows(floatTo: "left");
+                ListContainer.PrepareRows(floatTo:"left");
             }
 
             if (ScrollContainer != null)
             {
-                ScrollContainer.SetPosition(new Vector2(Position.X + Size.X - scrollContainerSizeX, Position.Y));
-                ScrollContainer.SetSize(new Vector2(scrollContainerSizeX, Size.Y));
-                ScrollContainer.PrepareRows(isCentralized: true);
-            }
+                var barStartingPosition = ScrollContainer.Size.X * Bar.WidthRatio / 100;
 
-
-            if (Bar != null)
-            {
-                var coX = new ClampObject("Position.X", ScrollContainer.Position.X, ScrollContainer.Position.X);
+                var coX = new ClampObject("Position.X", Bar.Position.X, Bar.Position.X);
 
                 if (!Bar.ClampManager.ContainsKey("Position.X"))
                     Bar.ClampManager.Add(coX);
@@ -230,23 +235,36 @@ namespace ArarGameLibrary.ScreenManagement
         //under the construction 
         public override void Update(GameTime gameTime = null)
         {
-            if (MaxRowsCount < RowsCountToShow)
-                ScrollContainer.SetVisible(false);
+            if (MaxRowsCount <= RowsCountToShow)
+                Bar.SetVisible(false);
+            else
+                Bar.SetVisible(true);
 
             base.Update(gameTime);
 
+            var mouseScrollValue = (Bar.Size.Y / 4);
+
+            //if (InputManager.IsMouseScrollUp)
+            //{
+            //    Bar.SetPosition(new Vector2(Bar.Position.X, MathHelper.Clamp(Bar.Position.Y - mouseScrollValue, ScrollContainer.Position.Y, ScrollContainer.Position.Y + ScrollContainer.Size.Y - Bar.Size.Y)));
+            //}
+            //else if (InputManager.IsMouseScrollDown)
+            //{
+            //    Bar.SetPosition(new Vector2(Bar.Position.X, MathHelper.Clamp(Bar.Position.Y + mouseScrollValue, ScrollContainer.Position.Y, ScrollContainer.Position.Y + ScrollContainer.Size.Y - Bar.Size.Y)));
+            //}
+
             var barScrollingEffect = GetEffect<BarScrollingEffect>();
 
-            if (Bar.IsDragging)
+            if (Bar.IsDragging || InputManager.IsMouseScrolling)
             {
-                var counter =0;
-                var counter2 = 0;
+                var counter = 0;
+                //var counter2 = 0;
 
-                var xxx = ScrollContainer.Rows.Select(row => new
-                {
-                    BlockNumber = counter2++,
-                    OverlappedAreaHeight = Rectangle.Intersect(Bar.DestinationRectangle, row.DestinationRectangle).Height
-                }).ToList();
+                //var xxx = ScrollContainer.Rows.Select(row => new
+                //{
+                //    BlockNumber = counter2++,
+                //    OverlappedAreaHeight = Rectangle.Intersect(Bar.DestinationRectangle, row.DestinationRectangle).Height
+                //}).ToList();
 
                 var maxOverlapAmongBarAndBlock = ScrollContainer.Rows.Select(row => new
                 {
@@ -256,10 +274,12 @@ namespace ArarGameLibrary.ScreenManagement
                 .OrderByDescending(o => o.OverlappedAreaHeight)
                 .FirstOrDefault();
 
+               // LoadListContainer(maxOverlapAmongBarAndBlock.BlockNumber);
+
                 if (barScrollingEffect.PageNumber != maxOverlapAmongBarAndBlock.BlockNumber)
                 {
-                    barScrollingEffect.Start();
                     barScrollingEffect.SetPageNumber(maxOverlapAmongBarAndBlock.BlockNumber);
+                    barScrollingEffect.Start();
                 }
             }
             else

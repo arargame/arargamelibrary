@@ -9,6 +9,13 @@ using System.Threading.Tasks;
 
 namespace ArarGameLibrary.Manager
 {
+    public enum MouseScrollState
+    {
+        Up,
+        Down,
+        Idle
+    }
+
     public class InputManager
     {
         public static Sprite DraggingObject { get; set; }
@@ -28,6 +35,8 @@ namespace ArarGameLibrary.Manager
         //public static Texture2D CursorTexture { get; set; }
 
         public static bool IsMouseVisible { get; set; }
+
+        public static int MouseWheelValue { get; set; }
 
         public static Rectangle CursorRectangle
         {
@@ -58,6 +67,8 @@ namespace ArarGameLibrary.Manager
             }
 
             CursorPosition = CurrentMouseState.Position.ToVector2();
+
+            MouseWheelValue = InputManager.CurrentMouseState.ScrollWheelValue - InputManager.PreviousMouseState.ScrollWheelValue;
         }
 
         public static bool IsNewKeyPress(Keys key)
@@ -73,6 +84,38 @@ namespace ArarGameLibrary.Manager
         public static bool IsKeyUp(Keys key)
         {
             return CurrentKeyboardState.IsKeyUp(key);
+        }
+
+        public static bool IsMouseScrollIdle
+        {
+            get
+            {
+                return MouseWheelValue == 0;
+            }
+        }
+
+        public static bool IsMouseScrollUp
+        {
+            get
+            {
+                return MouseWheelValue > 0;
+            }
+        }
+
+        public static bool IsMouseScrollDown
+        {
+            get
+            {
+                return MouseWheelValue < 0;
+            }
+        }
+
+        public static bool IsMouseScrolling
+        {
+            get
+            {
+                return MouseWheelValue != 0;
+            }
         }
 
         public static bool IsLeftClicked

@@ -21,9 +21,19 @@ namespace ArarGameLibrary.ScreenManagement
 
         Component AddChild(params IComponent[] child);
 
+        Vector2 Margin { get; set; }
+
+        Vector2 Padding { get; set; }
+
         List<T> GetChildAs<T>(Func<T, bool> predicate = null) where T : IComponent;
 
         List<T> GetParentAs<T>(Func<T, bool> predicate = null) where T : IComponent;
+
+        IComponent SetMargin(Vector2 margin);
+
+        IComponent SetPadding(Vector2 padding);
+
+        void Align(Vector2 offset, Rectangle? parentRect = null);
     }
 
     public abstract class Component : Sprite , IComponent
@@ -34,16 +44,20 @@ namespace ArarGameLibrary.ScreenManagement
 
         public Action ClickAction;
 
-        public Vector2 Margin { get; private set; }
+        public Vector2 Margin { get; set; }
 
-        public Vector2 Padding { get; private set; }
+        public Vector2 Padding { get; set; }
 
         public List<IComponent> Child { get; set; }
 
         public Frame Frame { get; set; }
 
-        //public bool IsStretching { get; private set; }
+        public override void IncreaseLayerDepth(float? additionalDepth = null, float? baseDepth = null)
+        {
+            baseDepth = baseDepth ?? Parent.LayerDepth;
 
+            base.IncreaseLayerDepth(additionalDepth, baseDepth);
+        }
 
         public void OnClick(Action action)
         {
@@ -106,19 +120,31 @@ namespace ArarGameLibrary.ScreenManagement
             return this;
         }
 
-        public Component SetMargin(Vector2 margin)
+        public override void Align(Vector2 offset, Rectangle? parentRect = null)
+        {
+            parentRect = parentRect ?? (Parent != null ? Parent.DestinationRectangle : (Rectangle?)null);
+
+            base.Align(offset, parentRect);
+        }
+
+        public IComponent SetMargin(Vector2 margin)
         {
             Margin = margin;
 
-            Align(Margin, Parent != null ? Parent.DestinationRectangle : (Rectangle?)null);
+            Align(Margin,Parent != null ? Parent.DestinationRectangle : (Rectangle?)null);
 
             return this;
         }
 
-        public Component SetPadding(Vector2 padding)
+        public IComponent SetPadding(Vector2 padding)
         {
             Padding = padding;
-            
+
+            foreach (var children in Child)
+            {
+                children.Align(Padding, DestinationRectangle);
+            }
+
             return this;
         }
 
@@ -142,39 +168,18 @@ namespace ArarGameLibrary.ScreenManagement
             return this;
         }
 
-        public override void SetVisible(bool enable)
-        {
-            base.SetVisible(enable);
-
-            //Child.ForEach(c=>c.SetVisible(enable));
-        }
-
-        //public Component Stretch(bool enable)
-        //{
-        //    IsStretching = enable;
-
-        //    var size = Parent != null ? Parent.Size : Global.ViewportRect.Size();
-        //    var position = Parent != null ? Parent.Position + new Vector2(10,10) : Global.ViewportRect.Position();
-
-        //    SetPosition(position);
-        //    SetSize(size);
-
-        //    if (Parent != null)
-        //        SetLayerDepth(Parent.LayerDepth + 0.01f);
-
-        //    if(Frame!=null)
-        //        SetFrame(Frame.LineColor);
-
-        //    return this;
-        //}
-
         public Component SetParent(IComponent parent)
         {
             Parent = parent;
 
-            SetLayerDepth(Parent.LayerDepth + 0.01f);
+            IncreaseLayerDepth();
 
             return this;
+        }
+
+        public override void SetVisible(bool enable)
+        {
+            base.SetVisible(enable);
         }
 
         public Component AddChild(params IComponent[] child)
@@ -185,14 +190,6 @@ namespace ArarGameLibrary.ScreenManagement
 
             return this;
         }
-
-        //public List<T> GetChildAs2<T>(Func<T, bool> predicate = null) where T : IComponent
-        //{
-        //    if (predicate != null)
-        //        return Child.OfType<T>().Where(predicate).ToList();
-
-        //    return Child.OfType<T>().ToList();
-        //}
 
         public List<T> GetChildAs<T>(Func<T, bool> predicate = null) where T : IComponent
         {
@@ -226,7 +223,6 @@ namespace ArarGameLibrary.ScreenManagement
                 else 
                     list.AddRange(Parent.GetParentAs<T>(predicate));
             }
-
 
             if (predicate != null && list.Count > 0)
             {

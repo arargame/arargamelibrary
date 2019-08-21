@@ -1,4 +1,5 @@
 ﻿using ArarGameLibrary.Effect;
+using ArarGameLibrary.Event;
 using ArarGameLibrary.Extension;
 using ArarGameLibrary.Manager;
 using Microsoft.Xna.Framework;
@@ -67,6 +68,7 @@ namespace ArarGameLibrary.Model
 
         //From 0f to 1f where 1f is the top layer
         public float LayerDepth { get; set; }
+        public const float LayerDepthPlus = 0.01f;
 
         public Vector2 Origin { get; set; }
 
@@ -89,6 +91,7 @@ namespace ArarGameLibrary.Model
         public event ChangingSomething OnChangeRectangle;
 
         public List<EffectManager> Effects = new List<EffectManager>();
+        public List<EventManager> Events = new List<EventManager>();
 
         #endregion
 
@@ -103,6 +106,7 @@ namespace ArarGameLibrary.Model
 
         #region Functions
 
+        #region XNA Functions
         public virtual void Initialize()
         {
             SetName(MemberInfoName);
@@ -121,8 +125,9 @@ namespace ArarGameLibrary.Model
             Color = Color.White;
 
             Effects.Add(new PulsateEffect(this));
-            Effects.Add(new SimpleShadowEffect(this,new Vector2(5,5)));
-            Effects.Add(new DraggingEffect(this));
+            Effects.Add(new SimpleShadowEffect(this, new Vector2(5, 5)));
+
+            Events.Add(new DraggingEvent(this));
 
             ClampManager = new ClampManager(this);
 
@@ -156,34 +161,21 @@ namespace ArarGameLibrary.Model
                     effect.Update();
                 }
 
+                foreach (var e in Events)
+                {
+                    e.Update();
+                }
+
                 ClampManager.Update();
 
                 TestInfo.Update();
 
-                if (IsClickable || IsDragable)
+                if (IsClickable)
                 {
                     IsHovering = InputManager.IsHovering(DestinationRectangle);
                     IsSelecting = InputManager.Selected(DestinationRectangle);
-
-                    if (IsDragable)
-                        Drag(InputManager.IsDragging(this));
                 }
             }
-        }
-
-        public void Drag(bool enable)
-        {
-            IsDragging = enable;
-
-            var draggingEffect = GetEffect<DraggingEffect>();
-
-            if (draggingEffect == null)
-                return;
-
-            if (IsDragging)
-                draggingEffect.Start();
-            else
-                draggingEffect.End();
         }
 
         public virtual void Draw(SpriteBatch spriteBatch = null)
@@ -239,7 +231,10 @@ namespace ArarGameLibrary.Model
             }
         }
 
-        public void Align(Vector2 offset, Rectangle? parentRect = null)
+        #endregion
+
+        
+        public virtual void Align(Vector2 offset, Rectangle? parentRect = null)
         {
             if (parentRect == null)
                 parentRect = Global.ViewportRect;
@@ -247,9 +242,20 @@ namespace ArarGameLibrary.Model
             SetPosition(new Vector2((int)(parentRect.Value.Position().X + offset.X), (int)(parentRect.Value.Position().Y + offset.Y)));
         }
 
+
         public T GetEffect<T>() where T : EffectManager
         {
             return EffectManager.Get<T>(Effects);
+        }
+
+        public T GetEvent<T>() where T : EventManager
+        {
+            return EventManager.Get<T>(Events);
+        }
+
+        public virtual void IncreaseLayerDepth(float? additionalDepth = null, float? baseDepth = null)
+        {
+            SetLayerDepth((baseDepth ?? LayerDepth) + (additionalDepth ?? LayerDepthPlus));
         }
 
         public void Pulsate(bool enable)
@@ -326,7 +332,7 @@ namespace ArarGameLibrary.Model
 
         public void SetLayerDepth(float layerDepth)
         {
-            LayerDepth = layerDepth;
+            LayerDepth = MathHelper.Clamp(layerDepth, 0f, 1f);
         }
 
         public void SetName(string name)

@@ -47,7 +47,7 @@ namespace PuzzleMeWindowsProject.Screens
             row1.AddColumn(column3, 25);
 
 
-            leftSideContainer.AddRow(row1, 1, 33);
+            leftSideContainer.AddRow(row1, 33);
 
 
             var row2 = new Row();
@@ -55,14 +55,14 @@ namespace PuzzleMeWindowsProject.Screens
             row2.SetTexture(TextureManager.CreateTexture2DByRandomColor());
             row2.SetFrame(Color.Tan);
 
-            leftSideContainer.AddRow(row2, 2, 33);
+            leftSideContainer.AddRow(row2, 33);
 
             var row3 = new Row();
             row3.MakeFrameVisible(true);
             row3.SetTexture(TextureManager.CreateTexture2DByRandomColor());
             row3.SetFrame(Color.Tan);
 
-            leftSideContainer.AddRow(row3, 1, 33);
+            leftSideContainer.AddRow(row3,33);
 
             leftSideContainer.PrepareRows(true);
            
