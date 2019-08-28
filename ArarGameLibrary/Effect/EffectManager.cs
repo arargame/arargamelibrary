@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace ArarGameLibrary.Effect
 {
+    //will be removed
     public abstract class EffectManager
     {
         public Sprite Sprite { get; set; }

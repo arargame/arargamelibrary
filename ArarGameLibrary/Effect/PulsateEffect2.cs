@@ -8,30 +8,33 @@ using System.Threading.Tasks;
 
 namespace ArarGameLibrary.Effect
 {
-    public class PulsateEffect : EffectManager
+    public class PulsateEffect2 : EventManager
     {
         public float LastScale { get; set; }
 
         public float CollapseSpeed { get; set; }
 
-        public PulsateEffect(Sprite sprite, float lastScale = 1f, float collapseSpeed = 0.05f) : base(sprite)
+        public PulsateEffect2(Sprite sprite,Func<bool> whenToInvoke, float lastScale = 1f, float collapseSpeed = 0.05f) 
+            : base(sprite,true)
         {
             SetTask(() =>
             {
-                Sprite.Scale = General.Pulsate();
-            });
-
-            SetEndTask(() =>
-            {
-                if (Sprite.Scale.ToString("0.0") != LastScale.ToString("0.0"))
+                if (whenToInvoke())
                 {
-                    Sprite.Scale = LastScale > Sprite.Scale ? Sprite.Scale + CollapseSpeed : Sprite.Scale - CollapseSpeed;
-
-                    return;
+                    Sprite.Scale = General.Pulsate();
                 }
                 else
                 {
-                    Sprite.Scale = LastScale;
+                    if (Sprite.Scale.ToString("0.0") != LastScale.ToString("0.0"))
+                    {
+                        Sprite.Scale = LastScale > Sprite.Scale ? Sprite.Scale + CollapseSpeed : Sprite.Scale - CollapseSpeed;
+
+                        return;
+                    }
+                    else
+                    {
+                        Sprite.Scale = LastScale;
+                    }
                 }
             });
 

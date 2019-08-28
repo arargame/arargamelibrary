@@ -31,7 +31,8 @@ namespace PuzzleMeWindowsProject
 
         Container container;
 
-
+        Container cnt;
+        Piece piece;
 
         public Game1()
         {
@@ -86,6 +87,7 @@ namespace PuzzleMeWindowsProject
             for (int i = 0; i < scrollBarColumns.Length; i++)
             {
                 scrollBarColumns[i] = new Column();
+            
 
                 //scrollBarColumns[i].SetFrame(Color.Black);
 
@@ -101,6 +103,19 @@ namespace PuzzleMeWindowsProject
 
             //scrollBar.SetListContainer(columns: scrollBarColumns);
             scrollBar.RefreshRectangle();
+
+            var firstScrollBarRow = scrollBar.Rows.FirstOrDefault();
+            var firstScrollBarRowColumn = firstScrollBarRow.Columns.FirstOrDefault();
+
+            var c = new Column();
+            c.SetTexture(TextureManager.CreateTexture2DByRandomColor());
+
+
+            firstScrollBarRowColumn.AddChild(c);
+            c.SetMargin(new Vector2(10, 10));
+            c.SetSize(new Vector2(50,50));
+            c.IncreaseLayerDepth();
+            
 
 
             //testColumn = new Column();
@@ -156,7 +171,37 @@ namespace PuzzleMeWindowsProject
             container.PrepareRows();
 
             row.PrepareColumns(true,"right");
-            var c = 0;
+
+
+            cnt = new Container();
+            cnt.SetTexture(TextureManager.CreateTexture2DBySingleColor(new Color(143, 166,225)));
+            cnt.SetSize(new Vector2(200,200));
+            cnt.SetPosition(new Vector2(10,10));
+
+            var cr1 = new Row();
+            cr1.SetTexture(TextureManager.CreateTexture2DByRandomColor());
+
+            var cr2 = new Row();
+            cr2.SetTexture(TextureManager.CreateTexture2DByRandomColor());
+
+            var cr2c1 = new Column();
+            cr2c1.SetTexture(TextureManager.CreateTexture2DByRandomColor());
+
+            cr2.AddColumn(cr2c1,50);
+
+            cnt.AddRow(cr1,80);
+            cnt.AddRow(cr2,20);
+            cnt.PrepareRows();
+            cnt.ShowSimpleShadow(true);
+
+
+            piece = new Piece(100,100);
+            piece.SetTexture(TextureManager.CreateTexture2DByRandomColor());
+            piece.SetPosition(new Vector2(250,250));
+            piece.SetSize(new Vector2(100,100));
+            piece.Select();
+            piece.SetClickable(true);
+            piece.SetDragable(true);
         }
 
         /// <summary>
@@ -179,14 +224,15 @@ namespace PuzzleMeWindowsProject
 
             InputManager.Update();
             //ScreenManager.Update();
+            cnt.Update();
 
-
-            scrollBar.Update();
+            //scrollBar.Update();
             font.Update();
 
             //testColumn.Update();
             //testColumn2.Update();
             container.Update();
+            piece.Update();
 
             message = "" + InputManager.IsMouseScrolling;
             //message += "\n IsHovering:"+InputManager.IsHovering(testColumn.DestinationRectangle);
@@ -218,9 +264,9 @@ namespace PuzzleMeWindowsProject
             //testColumn.Draw();
             //testColumn2.Draw();
             Global.SpriteBatch.DrawString(font.Font,message,new Vector2(350,250),Color.DarkSeaGreen);
-            scrollBar.Draw();
-
-
+            //scrollBar.Draw();
+            cnt.Draw();
+            piece.Draw();
             //foreach (var item in scrollBar.GetChildAs<Component>())
             //{
             //    item.Draw();

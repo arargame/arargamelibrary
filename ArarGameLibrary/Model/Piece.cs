@@ -112,10 +112,22 @@ namespace ArarGameLibrary.Model
 
             OnChangeRectangle += Piece_OnChangeRectangle;
 
-            var simpleShadowEffect = GetEffect<SimpleShadowEffect>();
+            //var simpleShadowEffect = GetEffect<SimpleShadowEffect>();
 
-            if (simpleShadowEffect != null)
-                simpleShadowEffect.SetOffset(new Vector2(-6, -6));
+            //if (simpleShadowEffect != null)
+            //    simpleShadowEffect.SetOffset(new Vector2(-6, -6));
+
+            Events.Add(new SimpleShadowEffect(this, new Vector2(-6, -6),
+                () =>
+                {
+                    return State == PieceState.Selected;
+                }));
+
+            Events.Add(new PulsateEffect2(this,
+                () =>
+                {
+                    return State == PieceState.Selected;
+                }));
 
             SetDrawMethodType(5);
         }
@@ -153,26 +165,31 @@ namespace ArarGameLibrary.Model
 
         public override void Update(GameTime gameTime = null)
         {
+            var ee = GetEvent<SimpleShadowEffect>();
+
             if (State == PieceState.Selected)
             {
                 SetLayerDepth(0.75f);
 
-                ShowSimpleShadow(true);
+                //ShowSimpleShadow(true);
 
-                Pulsate(true);
+                //Pulsate(true);
             }
             else
             {
                 SetStartingLayerDepth();
 
-                ShowSimpleShadow(false);
+                //ShowSimpleShadow(false);
 
-                Pulsate(false);
+                //Pulsate(false);
             }
 
-            FontManager.CalculateCenterVector2(DestinationRectangle);
+            if (FontManager != null)
+            {
+                FontManager.CalculateCenterVector2(DestinationRectangle);
 
-            FontManager.Update();
+                FontManager.Update();
+            }
 
             base.Update();
         }
@@ -191,7 +208,10 @@ namespace ArarGameLibrary.Model
 
             base.Draw();
 
-            FontManager.Draw();
+            if (FontManager != null)
+            {
+                FontManager.Draw();
+            }
 
             //Frame.Draw();
         }
@@ -208,7 +228,7 @@ namespace ArarGameLibrary.Model
             ClearTypes();
             AddType(PieceType.Empty);
 
-            var simpleShadowEffect = GetEffect<SimpleShadowEffect>();
+            var simpleShadowEffect = GetEvent<SimpleShadowEffect>();
 
             if (simpleShadowEffect != null)
                 simpleShadowEffect.End();
@@ -395,10 +415,6 @@ namespace ArarGameLibrary.Model
             //return Number + " - " + string.Join(",", Types.Select(t=>t.ToString())); 
 
             return text ?? string.Format("({0},{1})={2}",RowNumber,ColumnNumber,Number);//$"({RowNumber},{ColumnNumber})={Number}";
-
-            var e = GetEffect<SimpleShadowEffect>();
-
-            return e.IsActive.ToString();
 
             //return text ?? $"{ImageNumber}";
         }

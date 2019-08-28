@@ -61,7 +61,7 @@ namespace ArarGameLibrary.Model
         public bool IsClickable { get; set; }
         public bool IsDragable { get; set; }
         public bool IsDragging { get; set; }
-        public bool IsPulsating { get; set; }
+        //public bool IsPulsating { get; set; }
         public bool IsHovering { get; set; }
         public bool IsSelecting { get; set; }
         public bool IsVisible { get; set; }
@@ -77,7 +77,7 @@ namespace ArarGameLibrary.Model
         public float Rotation { get; set; }
 
         public float Scale { get; set; }
-        public bool SimpleShadowVisibility { get; set; }
+        //public bool SimpleShadowVisibility { get; set; }
         public Vector2 Size { get; set; }
         public Rectangle SourceRectangle { get; set; }
         public Vector2 Speed { get; set; }
@@ -124,8 +124,7 @@ namespace ArarGameLibrary.Model
 
             Color = Color.White;
 
-            Effects.Add(new PulsateEffect(this));
-            Effects.Add(new SimpleShadowEffect(this, new Vector2(5, 5)));
+            //Effects.Add(new PulsateEffect(this));
 
             Events.Add(new DraggingEvent(this));
 
@@ -227,6 +226,11 @@ namespace ArarGameLibrary.Model
                     effect.Draw();
                 }
 
+                foreach (var e in Events)
+                {
+                    e.Draw();
+                }
+
                 TestInfo.Draw();
             }
         }
@@ -260,17 +264,17 @@ namespace ArarGameLibrary.Model
 
         public void Pulsate(bool enable)
         {
-            IsPulsating = enable;
+            //IsPulsating = enable;
 
-            var pulsateEffect = GetEffect<PulsateEffect>();
+            //var pulsateEffect = GetEffect<PulsateEffect>();
 
-            if (pulsateEffect == null)
-                return;
+            //if (pulsateEffect == null)
+            //    return;
 
-            if (IsPulsating)
-                pulsateEffect.Start();
-            else
-                pulsateEffect.End();
+            //if (IsPulsating)
+            //    pulsateEffect.Start();
+            //else
+            //    pulsateEffect.End();
         }
 
         public void RefreshRectangle()
@@ -280,17 +284,17 @@ namespace ArarGameLibrary.Model
 
         public void ShowSimpleShadow(bool enable)
         {
-            SimpleShadowVisibility = enable;
+            //SimpleShadowVisibility = enable;
 
-            var simpleShadowEffect = GetEffect<SimpleShadowEffect>();
+            //var simpleShadowEffect = GetEffect<SimpleShadowEffect>();
 
-            if (simpleShadowEffect == null)
-                return;
+            //if (simpleShadowEffect == null)
+            //    return;
 
-            if (SimpleShadowVisibility)
-                simpleShadowEffect.Start();
-            else
-                simpleShadowEffect.End();
+            //if (SimpleShadowVisibility)
+            //    simpleShadowEffect.Start();
+            //else
+            //    simpleShadowEffect.End();
         }
 
         #region SetFunctions

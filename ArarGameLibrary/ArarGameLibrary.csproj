@@ -45,15 +45,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Effect\BarScrollingEffect.cs" />
-    <Compile Include="Effect\DraggingEffect.cs" />
     <Compile Include="Effect\EffectManager.cs" />
-    <Compile Include="Effect\PulsateEffect.cs" />
+    <Compile Include="Effect\PulsateEffect2.cs" />
     <Compile Include="Effect\SimpleShadowEffect.cs" />
+    <Compile Include="Event\BarScrollingEvent.cs" />
     <Compile Include="Event\DraggingEvent.cs" />
-    <Compile Include="Event\EventManager.cs" />
     <Compile Include="Event\MouseScrollEvent.cs" />
+    <Compile Include="Event\SingularInvoker.cs" />
     <Compile Include="Manager\ClampManager.cs" />
+    <Compile Include="Manager\EventManager.cs" />
     <Compile Include="Manager\FontManager.cs" />
     <Compile Include="Manager\FrameManager.cs" />
     <Compile Include="Manager\General.cs" />

@@ -46,7 +46,7 @@
 -Her bir episode için bir görsel ve başlat butonu içeren container
 -bu container veya herhangi bir çizdirliebiir objenin alignment fonksiyonelliği
 -row,column yapıları container içerisidne
--selectable,clickable object yapısı lazım,selectable rectangle kavramı?
++selectable,clickable object yapısı lazım,selectable rectangle kavramı?
 -level initial screen
 -level completed screen
 -pause screen tamamla
@@ -56,4 +56,6 @@
 -sound screen tasarımı
 -how to play yapısı üzerine düşün?
 -mouse un hover olaylarında mesela sol üst köşesi içni sıkıntı yok fakat sağ alt köşesine kadar temasını düşün nasıl olmalı?
--scrollarupdate için bir koşul olduğunda bir keree çalışacak bir yapı gerekiyor update-draw gibi fonksiyonların içinde gerekli
++scrollarupdate için bir koşul olduğunda bir keree çalışacak bir yapı gerekiyor update-draw gibi fonksiyonların içinde gerekli/singularInvoker modeli geliştirildi
+-   piece = new Piece(100,100); neden parametreler max min boyulara göre ayarlandı incele? beklentide size girişi gibi duruyor
+-scrollbar tasarlanacak

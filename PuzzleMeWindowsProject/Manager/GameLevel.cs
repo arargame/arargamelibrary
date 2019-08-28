@@ -108,7 +108,7 @@ namespace PuzzleMeWindowsProject.Manager
 
             foreach (var piece in Board.Pieces)
             {
-                var simpleShadowEffect = piece.GetEffect<SimpleShadowEffect>();
+                var simpleShadowEffect = piece.GetEvent<SimpleShadowEffect>();
 
                 if (outsidePiecesOfNest.Any(ep => ep.Number == piece.Number))
                 {

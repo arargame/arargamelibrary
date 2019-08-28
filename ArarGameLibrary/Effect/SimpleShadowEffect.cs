@@ -1,4 +1,5 @@
-﻿using ArarGameLibrary.Manager;
+﻿using ArarGameLibrary.Event;
+using ArarGameLibrary.Manager;
 using ArarGameLibrary.Model;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -10,33 +11,39 @@ using System.Threading.Tasks;
 
 namespace ArarGameLibrary.Effect
 {
-    public class SimpleShadowEffect : EffectManager
+    public class SimpleShadowEffect : EventManager
     {
         private Texture2D Texture { get; set; }
 
         private Rectangle Rectangle { get; set; }
 
-        public Vector2 OffSet { get; private set; }
+        private Vector2 OffSet { get; set; }
 
-        public SimpleShadowEffect(Sprite sprite,Vector2? offset) : base(sprite)
+        public SimpleShadowEffect(Sprite sprite, Vector2? offset,Func<bool> whenToInvoke)
+            : base(sprite,true)
         {
             Texture = TextureManager.CreateTexture2DBySingleColor(Color.Black, 1, 1);
-            
-            OffSet = offset ?? new Vector2(0, 0);
+
+            SetOffset(offset ?? new Vector2(0, 0));
 
             SetTask(() => 
             {
-                Rectangle = new Rectangle((int)(Sprite.DestinationRectangle.X + OffSet.X), (int)(Sprite.DestinationRectangle.Y + OffSet.Y), Sprite.DestinationRectangle.Width, Sprite.DestinationRectangle.Height);
+                if (whenToInvoke())
+                {
+                    Rectangle = new Rectangle((int)(Sprite.DestinationRectangle.X + OffSet.X), (int)(Sprite.DestinationRectangle.Y + OffSet.Y), Sprite.DestinationRectangle.Width, Sprite.DestinationRectangle.Height);
+
+                    SetDrawable(true);
+                }
+                else
+                {
+                    Rectangle = Sprite.DestinationRectangle;
+
+                    SetDrawable(false);
+                }
             });
 
-            SetEndTask(() => 
+            SetDrawingTask(() =>
             {
-                Rectangle = Sprite.DestinationRectangle;
-            });
-
-            SetDrawingTask(() => 
-            {
-                if(IsActive)
                 Global.SpriteBatch.Draw(Texture, new Vector2(Rectangle.X, Rectangle.Y), Rectangle, Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, Sprite.LayerDepth - 0.5f);
             });
         }

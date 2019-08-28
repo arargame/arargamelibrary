@@ -77,8 +77,6 @@ namespace ArarGameLibrary.ScreenManagement
             LoadScrollContainer();
         }
 
-
-
         public override void Initialize()
         {
             base.Initialize();
@@ -86,8 +84,6 @@ namespace ArarGameLibrary.ScreenManagement
             SetPosition(Vector2.Zero);
 
             SetSize(new Vector2(Global.ViewportWidth, Global.ViewportHeight));
-
-            Effects.Add(new BarScrollingEffect(this));
 
             Events.Add(new MouseScrollEvent(sprite: this,
                 whenScrollStateIsUp: () => 
@@ -103,6 +99,22 @@ namespace ArarGameLibrary.ScreenManagement
                     Bar.SetPosition(new Vector2(Bar.Position.X, MathHelper.Clamp(Bar.Position.Y + mouseScrollValue, ScrollContainer.Position.Y, ScrollContainer.Position.Y + ScrollContainer.Size.Y - Bar.Size.Y)));
                 },
                 whenScrollStateIsIdle: null));
+
+            Events.Add(new BarScrollingEvent(this));
+
+            Events.Add(new SingularInvoker(this,
+                whenToInvoke: () =>
+                {
+                    return MaxRowsCount <= RowsCountToShow;
+                },
+                success: () =>
+                {
+                    Bar.SetVisible(false);
+                },
+                fail: () => 
+                {
+                    Bar.SetVisible(true);
+                }));
         }
 
 
@@ -142,7 +154,7 @@ namespace ArarGameLibrary.ScreenManagement
                     //row.SetTexture(TextureManager.CreateTexture2DByRandomColor());
                     columnsToAdd.ForEach(c => row.AddColumn(c, columnRatio));
                     columnsToAdd.ForEach(c => c.SetTexture(TextureManager.CreateTexture2DByRandomColor()));
-                    ListContainer.AddRow(row,rowRatio);
+                    ListContainer.AddRow(row, rowRatio);
                 }
             }
 
@@ -235,57 +247,7 @@ namespace ArarGameLibrary.ScreenManagement
         //under the construction 
         public override void Update(GameTime gameTime = null)
         {
-            if (MaxRowsCount <= RowsCountToShow)
-                Bar.SetVisible(false);
-            else
-                Bar.SetVisible(true);
-
             base.Update(gameTime);
-
-            var mouseScrollValue = (Bar.Size.Y / 4);
-
-            //if (InputManager.IsMouseScrollUp)
-            //{
-            //    Bar.SetPosition(new Vector2(Bar.Position.X, MathHelper.Clamp(Bar.Position.Y - mouseScrollValue, ScrollContainer.Position.Y, ScrollContainer.Position.Y + ScrollContainer.Size.Y - Bar.Size.Y)));
-            //}
-            //else if (InputManager.IsMouseScrollDown)
-            //{
-            //    Bar.SetPosition(new Vector2(Bar.Position.X, MathHelper.Clamp(Bar.Position.Y + mouseScrollValue, ScrollContainer.Position.Y, ScrollContainer.Position.Y + ScrollContainer.Size.Y - Bar.Size.Y)));
-            //}
-
-            var barScrollingEffect = GetEffect<BarScrollingEffect>();
-
-            if (Bar.IsDragging || InputManager.IsMouseScrolling)
-            {
-                var counter = 0;
-                //var counter2 = 0;
-
-                //var xxx = ScrollContainer.Rows.Select(row => new
-                //{
-                //    BlockNumber = counter2++,
-                //    OverlappedAreaHeight = Rectangle.Intersect(Bar.DestinationRectangle, row.DestinationRectangle).Height
-                //}).ToList();
-
-                var maxOverlapAmongBarAndBlock = ScrollContainer.Rows.Select(row => new
-                {
-                    BlockNumber = counter++,
-                    OverlappedAreaHeight = Rectangle.Intersect(Bar.DestinationRectangle, row.DestinationRectangle).Height
-                })
-                .OrderByDescending(o => o.OverlappedAreaHeight)
-                .FirstOrDefault();
-
-               // LoadListContainer(maxOverlapAmongBarAndBlock.BlockNumber);
-
-                if (barScrollingEffect.PageNumber != maxOverlapAmongBarAndBlock.BlockNumber)
-                {
-                    barScrollingEffect.SetPageNumber(maxOverlapAmongBarAndBlock.BlockNumber);
-                    barScrollingEffect.Start();
-                }
-            }
-            else
-            {
-                barScrollingEffect.End();
-            }
         }
 
         public override void Draw(SpriteBatch spriteBatch = null)

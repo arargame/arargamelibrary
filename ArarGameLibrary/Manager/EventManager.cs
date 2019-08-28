@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ArarGameLibrary.Event
+namespace ArarGameLibrary.Manager
 {
     public abstract class EventManager
     {
@@ -15,7 +15,11 @@ namespace ArarGameLibrary.Event
 
         private Action Task;
 
+        private Action DrawingTask;
+
         private bool IsInvoked { get; set; }
+
+        private bool IsDrawable { get; set; }
 
         private bool IsActive { get; set; }
 
@@ -23,7 +27,9 @@ namespace ArarGameLibrary.Event
         {
             Sprite = sprite;
 
-            IsActive = IsContinuous = isContinuous;
+            IsContinuous = isContinuous;
+
+            IsActive = true;
         }
 
         public virtual void Update()
@@ -42,9 +48,39 @@ namespace ArarGameLibrary.Event
                 }
         }
 
+        public virtual void Draw()
+        {
+            if (!IsActive)
+                return;
+
+            if (IsDrawable && DrawingTask != null)
+                DrawingTask.Invoke();
+        }
+
         public EventManager SetTask(Action task)
         {
             Task = task;
+
+            return this;
+        }
+
+        public EventManager SetDrawingTask(Action drawingTask)
+        {
+            DrawingTask = drawingTask;
+
+            return this;
+        }
+
+        public EventManager SetContinuous(bool enable)
+        {
+            IsContinuous = enable;
+
+            return this;
+        }
+
+        public EventManager SetDrawable(bool enable)
+        {
+            IsDrawable = enable;
 
             return this;
         }
@@ -72,3 +108,4 @@ namespace ArarGameLibrary.Event
         }
     }
 }
+
