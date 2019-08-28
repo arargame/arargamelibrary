@@ -186,6 +186,7 @@ namespace PuzzleMeWindowsProject
 
             var cr2c1 = new Column();
             cr2c1.SetTexture(TextureManager.CreateTexture2DByRandomColor());
+            ///
 
             cr2.AddColumn(cr2c1,50);
 
