@@ -12,8 +12,6 @@ namespace ArarGameLibrary.Event
     {
         bool IsPositive { get; set; }
 
-        Func<bool> WhenToInvoke { get; set; }
-
         Action Success { get; set; }
 
         Action Fail { get; set; }
@@ -62,12 +60,6 @@ namespace ArarGameLibrary.Event
             base.Update();
         }
 
-        public SingularInvoker SetWhenToInvoke(Func<bool> whenToInvoke)
-        {
-            WhenToInvoke = whenToInvoke;
-
-            return this;
-        }
 
         public SingularInvoker SetSuccessAction(Action successAction)
         {

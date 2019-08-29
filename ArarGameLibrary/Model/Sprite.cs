@@ -90,7 +90,7 @@ namespace ArarGameLibrary.Model
         public delegate void ChangingSomething();
         public event ChangingSomething OnChangeRectangle;
 
-        public List<EffectManager> Effects = new List<EffectManager>();
+        //public List<EffectManager> Effects = new List<EffectManager>();
         public List<EventManager> Events = new List<EventManager>();
 
         #endregion
@@ -128,6 +128,10 @@ namespace ArarGameLibrary.Model
 
             Events.Add(new DraggingEvent(this));
 
+            Events.Add(new SimpleShadowEffect(this, new Vector2(-6, -6)));
+
+            Events.Add(new PulsateEffect(this));
+
             ClampManager = new ClampManager(this);
 
             TestInfo = new TestInfo(this);
@@ -155,10 +159,10 @@ namespace ArarGameLibrary.Model
                 //    Scale = General.Pulsate();
                 //}
 
-                foreach (var effect in Effects)
-                {
-                    effect.Update();
-                }
+                //foreach (var effect in Effects)
+                //{
+                //    effect.Update();
+                //}
 
                 foreach (var e in Events)
                 {
@@ -221,10 +225,10 @@ namespace ArarGameLibrary.Model
                     }
                 }
 
-                foreach (var effect in Effects)
-                {
-                    effect.Draw();
-                }
+                //foreach (var effect in Effects)
+                //{
+                //    effect.Draw();
+                //}
 
                 foreach (var e in Events)
                 {
@@ -247,10 +251,10 @@ namespace ArarGameLibrary.Model
         }
 
 
-        public T GetEffect<T>() where T : EffectManager
-        {
-            return EffectManager.Get<T>(Effects);
-        }
+        //public T GetEffect<T>() where T : EffectManager
+        //{
+        //    return EffectManager.Get<T>(Effects);
+        //}
 
         public T GetEvent<T>() where T : EventManager
         {

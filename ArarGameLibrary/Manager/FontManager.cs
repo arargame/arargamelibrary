@@ -125,8 +125,8 @@ namespace ArarGameLibrary.Manager
 
         public void CalculateCenterVector2(Rectangle rect)
         {
-            var x = rect.Center.X - TextMeasure.X / 2;
-            var y = rect.Center.Y - TextMeasure.Y / 2;
+            var x = rect.Center.X - TextMeasure.X;
+            var y = rect.Center.Y - TextMeasure.Y;
 
             SetPosition(new Vector2(x, y));
         }

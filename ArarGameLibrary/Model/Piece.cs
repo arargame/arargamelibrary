@@ -117,17 +117,21 @@ namespace ArarGameLibrary.Model
             //if (simpleShadowEffect != null)
             //    simpleShadowEffect.SetOffset(new Vector2(-6, -6));
 
-            Events.Add(new SimpleShadowEffect(this, new Vector2(-6, -6),
-                () =>
-                {
-                    return State == PieceState.Selected;
-                }));
+            var simpleShadowEffect = GetEvent<SimpleShadowEffect>();
 
-            Events.Add(new PulsateEffect2(this,
-                () =>
+            if (simpleShadowEffect != null)
+                simpleShadowEffect.SetWhenToInvoke(() =>
                 {
                     return State == PieceState.Selected;
-                }));
+                });
+
+            var pulsateEffect = GetEvent<PulsateEffect>();
+
+            if (pulsateEffect != null)
+                pulsateEffect.SetWhenToInvoke(() => 
+                {
+                    return State == PieceState.Selected;
+                });
 
             SetDrawMethodType(5);
         }

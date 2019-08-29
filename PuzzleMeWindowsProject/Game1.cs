@@ -63,7 +63,7 @@ namespace PuzzleMeWindowsProject
             ScreenManager.SetFullScreen(false);
 
 
-            ScreenManager.Add(new MainMenu());
+            //ScreenManager.Add(new MainMenu());
             
 
             base.Initialize();
@@ -175,32 +175,48 @@ namespace PuzzleMeWindowsProject
 
             cnt = new Container();
             cnt.SetTexture(TextureManager.CreateTexture2DBySingleColor(new Color(143, 166,225)));
-            cnt.SetSize(new Vector2(200,200));
+            cnt.SetSize(new Vector2(250,200));
             cnt.SetPosition(new Vector2(10,10));
 
             var cr1 = new Row();
-            cr1.SetTexture(TextureManager.CreateTexture2DByRandomColor());
+            cr1.SetTexture(TextureManager.CreateTexture2D("Textures/coral"));
 
             var cr2 = new Row();
             cr2.SetTexture(TextureManager.CreateTexture2DByRandomColor());
 
-            var cr2c1 = new Column();
-            cr2c1.SetTexture(TextureManager.CreateTexture2DByRandomColor());
-            ///
-
-            cr2.AddColumn(cr2c1,50);
-
             cnt.AddRow(cr1,80);
             cnt.AddRow(cr2,20);
             cnt.PrepareRows();
-            cnt.ShowSimpleShadow(true);
+
+            var cr2c1 = new Column();
+            cr2c1.SetTexture(TextureManager.CreateTexture2DByRandomColor());
+
+            cr2.AddColumn(cr2c1, 50);
+            cr2.PrepareColumns(floatTo:"right");
+
+            Button b = new Button("Play with me",Vector2.Zero);
+            cr2c1.AddChild(b);
+            b.SetPosition(new Vector2(300,150));
+            b.SetSize(cr2c1.Size-new Vector2(-20-20));
+
+
+            //cnt.ShowSimpleShadow(true);
+
+            //var pulsateEvent = cnt.GetEvent<PulsateEffect>();
+            //pulsateEvent.SetWhenToInvoke(() => { return true; });
+
+            //foreach (var children in cnt.Child)
+            //{
+            //    var pulsateEvent2 = (children as Sprite).GetEvent<PulsateEffect>();
+            //    pulsateEvent2.SetWhenToInvoke(() => { return true; });    
+            //}
 
 
             piece = new Piece(100,100);
             piece.SetTexture(TextureManager.CreateTexture2DByRandomColor());
             piece.SetPosition(new Vector2(250,250));
             piece.SetSize(new Vector2(100,100));
-            piece.Select();
+           // piece.Select();
             piece.SetClickable(true);
             piece.SetDragable(true);
         }
@@ -232,7 +248,7 @@ namespace PuzzleMeWindowsProject
 
             //testColumn.Update();
             //testColumn2.Update();
-            container.Update();
+            //container.Update();
             piece.Update();
 
             message = "" + InputManager.IsMouseScrolling;

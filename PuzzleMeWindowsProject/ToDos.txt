@@ -59,3 +59,5 @@
 +scrollarupdate için bir koşul olduğunda bir keree çalışacak bir yapı gerekiyor update-draw gibi fonksiyonların içinde gerekli/singularInvoker modeli geliştirildi
 -   piece = new Piece(100,100); neden parametreler max min boyulara göre ayarlandı incele? beklentide size girişi gibi duruyor
 -scrollbar tasarlanacak
+-button font manager kurgusunu düzenle
+-componentlerde parent child ile prepare fonksiyonu geliştir(bir parentın pozisyonuna göre child lar konumlansın)

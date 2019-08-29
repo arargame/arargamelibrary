@@ -74,5 +74,56 @@ namespace ArarGameLibrary.ScreenManagement
 
             base.Dispose(disposing);
         }
+
+        public static List<Button> SortButtons(Dictionary<string, Action> collection, Vector2? center = null, Vector2? margin = null, Color? textColor = null, bool isFrameVisible = true, float topHeight = 100f)
+        {
+            LinkedList<Button> buttons = new LinkedList<Button>();
+
+            var startingPosition = Vector2.Zero;
+
+            if (center == null)
+                center = Global.ViewportCenter;
+
+            if (margin == null)
+                margin = new Vector2(-Global.ViewportCenter.X * 0.7f, 10);
+
+            if (textColor == null)
+                textColor = Global.Theme.GetColor();
+
+            foreach (var item in collection)
+            {
+                var button = new Button(item.Key, Vector2.Zero, textColor);
+
+                button.MakeFrameVisible(true);
+
+                button.OnClick(item.Value);
+
+                buttons.AddLast(button);
+            }
+
+            foreach (var button in buttons)
+            {
+                var node = buttons.Find(button);
+
+                if (node.Previous != null)
+                {
+                    var previousButton = node.Previous.Value;
+
+                    button.SetPosition(new Vector2(previousButton.Position.X, previousButton.Position.Y + previousButton.Size.Y + margin.Value.Y));
+                }
+                else
+                {
+                    var x = center.Value.X - (float)(button.Texture.Width / 2);
+
+                    startingPosition.X = x + margin.Value.X;
+
+                    startingPosition.Y = startingPosition.Y + topHeight;
+
+                    button.SetPosition(startingPosition);
+                }
+            }
+
+            return buttons.ToList();
+        }
     }
 }

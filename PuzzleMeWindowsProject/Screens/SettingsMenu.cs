@@ -35,7 +35,7 @@ namespace PuzzleMeWindowsProject.Screens
                 DisableThenAddNew(new MainMenu());
             });
 
-            Components.AddRange(Button.Sort(collection));
+            Components.AddRange(SortButtons(collection));
 
             return true && base.Load();
         }

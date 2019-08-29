@@ -19,16 +19,21 @@ namespace ArarGameLibrary.Effect
 
         private Vector2 OffSet { get; set; }
 
-        public SimpleShadowEffect(Sprite sprite, Vector2? offset,Func<bool> whenToInvoke)
+        public SimpleShadowEffect(Sprite sprite, Vector2? offset,Func<bool> whenToInvoke = null)
             : base(sprite,true)
         {
             Texture = TextureManager.CreateTexture2DBySingleColor(Color.Black, 1, 1);
 
             SetOffset(offset ?? new Vector2(0, 0));
 
+            SetWhenToInvoke(whenToInvoke);
+
             SetTask(() => 
             {
-                if (whenToInvoke())
+                if (WhenToInvoke == null)
+                    return;
+
+                if (WhenToInvoke())
                 {
                     Rectangle = new Rectangle((int)(Sprite.DestinationRectangle.X + OffSet.X), (int)(Sprite.DestinationRectangle.Y + OffSet.Y), Sprite.DestinationRectangle.Width, Sprite.DestinationRectangle.Height);
 

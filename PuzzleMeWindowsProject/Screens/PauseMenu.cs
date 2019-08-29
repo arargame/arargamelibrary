@@ -28,7 +28,7 @@ namespace PuzzleMeWindowsProject.Screens
                 DisableThenAddNew(PreviousScreen.Activate() ?? new MainMenu());
             });
 
-            Components.AddRange(Button.Sort(collection));
+            Components.AddRange(SortButtons(collection));
 
             TransparentBackground = TextureManager.CreateTexture2DBySingleColor(new Color((byte)0, (byte)0, (byte)0, (byte)(0.5 * 255)), 1, 1);
 

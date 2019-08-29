@@ -1,4 +1,5 @@
-﻿using ArarGameLibrary.Extension;
+﻿using ArarGameLibrary.Event;
+using ArarGameLibrary.Extension;
 using ArarGameLibrary.Manager;
 using ArarGameLibrary.Model;
 using Microsoft.Xna.Framework;
@@ -43,6 +44,33 @@ namespace ArarGameLibrary.ScreenManagement
             OnChangeRectangle += Button_OnChangeRectangle;            
         }
 
+        public override void Initialize()
+        {
+            base.Initialize();
+
+            //var hoveringEvent = new SingularInvoker(this,
+            //                whenToInvoke: () =>
+            //                {
+            //                    return IsHovering;
+            //                },
+            //                success: () =>
+            //                {
+            //                    InnerTextureSize += new Vector2(10, 0);
+
+            //                    FontManager.SetColor(ThemeColor);
+            //                },
+            //                fail: () =>
+            //                {
+            //                    InnerTextureSize += new Vector2(-10, 0);
+
+            //                    FontManager.SetColor(OppositeColor);
+            //                });
+
+            //hoveringEvent.SetContinuous(true);
+
+           // Events.Add(hoveringEvent);
+        }
+
         public override void LoadContent(Texture2D texture = null)
         {
             Texture = Global.Content.Load<Texture2D>("Controls/button");
@@ -54,11 +82,9 @@ namespace ArarGameLibrary.ScreenManagement
         {
             base.Update();
 
-            FontManager.SetPosition(Position);
-
             if (IsHovering)
             {
-                InnerTextureSize += new Vector2(10,0);
+                InnerTextureSize += new Vector2(10, 0);
 
                 FontManager.SetColor(ThemeColor);
             }
@@ -68,12 +94,11 @@ namespace ArarGameLibrary.ScreenManagement
 
                 FontManager.SetColor(OppositeColor);
             }
-            
-            if (InnerTextureSize.X < 0)
-                InnerTextureSize.X = 0;
 
-            if (InnerTextureSize.X > Size.X)
-                InnerTextureSize.X = Size.X;
+            FontManager.CalculateCenterVector2(DestinationRectangle);
+            //FontManager.SetPosition(Position);
+
+            InnerTextureSize.X = MathHelper.Clamp(InnerTextureSize.X, 0, Size.X);
 
             InnerTextureSize.Y = Size.Y;
 
@@ -94,57 +119,6 @@ namespace ArarGameLibrary.ScreenManagement
             Frame = Frame.Create(DestinationRectangle, OppositeColor);
 
             Frame.LoadContent();
-        }
-
-        public static List<Button> Sort(Dictionary<string, Action> collection, Vector2? center = null,Vector2? margin = null, Color? textColor = null,bool isFrameVisible = true, float topHeight = 100f)
-        {
-            LinkedList<Button> buttons = new LinkedList<Button>();
-
-            var startingPosition = Vector2.Zero;
-
-            if (center == null)
-                center = Global.ViewportCenter;
-
-            if (margin == null)
-                margin = new Vector2(-Global.ViewportCenter.X * 0.7f, 10);
-
-            if(textColor == null)
-                textColor = Global.Theme.GetColor();
-
-            foreach (var item in collection)
-            {
-                var button = new Button(item.Key, Vector2.Zero, textColor);
-
-                button.MakeFrameVisible(true);
-
-                button.OnClick(item.Value);
-
-                buttons.AddLast(button);
-            }
-
-            foreach (var button in buttons)
-            {
-                var node = buttons.Find(button);
-
-                if (node.Previous != null)
-                {
-                    var previousButton = node.Previous.Value;
-
-                    button.SetPosition(new Vector2(previousButton.Position.X, previousButton.Position.Y + previousButton.Size.Y + margin.Value.Y));
-                }
-                else
-                {
-                    var x = center.Value.X - (float)(button.Texture.Width / 2);
-
-                    startingPosition.X = x + margin.Value.X;
-
-                    startingPosition.Y = startingPosition.Y + topHeight;
-
-                    button.SetPosition(startingPosition);
-                }
-            }
-
-            return buttons.ToList();
         }
     }
 }

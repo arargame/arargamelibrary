@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using ArarGameLibrary.Manager;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using ArarGameLibrary.Effect;
 
 namespace ArarGameLibrary.ScreenManagement
 {

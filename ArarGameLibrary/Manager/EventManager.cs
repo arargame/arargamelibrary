@@ -23,6 +23,8 @@ namespace ArarGameLibrary.Manager
 
         private bool IsActive { get; set; }
 
+        public Func<bool> WhenToInvoke { get; set; }
+
         public EventManager(Sprite sprite, bool isContinuous = false)
         {
             Sprite = sprite;
@@ -81,6 +83,13 @@ namespace ArarGameLibrary.Manager
         public EventManager SetDrawable(bool enable)
         {
             IsDrawable = enable;
+
+            return this;
+        }
+
+        public EventManager SetWhenToInvoke(Func<bool> whenToInvoke)
+        {
+            WhenToInvoke = whenToInvoke;
 
             return this;
         }

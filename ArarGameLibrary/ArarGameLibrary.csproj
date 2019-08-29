@@ -46,7 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Effect\EffectManager.cs" />
-    <Compile Include="Effect\PulsateEffect2.cs" />
+    <Compile Include="Effect\PulsateEffect.cs" />
     <Compile Include="Effect\SimpleShadowEffect.cs" />
     <Compile Include="Event\BarScrollingEvent.cs" />
     <Compile Include="Event\DraggingEvent.cs" />
