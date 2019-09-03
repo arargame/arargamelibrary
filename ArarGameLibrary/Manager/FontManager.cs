@@ -35,37 +35,37 @@ namespace ArarGameLibrary.Manager
 
         public Func<string> ChangeTextEvent { get; set; }
 
-        public FontManager(string fontFile,
-            string text,
-            Vector2 position,
-            Color color,
-            float rotation,
-            Vector2 origin,
-            Vector2 scale,
-            SpriteEffects effects,
-            float layerDepth,
-            Vector2 padding,
-            Func<string> changeTextEvent)
+        public FontManager(string fontFile = "Fonts/MenuFont",
+            string text = null,
+            Vector2? position = null,
+            Color? color = null,
+            float rotation = 0f,
+            Vector2? origin = null,
+            Vector2? scale = null,
+            SpriteEffects effects = SpriteEffects.None,
+            float layerDepth = 0.5f,
+            Vector2? padding = null,
+            Func<string> changeTextEvent = null)
         {
             Font = Global.Content.Load<SpriteFont>(fontFile ?? "Fonts/DefaultFont");
 
             SetText(text);
 
-            SetPosition(position);
+            SetPosition(position ?? Vector2.Zero);
 
-            SetColor(color);
+            SetColor(color ?? Color.White);
 
             Rotation = rotation;
 
-            Origin = origin;
+            Origin = origin ?? Vector2.Zero;
 
-            Scale = scale;
+            Scale = scale ?? new Vector2(1);
 
             Effects = effects;
 
             LayerDepth = layerDepth;
 
-            Padding = padding;
+            Padding = padding ?? Vector2.Zero;
 
             ChangeTextEvent = changeTextEvent;
         }

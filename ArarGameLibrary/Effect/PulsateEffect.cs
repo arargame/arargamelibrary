@@ -10,14 +10,22 @@ namespace ArarGameLibrary.Effect
 {
     public class PulsateEffect : EventManager
     {
-        public float LastScale { get; set; }
+        public float OriginalScale { get; private set; }
 
-        public float CollapseSpeed { get; set; }
+        public float CollapseSpeed { get; private set; }
 
-        public PulsateEffect(Sprite sprite,Func<bool> whenToInvoke = null, float lastScale = 1f, float collapseSpeed = 0.05f) 
-            : base(sprite,true)
+        public float PulsateSpeed { get; private set; }
+
+        public PulsateEffect(Sprite sprite, Func<bool> whenToInvoke = null, float lastScale = 1f, float collapseSpeed = 0.05f, float pulsateSpeed = 6f)
+            : base(sprite, true)
         {
             SetWhenToInvoke(whenToInvoke);
+
+            SetOriginalScale(lastScale);
+
+            SetCollapseSpeed(collapseSpeed);
+
+            SetPulsateSpeed(pulsateSpeed);
 
             SetTask(() =>
             {
@@ -26,35 +34,37 @@ namespace ArarGameLibrary.Effect
 
                 if (WhenToInvoke())
                 {
-                    Sprite.Scale = General.Pulsate();
+                    Sprite.Scale = General.Pulsate(OriginalScale);
                 }
                 else
                 {
-                    if (Sprite.Scale.ToString("0.0") != LastScale.ToString("0.0"))
+                    if (Sprite.Scale.ToString("0.0") != OriginalScale.ToString("0.0"))
                     {
-                        Sprite.Scale = LastScale > Sprite.Scale ? Sprite.Scale + CollapseSpeed : Sprite.Scale - CollapseSpeed;
+                        Sprite.Scale = OriginalScale > Sprite.Scale ? Sprite.Scale + CollapseSpeed : Sprite.Scale - CollapseSpeed;
 
                         return;
                     }
                     else
                     {
-                        Sprite.Scale = LastScale;
+                        Sprite.Scale = OriginalScale;
                     }
                 }
             });
-
-            SetLastScale(lastScale);
-            SetCollapseSpeed(collapseSpeed);
         }
 
-        public void SetLastScale(float scale)
+        public void SetOriginalScale(float scale)
         {
-            LastScale = scale;
+            OriginalScale = scale;
         }
 
         public void SetCollapseSpeed(float speed)
         {
             CollapseSpeed = speed;
+        }
+
+        public void SetPulsateSpeed(float speed)
+        {
+            PulsateSpeed = speed;
         }
     }
 }

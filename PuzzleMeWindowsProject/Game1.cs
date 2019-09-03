@@ -21,8 +21,9 @@ namespace PuzzleMeWindowsProject
     /// </summary>
     public class Game1 : Game
     {
+        Font font;
+
         ScrollBar scrollBar;
-        FontManager font;
         //Column testColumn;
         //Column testColumn2;
         string message = "";
@@ -75,11 +76,6 @@ namespace PuzzleMeWindowsProject
         /// </summary>
         protected override void LoadContent()
         {
-            font = FontManager.Create("IsLeftpressing : " + InputManager.IsPressing, new Vector2(350, 70), Color.Black);
-            //font.SetChangeTextEvent(()=>
-            //{
-            //    return "IsLeftpressing : " + InputManager.IsPressing + " " + " Position:" + testColumn.Position.ToString()+" MouseCursor:"+InputManager.CursorPosition.ToString();
-            //});
 
             InputManager.IsActive = true;
 
@@ -194,10 +190,10 @@ namespace PuzzleMeWindowsProject
             cr2.AddColumn(cr2c1, 50);
             cr2.PrepareColumns(floatTo:"right");
 
-            Button b = new Button("Play with me",Vector2.Zero);
+            Button b = new Button("Play with me",new Vector2(400,150));
             cr2c1.AddChild(b);
-            b.SetPosition(new Vector2(300,150));
-            b.SetSize(cr2c1.Size-new Vector2(-20-20));
+            //b.SetPosition(new Vector2(300, 150));
+            //b.SetSize(cr2c1.Size - new Vector2(-20 - 20));
 
 
             //cnt.ShowSimpleShadow(true);
@@ -219,6 +215,9 @@ namespace PuzzleMeWindowsProject
            // piece.Select();
             piece.SetClickable(true);
             piece.SetDragable(true);
+
+            font = new Font(text:"HELllow",color:Color.Coral,scale:2f,position:new Vector2(400,10),isPulsating:true);
+            font.SetDragable(true);
         }
 
         /// <summary>
@@ -278,9 +277,7 @@ namespace PuzzleMeWindowsProject
 
             Global.SpriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend);
 
-            //testColumn.Draw();
-            //testColumn2.Draw();
-            Global.SpriteBatch.DrawString(font.Font,message,new Vector2(350,250),Color.DarkSeaGreen);
+
             //scrollBar.Draw();
             cnt.Draw();
             piece.Draw();
@@ -289,8 +286,8 @@ namespace PuzzleMeWindowsProject
             //    item.Draw();
             //}
             //container.Draw();
-
             font.Draw();
+
             //ScreenManager.Draw();
 
             Global.SpriteBatch.End();

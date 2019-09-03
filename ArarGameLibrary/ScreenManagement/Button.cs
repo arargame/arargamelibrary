@@ -12,36 +12,104 @@ using System.Threading.Tasks;
 
 namespace ArarGameLibrary.ScreenManagement
 {
-    public class Button : Component
+    public class MenuButton : Button
     {
         Texture2D InnerTexture { get; set; }
 
         Vector2 InnerTextureSize;
 
-        FontManager FontManager { get; set; }
-
         Color ThemeColor { get; set; }
 
         Color OppositeColor { get; set; }
 
-        public Button(string text, Vector2 position, Color? textColor = null)
+        public MenuButton(string text,Color? textColor = null)
         {
-            var padding = new Vector2(25, 10);
+            ThemeColor = textColor ?? Global.Theme.GetColor();
+            OppositeColor = Global.Theme.Mode == ThemeMode.White ? Theme.GetDefaultColorByMode(ThemeMode.Dark) : Theme.GetDefaultColorByMode(ThemeMode.White);
+        }
+
+        public override void Initialize()
+        {
+            base.Initialize();
+
+            OnChangeRectangle += MenuButton_OnChangeRectangle;
+        }
+
+        public override void LoadContent(Texture2D texture = null)
+        {
+            base.LoadContent(texture);
+
+            InnerTexture = TextureManager.CreateTexture2DBySingleColor(OppositeColor, 1, 1);
+        }
+
+        public override void Update(GameTime gameTime = null)
+        {
+            base.Update(gameTime);
+
+            if (IsHovering)
+            {
+                InnerTextureSize += new Vector2(10, 0);
+
+                //FontManager.SetColor(ThemeColor);
+            }
+            else
+            {
+                InnerTextureSize += new Vector2(-10, 0);
+
+                //FontManager.SetColor(OppositeColor);
+            }
+
+
+            InnerTextureSize.X = MathHelper.Clamp(InnerTextureSize.X, 0, Size.X);
+
+            InnerTextureSize.Y = Size.Y;
+        }
+
+        public override void Draw(SpriteBatch spriteBatch = null)
+        {
+            base.Draw(spriteBatch);
+
+            Global.SpriteBatch.Draw(InnerTexture, new Rectangle((int)Position.X, (int)Position.Y, (int)InnerTextureSize.X, (int)InnerTextureSize.Y), Color.White);
+        }
+
+        void MenuButton_OnChangeRectangle()
+        {
+            Frame = Frame.Create(DestinationRectangle, OppositeColor);
+
+            Frame.LoadContent();
+        }
+    }
+
+
+    public class Button : Component
+    {
+        FontManager FontManager { get; set; }
+
+        public Button(string text, Vector2 position, Color? textColor = null,Vector2? textPadding = null )
+        {
+            var padding = textPadding ?? Vector2.Zero;
 
             FontManager = new FontManager("Fonts/MenuFont", text, position, Color.White, 0f, Vector2.Zero, new Vector2(1, 1), SpriteEffects.None, 0.5f, padding, null);
 
-            ThemeColor = textColor ?? Global.Theme.GetColor();
-            OppositeColor = Global.Theme.Mode == ThemeMode.White ? Theme.GetDefaultColorByMode(ThemeMode.Dark) : Theme.GetDefaultColorByMode(ThemeMode.White);
 
-            LoadContent();
 
             SetPosition(position);
 
             SetSize(new Vector2(FontManager.TextMeasure.X + 2 * padding.X, FontManager.TextMeasure.Y + 2 * padding.Y));
 
-            Button_OnChangeRectangle();
+            //Button_OnChangeRectangle();        
+        }
 
-            OnChangeRectangle += Button_OnChangeRectangle;            
+        public Button SetFontManager(string text,Color textColor)
+        {
+            FontManager = new FontManager(text: text, color: textColor);
+
+            return this;
+        }
+
+        public Button()
+        {
+
         }
 
         public override void Initialize()
@@ -69,13 +137,13 @@ namespace ArarGameLibrary.ScreenManagement
             //hoveringEvent.SetContinuous(true);
 
            // Events.Add(hoveringEvent);
+
+            OnChangeRectangle += Button_OnChangeRectangle;    
         }
 
         public override void LoadContent(Texture2D texture = null)
         {
             Texture = Global.Content.Load<Texture2D>("Controls/button");
-
-            InnerTexture = TextureManager.CreateTexture2DBySingleColor(OppositeColor, 1, 1);
         }
 
         public override void Update(GameTime gameTime = null)
@@ -84,23 +152,21 @@ namespace ArarGameLibrary.ScreenManagement
 
             if (IsHovering)
             {
-                InnerTextureSize += new Vector2(10, 0);
+                //InnerTextureSize += new Vector2(10, 0);
 
-                FontManager.SetColor(ThemeColor);
+                //FontManager.SetColor(ThemeColor);
             }
             else
             {
-                InnerTextureSize += new Vector2(-10, 0);
+                //InnerTextureSize += new Vector2(-10, 0);
 
-                FontManager.SetColor(OppositeColor);
+                //FontManager.SetColor(OppositeColor);
             }
 
             FontManager.CalculateCenterVector2(DestinationRectangle);
             //FontManager.SetPosition(Position);
 
-            InnerTextureSize.X = MathHelper.Clamp(InnerTextureSize.X, 0, Size.X);
 
-            InnerTextureSize.Y = Size.Y;
 
             FontManager.Update();
         }
@@ -109,16 +175,13 @@ namespace ArarGameLibrary.ScreenManagement
         {
             base.Draw();
 
-            Global.SpriteBatch.Draw(InnerTexture, new Rectangle((int)Position.X, (int)Position.Y, (int)InnerTextureSize.X, (int)InnerTextureSize.Y), Color.White);
-
-            FontManager.Draw();
+             FontManager.Draw();
         }
 
         private void Button_OnChangeRectangle()
         {
-            Frame = Frame.Create(DestinationRectangle, OppositeColor);
 
-            Frame.LoadContent();
+            FontManager.SetPosition(new Vector2(Position.X + FontManager.Padding.X, Position.Y + FontManager.Padding.Y));
         }
     }
 }

@@ -65,6 +65,7 @@
     <Compile Include="Manager\TextureManager.cs" />
     <Compile Include="Model\Animation.cs" />
     <Compile Include="Model\BaseObject.cs" />
+    <Compile Include="Model\Font.cs" />
     <Compile Include="Model\Frame.cs" />
     <Compile Include="Model\DrawableObject.cs" />
     <Compile Include="Model\Graph.cs" />

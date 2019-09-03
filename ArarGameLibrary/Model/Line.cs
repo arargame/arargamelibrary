@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace ArarGameLibrary.Model
 {
-    public class Line : DrawableObject
+    public class Line : Sprite
     {
         public Vector2 From { get; set; }
 

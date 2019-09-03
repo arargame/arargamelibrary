@@ -38,6 +38,10 @@ namespace ArarGameLibrary.Manager
 
         public static int MouseWheelValue { get; set; }
 
+        public static Rectangle? RectangleWhenPressingStart { get; set; }
+
+        public static Rectangle? RectangleWhenPressingFinish { get; set; }
+
         public static Rectangle CursorRectangle
         {
             get
@@ -69,6 +73,19 @@ namespace ArarGameLibrary.Manager
             CursorPosition = CurrentMouseState.Position.ToVector2();
 
             MouseWheelValue = InputManager.CurrentMouseState.ScrollWheelValue - InputManager.PreviousMouseState.ScrollWheelValue;
+
+            if (IsPressing)
+            {
+                RectangleWhenPressingStart = RectangleWhenPressingStart ?? CursorRectangle;
+
+                RectangleWhenPressingFinish = null;
+            }
+            else
+            {
+                RectangleWhenPressingStart = null;
+
+                RectangleWhenPressingFinish = CursorRectangle;
+            }
         }
 
         public static bool IsNewKeyPress(Keys key)
@@ -153,7 +170,7 @@ namespace ArarGameLibrary.Manager
                 return false;
             }
 
-            if (IsHovering(sprite.DestinationRectangle) && DraggingObject == null)
+            if (IsHovering(sprite.DestinationRectangle) && DraggingObject == null && sprite.DestinationRectangle.Intersects(RectangleWhenPressingStart.Value))
                 DraggingObject = sprite;
 
             //DraggingObject = IsHovering(sprite.DestinationRectangle) && DraggingObject == null ? DraggingObject = sprite : null ;

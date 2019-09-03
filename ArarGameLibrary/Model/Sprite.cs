@@ -72,6 +72,7 @@ namespace ArarGameLibrary.Model
 
         public Vector2 Origin { get; set; }
 
+        public Vector2 Padding { get; set; }
         public Vector2 Position { get; set; }
 
         public float Rotation { get; set; }
@@ -173,9 +174,10 @@ namespace ArarGameLibrary.Model
 
                 TestInfo.Update();
 
+                IsHovering = InputManager.IsHovering(DestinationRectangle);
+
                 if (IsClickable)
                 {
-                    IsHovering = InputManager.IsHovering(DestinationRectangle);
                     IsSelecting = InputManager.Selected(DestinationRectangle);
                 }
             }
@@ -331,6 +333,8 @@ namespace ArarGameLibrary.Model
         public void SetDragable(bool enable)
         {
             IsDragable = enable;
+
+            SetClickable(true);
         }
 
         public void SetDrawMethodType(int methodType)
@@ -348,12 +352,17 @@ namespace ArarGameLibrary.Model
             Name = name;
         }
 
-        private void SetOrigin(Vector2? origin = null)
+        public void SetOrigin(Vector2? origin = null)
         {
             if (origin != null)
                 Origin = origin.Value;
             else
                 Origin = Vector2.Zero;
+        }
+
+        public void SetPadding(Vector2 padding)
+        {
+            Padding = padding;
         }
 
         public void SetPosition(Vector2 position)

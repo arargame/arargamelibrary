@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace ArarGameLibrary.Model
 {
-    public class Graph : DrawableObject 
+    public class Graph : Sprite 
     {
         public List<Line> Lines { get; set; }
 
