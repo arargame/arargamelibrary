@@ -39,15 +39,5 @@ namespace ArarGameLibrary.Manager
                 return (T)formatter.Deserialize(ms);
             }
         }
-
-
-        public static float Pulsate(float startingPoint = 1f, float speed = 6)
-        {
-            double time = Global.GameTime.TotalGameTime.TotalSeconds;
-
-            float pulsate = (float)Math.Sin(time * speed) + 1;
-
-            return startingPoint + pulsate * 0.05f;
-        }
     }
 }

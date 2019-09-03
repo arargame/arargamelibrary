@@ -68,7 +68,7 @@ namespace ArarGameLibrary.Model
 
             SetPadding(padding ?? Vector2.Zero);
 
-            ChangeTextEvent = changeTextEvent;
+            SetChangeTextEvent(changeTextEvent);
         }
 
 
@@ -96,6 +96,14 @@ namespace ArarGameLibrary.Model
             base.Initialize();
 
             SetDrawMethodType(3);
+        }
+
+        public override void Update(GameTime gameTime = null)
+        {
+            base.Update(gameTime);
+
+            if (ChangeTextEvent != null)
+                SetText(ChangeTextEvent());
         }
 
         public override void Draw(SpriteBatch spriteBatch = null)
@@ -143,6 +151,13 @@ namespace ArarGameLibrary.Model
                         break;
                 }
             }
+        }
+
+        public Font SetChangeTextEvent(Func<string> changeTextEvent)
+        {
+            ChangeTextEvent = changeTextEvent;
+
+            return this;
         }
     }
 }

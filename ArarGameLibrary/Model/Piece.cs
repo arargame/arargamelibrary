@@ -41,7 +41,7 @@ namespace ArarGameLibrary.Model
 
         public IPieceContainer Container { get; set; }
 
-        public FontManager FontManager { get; set; }
+        public Font Font { get; set; }
 
         public int Number { get; set; }
 
@@ -154,7 +154,7 @@ namespace ArarGameLibrary.Model
 
             //SetTexture(texture ?? TextureManager.CreateTexture2DByRandomColor(1,1));
 
-            FontManager = new FontManager("Fonts/MenuFont", "", Position, Color.Yellow, 0f, Vector2.Zero, new Vector2(1, 1), SpriteEffects.None, 1f, Vector2.Zero, () => SetText());
+            Font = new Font(fontFile: "Fonts/MenuFont", position: Position, color: Color.Yellow, changeTextEvent: () => SetText());
 
             SetRectangle();
 
@@ -188,11 +188,11 @@ namespace ArarGameLibrary.Model
                 //Pulsate(false);
             }
 
-            if (FontManager != null)
+            if (Font != null)
             {
-                FontManager.CalculateCenterVector2(DestinationRectangle);
+                Font.CalculateCenterVector2(DestinationRectangle);
 
-                FontManager.Update();
+                Font.Update();
             }
 
             base.Update();
@@ -212,9 +212,9 @@ namespace ArarGameLibrary.Model
 
             base.Draw();
 
-            if (FontManager != null)
+            if (Font != null)
             {
-                FontManager.Draw();
+                Font.Draw();
             }
 
             //Frame.Draw();

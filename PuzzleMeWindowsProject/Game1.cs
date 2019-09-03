@@ -216,8 +216,23 @@ namespace PuzzleMeWindowsProject
             piece.SetClickable(true);
             piece.SetDragable(true);
 
-            font = new Font(text:"HELllow",color:Color.Coral,scale:2f,position:new Vector2(400,10),isPulsating:true);
+            font = new Font(text: "HELllow", color: Color.Coral, scale: 1f, position: new Vector2(400, 10), isPulsating: true);
             font.SetDragable(true);
+            font.SetChangeTextEvent(() => 
+            {
+                var speed = 2f;
+
+                var startingScale = 2f;
+
+                double time = Global.GameTime.TotalGameTime.TotalSeconds;
+
+                float pulsate = (float)Math.Sin(time * speed);
+
+                //return font.Scale.ToString() + " " + ( pulsate * 0.05f).ToString();
+
+                return font.Scale.ToString("0.0");
+            
+            });
         }
 
         /// <summary>

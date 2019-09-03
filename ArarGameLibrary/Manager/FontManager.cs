@@ -9,7 +9,8 @@ using System.Threading.Tasks;
 
 namespace ArarGameLibrary.Manager
 {
-    public class FontManager : IXna
+    //will be removed
+    class FontManager : IXna
     {
         public SpriteFont Font { get; set; }
 

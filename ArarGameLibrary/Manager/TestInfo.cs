@@ -19,14 +19,18 @@ namespace ArarGameLibrary.Manager
 
         private bool IsVisible { get; set; }
 
-        public FontManager Font { get; set; }
+        public Font Font { get; set; }
 
         public TestInfo(IDrawableObject drawableObject)
         {
             DrawableObject = drawableObject;
 
-            Font = FontManager.Create(DrawableObject.GetType().Name,Vector2.Zero,Color.White);
-            Font.SetLayerDepth(DrawableObject.LayerDepth + 0.1f);
+            //After the font class started to derive from the sprite class each font object we create calls a testinfo object which uses a font.So it leads to infinitive loop(stackoverflowexception)
+            if (DrawableObject.GetType().Name != "Font")
+            {
+                Font = new Font(text: DrawableObject.GetType().Name);
+                Font.SetLayerDepth(DrawableObject.LayerDepth + 0.1f);
+            }
         }
 
         public TestInfo AddParameters(params string[] parameters)

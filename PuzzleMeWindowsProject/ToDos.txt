@@ -62,3 +62,4 @@
 -button font manager kurgusunu düzenle
 -componentlerde parent child ile prepare fonksiyonu geliştir(bir parentın pozisyonuna göre child lar konumlansın)
 -default mouse cursor texture leri lazım ve sprite nesnesi üzerinde o objenin örneğin hoverında hangi cursor texture ının gösterilmesşi isteniliyorsa sağlanmalı
+-pulsate effectin min max dalga boylarını ayarla(3.9.2019)
