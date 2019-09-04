@@ -70,6 +70,8 @@ namespace ArarGameLibrary.Model
         public float LayerDepth { get; set; }
         public const float LayerDepthPlus = 0.01f;
 
+        public Vector2 Margin { get; set; }
+
         public Vector2 Origin { get; set; }
 
         public Vector2 Padding { get; set; }
@@ -345,6 +347,11 @@ namespace ArarGameLibrary.Model
         public void SetLayerDepth(float layerDepth)
         {
             LayerDepth = MathHelper.Clamp(layerDepth, 0f, 1f);
+        }
+
+        public void SetMargin(Vector2 margin)
+        {
+            Margin = margin;
         }
 
         public void SetName(string name)

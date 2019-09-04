@@ -92,7 +92,9 @@ namespace ArarGameLibrary.ScreenManagement
 
             foreach (var item in collection)
             {
-                var button = new Button(item.Key, Vector2.Zero, textColor);
+                var button = new Button();
+
+                button.SetFont(text: item.Key, textColor: textColor);
 
                 button.MakeFrameVisible(true);
 

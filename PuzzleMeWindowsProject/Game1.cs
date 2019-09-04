@@ -21,6 +21,8 @@ namespace PuzzleMeWindowsProject
     /// </summary>
     public class Game1 : Game
     {
+        Button btn1001;
+
         Font font;
 
         ScrollBar scrollBar;
@@ -190,8 +192,8 @@ namespace PuzzleMeWindowsProject
             cr2.AddColumn(cr2c1, 50);
             cr2.PrepareColumns(floatTo:"right");
 
-            Button b = new Button("Play with me",new Vector2(400,150));
-            cr2c1.AddChild(b);
+            //Button b = new Button("Play with me",new Vector2(400,150));
+            //cr2c1.AddChild(b);
             //b.SetPosition(new Vector2(300, 150));
             //b.SetSize(cr2c1.Size - new Vector2(-20 - 20));
 
@@ -216,7 +218,7 @@ namespace PuzzleMeWindowsProject
             piece.SetClickable(true);
             piece.SetDragable(true);
 
-            font = new Font(text: "HELllow", color: Color.Coral, scale: 1f, position: new Vector2(400, 10), isPulsating: true);
+            font = new Font(text: "HELllow", color: Color.Coral, scale: 4f, position: new Vector2(400, 10), isPulsating: true);
             font.SetDragable(true);
             font.SetChangeTextEvent(() => 
             {
@@ -233,6 +235,15 @@ namespace PuzzleMeWindowsProject
                 return font.Scale.ToString("0.0");
             
             });
+
+            btn1001 = new Button();
+            btn1001.SetPosition(new Vector2(250,250));
+            btn1001.SetSize(new Vector2(50,100));
+            btn1001.SetTexture(TextureManager.CreateTexture2DByRandomColor());
+            btn1001.SetFrame(Color.Yellow,2f);
+            btn1001.MakeFrameVisible(true);
+
+            btn1001.SetFont("Hello Pluton",Color.Salmon);
         }
 
         /// <summary>
@@ -255,7 +266,7 @@ namespace PuzzleMeWindowsProject
 
             InputManager.Update();
             //ScreenManager.Update();
-            cnt.Update();
+            //cnt.Update();
 
             //scrollBar.Update();
             font.Update();
@@ -263,7 +274,7 @@ namespace PuzzleMeWindowsProject
             //testColumn.Update();
             //testColumn2.Update();
             //container.Update();
-            piece.Update();
+            //piece.Update();
 
             message = "" + InputManager.IsMouseScrolling;
             //message += "\n IsHovering:"+InputManager.IsHovering(testColumn.DestinationRectangle);
@@ -274,7 +285,7 @@ namespace PuzzleMeWindowsProject
 
             //message += "\nDraggingObject.ID:" + (InputManager.DraggingObject != null ? InputManager.DraggingObject.Id : (Guid?)null);
             //message+= "\nselecting:"+ testColumn.IsSelecting;
-
+            btn1001.Update();
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Global.OnExit)
                 Exit();
 
@@ -294,14 +305,15 @@ namespace PuzzleMeWindowsProject
 
 
             //scrollBar.Draw();
-            cnt.Draw();
-            piece.Draw();
+            //cnt.Draw();
+            //piece.Draw();
             //foreach (var item in scrollBar.GetChildAs<Component>())
             //{
             //    item.Draw();
             //}
             //container.Draw();
             font.Draw();
+            btn1001.Draw();
 
             //ScreenManager.Draw();
 

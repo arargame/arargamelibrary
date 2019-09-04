@@ -25,6 +25,7 @@ namespace ArarGameLibrary.ScreenManagement
         public MenuButton(string text,Color? textColor = null)
         {
             ThemeColor = textColor ?? Global.Theme.GetColor();
+
             OppositeColor = Global.Theme.Mode == ThemeMode.White ? Theme.GetDefaultColorByMode(ThemeMode.Dark) : Theme.GetDefaultColorByMode(ThemeMode.White);
         }
 
@@ -83,34 +84,7 @@ namespace ArarGameLibrary.ScreenManagement
 
     public class Button : Component
     {
-        FontManager FontManager { get; set; }
-
-        public Button(string text, Vector2 position, Color? textColor = null,Vector2? textPadding = null )
-        {
-            var padding = textPadding ?? Vector2.Zero;
-
-            FontManager = new FontManager("Fonts/MenuFont", text, position, Color.White, 0f, Vector2.Zero, new Vector2(1, 1), SpriteEffects.None, 0.5f, padding, null);
-
-
-
-            SetPosition(position);
-
-            SetSize(new Vector2(FontManager.TextMeasure.X + 2 * padding.X, FontManager.TextMeasure.Y + 2 * padding.Y));
-
-            //Button_OnChangeRectangle();        
-        }
-
-        public Button SetFontManager(string text,Color textColor)
-        {
-            FontManager = new FontManager(text: text, color: textColor);
-
-            return this;
-        }
-
-        public Button()
-        {
-
-        }
+        public Font Font { get; private set; }
 
         public override void Initialize()
         {
@@ -143,7 +117,7 @@ namespace ArarGameLibrary.ScreenManagement
 
         public override void LoadContent(Texture2D texture = null)
         {
-            Texture = Global.Content.Load<Texture2D>("Controls/button");
+           // Texture = Global.Content.Load<Texture2D>("Controls/button");
         }
 
         public override void Update(GameTime gameTime = null)
@@ -162,26 +136,46 @@ namespace ArarGameLibrary.ScreenManagement
 
                 //FontManager.SetColor(OppositeColor);
             }
-
-            FontManager.CalculateCenterVector2(DestinationRectangle);
             //FontManager.SetPosition(Position);
 
-
-
-            FontManager.Update();
+            if (Font != null)
+                Font.Update();
         }
 
         public override void Draw(SpriteBatch spriteBatch = null)
         {
             base.Draw();
 
-             FontManager.Draw();
+            if (Font != null)
+                Font.Draw();
+        }
+
+        public Button SetFont(string text, Color? textColor, Vector2? textPadding = null)
+        {
+            textColor = textColor ?? Color.White;
+
+            textPadding = textPadding ?? Vector2.Zero;
+
+            Font = new Font(text: text, color: textColor);
+
+            Font.IncreaseLayerDepth();
+
+            SetPadding(textPadding ?? Vector2.Zero);
+
+            SetSize(new Vector2(Font.TextMeasure.X + 2 * Padding.X, Font.TextMeasure.Y + 2 * Padding.Y));
+
+            return this;
         }
 
         private void Button_OnChangeRectangle()
         {
-
-            FontManager.SetPosition(new Vector2(Position.X + FontManager.Padding.X, Position.Y + FontManager.Padding.Y));
+            if (Font != null)
+            {
+                if (Padding == Vector2.Zero)
+                    Font.CalculateCenterVector2(DestinationRectangle);
+                else
+                    Font.SetPosition(new Vector2(Position.X + Padding.X, Position.Y + Padding.Y));
+            }
         }
     }
 }

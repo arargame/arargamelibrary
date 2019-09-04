@@ -21,10 +21,6 @@ namespace ArarGameLibrary.ScreenManagement
 
         Component AddChild(params IComponent[] child);
 
-        Vector2 Margin { get; set; }
-
-        Vector2 Padding { get; set; }
-
         List<T> GetChildAs<T>(Func<T, bool> predicate = null) where T : IComponent;
 
         List<T> GetParentAs<T>(Func<T, bool> predicate = null) where T : IComponent;
@@ -43,10 +39,6 @@ namespace ArarGameLibrary.ScreenManagement
         public IComponent Parent { get; set; }
 
         public Action ClickAction;
-
-        public Vector2 Margin { get; set; }
-
-        public Vector2 Padding { get; set; }
 
         public List<IComponent> Child { get; set; }
 
@@ -73,6 +65,8 @@ namespace ArarGameLibrary.ScreenManagement
             base.Initialize();
 
             SetClickable(true);
+
+            OnChangeRectangle += Component_OnChangeRectangle;
         }
 
         public override void Update(GameTime gameTime = null)
@@ -230,6 +224,12 @@ namespace ArarGameLibrary.ScreenManagement
             }
 
             return list.ToList();
+        }
+
+        void Component_OnChangeRectangle()
+        {
+            if (Frame != null)
+                Frame.LoadContent();
         }
     }
 }

@@ -30,7 +30,7 @@ namespace ArarGameLibrary.Model
             float scale = 1f,
             SpriteEffects effects = SpriteEffects.None,
             float layerDepth = 0.5f,
-            Vector2? padding = null,
+            Vector2? margin = null,
             Func<string> changeTextEvent = null,
             bool isPulsating = false)
         {
@@ -66,7 +66,7 @@ namespace ArarGameLibrary.Model
 
             SetLayerDepth(layerDepth);
 
-            SetPadding(padding ?? Vector2.Zero);
+            SetMargin(margin ?? Vector2.Zero);
 
             SetChangeTextEvent(changeTextEvent);
         }
@@ -85,8 +85,8 @@ namespace ArarGameLibrary.Model
 
         public void CalculateCenterVector2(Rectangle rect)
         {
-            var x = rect.Center.X - TextMeasure.X;
-            var y = rect.Center.Y - TextMeasure.Y;
+            var x = rect.Center.X - TextMeasure.X / 2;
+            var y = rect.Center.Y - TextMeasure.Y / 2;
 
             SetPosition(new Vector2(x, y));
         }

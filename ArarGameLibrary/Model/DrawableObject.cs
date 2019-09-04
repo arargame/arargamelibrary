@@ -22,6 +22,8 @@ namespace ArarGameLibrary.Model
 
         float LayerDepth { get; set; }
 
+        Vector2 Margin { get; set; }
+
         Vector2 Origin { get; set; }
 
         Vector2 Padding { get; set; }
