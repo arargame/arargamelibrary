@@ -75,7 +75,7 @@ namespace ArarGameLibrary.ScreenManagement
                 row.SetSize(new Vector2(row.Parent.Size.X, maxHeight * row.HeightRatio / 100));
 
                 if (row.Frame != null)
-                    row.SetFrame(row.Frame.LineColor);
+                    row.SetFrame(row.Frame.LinesColor);
 
                 takenHeight += row.Size.Y;
 

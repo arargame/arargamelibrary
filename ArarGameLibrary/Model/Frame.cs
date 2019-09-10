@@ -16,7 +16,9 @@ namespace ArarGameLibrary.Model
 
             PopulateLines(lineColor,thickness);
 
-            LineColor = lineColor;
+            SetPosition(point1);
+
+            SetSize(new Vector2(point2.X - point1.X, point3.Y - point2.Y));
         }
 
         public static Frame Create(Rectangle rect,Color lineColor, float thickness = 1f)

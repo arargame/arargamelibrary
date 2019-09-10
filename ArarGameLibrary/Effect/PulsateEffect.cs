@@ -39,7 +39,7 @@ namespace ArarGameLibrary.Effect
 
                 if (WhenToInvoke())
                 {
-                    Sprite.Scale = Pulsate(OriginalScale, Speed, Range, ToUpperOrLower);
+                    Sprite.SetScale(Pulsate(OriginalScale, Speed, Range, ToUpperOrLower));
                 }
                 else
                 {
@@ -49,13 +49,13 @@ namespace ArarGameLibrary.Effect
 
                         if (Sprite.Scale > OriginalScale)
                         {
-                            Sprite.Scale = Sprite.Scale - (difference > Range ? Range : difference);
+                            Sprite.SetScale(Sprite.Scale - (difference > Range ? Range : difference));
 
                            // Sprite.Scale = MathHelper.Clamp(Sprite.Scale, OriginalScale, Sprite.Scale);
                         }
                         else
                         {
-                            Sprite.Scale = Sprite.Scale + (difference > Range ? Range : difference);
+                            Sprite.SetScale(Sprite.Scale + (difference > Range ? Range : difference));
 
                            // Sprite.Scale = MathHelper.Clamp(Sprite.Scale, Sprite.Scale, OriginalScale);
                         }
@@ -66,7 +66,7 @@ namespace ArarGameLibrary.Effect
                     }
                     else
                     {
-                        Sprite.Scale = OriginalScale;
+                        Sprite.SetScale(OriginalScale);
                     }
                 }
             });

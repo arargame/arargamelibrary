@@ -229,7 +229,12 @@ namespace ArarGameLibrary.ScreenManagement
         void Component_OnChangeRectangle()
         {
             if (Frame != null)
-                Frame.LoadContent();
+                if (Frame.DestinationRectangle != DestinationRectangle)
+                {
+                    Frame = Frame.Create(DestinationRectangle, Frame.LinesColor, Frame.LinesThickness);
+
+                    Frame.LoadContent();
+                }
         }
     }
 }

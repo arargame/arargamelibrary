@@ -1,4 +1,5 @@
-﻿using ArarGameLibrary.Event;
+﻿using ArarGameLibrary.Effect;
+using ArarGameLibrary.Event;
 using ArarGameLibrary.Extension;
 using ArarGameLibrary.Manager;
 using ArarGameLibrary.Model;
@@ -18,20 +19,51 @@ namespace ArarGameLibrary.ScreenManagement
 
         Vector2 InnerTextureSize;
 
+        float InnerTextureLayerDepth { get; set; }
+
         Color ThemeColor { get; set; }
 
         Color OppositeColor { get; set; }
 
-        public MenuButton(string text,Color? textColor = null)
+        public MenuButton(string text, Color? textColor = null, Vector2? textPadding = null, bool isPulsating = false)
+            : base(isPulsating)
         {
             ThemeColor = textColor ?? Global.Theme.GetColor();
 
             OppositeColor = Global.Theme.Mode == ThemeMode.White ? Theme.GetDefaultColorByMode(ThemeMode.Dark) : Theme.GetDefaultColorByMode(ThemeMode.White);
+
+            textPadding = textPadding ?? new Vector2(10);
+
+            SetFont(text, OppositeColor, textPadding);
+
+            InnerTextureLayerDepth = LayerDepth;
         }
 
         public override void Initialize()
         {
             base.Initialize();
+
+            var hoveringEvent = new SingularInvoker(this,
+                            whenToInvoke: () =>
+                            {
+                                return IsHovering;
+                            },
+                            success: () =>
+                            {
+                                InnerTextureSize += new Vector2(10, 0);
+
+                                Font.SetColor(ThemeColor);
+                            },
+                            fail: () =>
+                            {
+                                InnerTextureSize += new Vector2(-10, 0);
+
+                                Font.SetColor(OppositeColor);
+                            });
+
+            hoveringEvent.SetContinuous(true);
+
+            Events.Add(hoveringEvent);
 
             OnChangeRectangle += MenuButton_OnChangeRectangle;
         }
@@ -47,37 +79,38 @@ namespace ArarGameLibrary.ScreenManagement
         {
             base.Update(gameTime);
 
-            if (IsHovering)
-            {
-                InnerTextureSize += new Vector2(10, 0);
+            //if (IsHovering)
+            //{
+            //    InnerTextureSize += new Vector2(10, 0);
 
-                //FontManager.SetColor(ThemeColor);
-            }
-            else
-            {
-                InnerTextureSize += new Vector2(-10, 0);
+            //    Font.SetColor(ThemeColor);
+            //}
+            //else
+            //{
+            //    InnerTextureSize += new Vector2(-10, 0);
 
-                //FontManager.SetColor(OppositeColor);
-            }
+            //    Font.SetColor(OppositeColor);
+            //}
 
+            InnerTextureLayerDepth = LayerDepth - 0.01f;
 
-            InnerTextureSize.X = MathHelper.Clamp(InnerTextureSize.X, 0, Size.X);
+            InnerTextureSize.X = MathHelper.Clamp(InnerTextureSize.X, 0, DestinationRectangle.Size.X);
 
-            InnerTextureSize.Y = Size.Y;
+            InnerTextureSize.Y = DestinationRectangle.Size.Y;
         }
 
         public override void Draw(SpriteBatch spriteBatch = null)
         {
             base.Draw(spriteBatch);
 
-            Global.SpriteBatch.Draw(InnerTexture, new Rectangle((int)Position.X, (int)Position.Y, (int)InnerTextureSize.X, (int)InnerTextureSize.Y), Color.White);
+            Global.SpriteBatch.Draw(InnerTexture, new Rectangle((int)Position.X, (int)Position.Y, (int)InnerTextureSize.X, (int)InnerTextureSize.Y), null, Color.White, 0f, Vector2.Zero, SpriteEffects, 0.2f);
         }
 
         void MenuButton_OnChangeRectangle()
         {
-            Frame = Frame.Create(DestinationRectangle, OppositeColor);
+            //Frame = Frame.Create(DestinationRectangle, OppositeColor);
 
-            Frame.LoadContent();
+            //Frame.LoadContent();
         }
     }
 
@@ -86,33 +119,27 @@ namespace ArarGameLibrary.ScreenManagement
     {
         public Font Font { get; private set; }
 
+        public Button(bool isPulsating = false)
+        {
+            if (isPulsating)
+            {
+                var pulsateEffect = GetEvent<PulsateEffect>();
+
+                pulsateEffect.SetOriginalScale(Scale);
+
+                if (pulsateEffect != null)
+                    pulsateEffect.SetWhenToInvoke(() =>
+                    {
+                        return IsHovering;
+                    });
+            }
+        }
+
         public override void Initialize()
         {
             base.Initialize();
 
-            //var hoveringEvent = new SingularInvoker(this,
-            //                whenToInvoke: () =>
-            //                {
-            //                    return IsHovering;
-            //                },
-            //                success: () =>
-            //                {
-            //                    InnerTextureSize += new Vector2(10, 0);
-
-            //                    FontManager.SetColor(ThemeColor);
-            //                },
-            //                fail: () =>
-            //                {
-            //                    InnerTextureSize += new Vector2(-10, 0);
-
-            //                    FontManager.SetColor(OppositeColor);
-            //                });
-
-            //hoveringEvent.SetContinuous(true);
-
-           // Events.Add(hoveringEvent);
-
-            OnChangeRectangle += Button_OnChangeRectangle;    
+            OnChangeRectangle += Button_OnChangeRectangle;
         }
 
         public override void LoadContent(Texture2D texture = null)
@@ -162,7 +189,11 @@ namespace ArarGameLibrary.ScreenManagement
 
             SetPadding(textPadding ?? Vector2.Zero);
 
-            SetSize(new Vector2(Font.TextMeasure.X + 2 * Padding.X, Font.TextMeasure.Y + 2 * Padding.Y));
+            var newSize = new Vector2(Font.TextMeasure.X + 2 * Padding.X, Font.TextMeasure.Y + 2 * Padding.Y);
+
+            newSize = new Vector2(MathHelper.Clamp(newSize.X, Size.X, newSize.X), MathHelper.Clamp(newSize.Y, Size.Y, newSize.Y));
+
+            SetSize(newSize);
 
             return this;
         }
@@ -175,7 +206,10 @@ namespace ArarGameLibrary.ScreenManagement
                     Font.CalculateCenterVector2(DestinationRectangle);
                 else
                     Font.SetPosition(new Vector2(Position.X + Padding.X, Position.Y + Padding.Y));
+
+                Font.SetScale(Scale);
             }
         }
+
     }
 }

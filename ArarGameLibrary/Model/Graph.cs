@@ -16,7 +16,21 @@ namespace ArarGameLibrary.Model
 
         public bool IsClosedType { get; set; }
 
-        public Color LineColor { get; set; }
+        public Color LinesColor 
+        {
+            get
+            {
+                return Lines.FirstOrDefault().Color;
+            }
+        }
+
+        public float LinesThickness
+        {
+            get
+            {
+                return Lines.FirstOrDefault().Thickness;
+            }
+        }
 
         public Graph(bool isClosedType = false)
         {
@@ -31,7 +45,7 @@ namespace ArarGameLibrary.Model
 
         public override void Initialize()
         {
-
+            base.Initialize();
         }
 
         public override void LoadContent(Texture2D texture = null)
@@ -125,5 +139,6 @@ namespace ArarGameLibrary.Model
 
             return this;
         }
+
     }
 }

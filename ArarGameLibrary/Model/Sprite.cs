@@ -93,6 +93,12 @@ namespace ArarGameLibrary.Model
         public delegate void ChangingSomething();
         public event ChangingSomething OnChangeRectangle;
 
+        //public virtual void Refresh(Action action = null)
+        //{
+        //    if (action != null)
+        //        action.Invoke();
+        //}
+
         //public List<EffectManager> Effects = new List<EffectManager>();
         public List<EventManager> Events = new List<EventManager>();
 
@@ -270,40 +276,40 @@ namespace ArarGameLibrary.Model
             SetLayerDepth((baseDepth ?? LayerDepth) + (additionalDepth ?? LayerDepthPlus));
         }
 
-        public void Pulsate(bool enable)
-        {
-            //IsPulsating = enable;
+        //public void Pulsate(bool enable)
+        //{
+        //    //IsPulsating = enable;
 
-            //var pulsateEffect = GetEffect<PulsateEffect>();
+        //    //var pulsateEffect = GetEffect<PulsateEffect>();
 
-            //if (pulsateEffect == null)
-            //    return;
+        //    //if (pulsateEffect == null)
+        //    //    return;
 
-            //if (IsPulsating)
-            //    pulsateEffect.Start();
-            //else
-            //    pulsateEffect.End();
-        }
+        //    //if (IsPulsating)
+        //    //    pulsateEffect.Start();
+        //    //else
+        //    //    pulsateEffect.End();
+        //}
 
         public void RefreshRectangle()
         {
             OnChangeRectangle();
         }
 
-        public void ShowSimpleShadow(bool enable)
-        {
-            //SimpleShadowVisibility = enable;
+        //public void ShowSimpleShadow(bool enable)
+        //{
+        //    //SimpleShadowVisibility = enable;
 
-            //var simpleShadowEffect = GetEffect<SimpleShadowEffect>();
+        //    //var simpleShadowEffect = GetEffect<SimpleShadowEffect>();
 
-            //if (simpleShadowEffect == null)
-            //    return;
+        //    //if (simpleShadowEffect == null)
+        //    //    return;
 
-            //if (SimpleShadowVisibility)
-            //    simpleShadowEffect.Start();
-            //else
-            //    simpleShadowEffect.End();
-        }
+        //    //if (SimpleShadowVisibility)
+        //    //    simpleShadowEffect.Start();
+        //    //else
+        //    //    simpleShadowEffect.End();
+        //}
 
         #region SetFunctions
 
@@ -376,7 +382,8 @@ namespace ArarGameLibrary.Model
         {
             Position = position;
 
-            OnChangeRectangle();
+            if (OnChangeRectangle != null)
+                OnChangeRectangle();
         }
 
         public void SetRectangle()
@@ -396,14 +403,16 @@ namespace ArarGameLibrary.Model
         {
             Scale = scale;
 
-            OnChangeRectangle();
+            if (OnChangeRectangle != null)
+                OnChangeRectangle();
         }
 
         public void SetSize(Vector2 size)
         {
             Size = size;
 
-            OnChangeRectangle();
+            if (OnChangeRectangle != null)
+                OnChangeRectangle();
         }
 
         public void SetSpeed(Vector2 speed)

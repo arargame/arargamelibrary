@@ -21,6 +21,8 @@ namespace PuzzleMeWindowsProject
     /// </summary>
     public class Game1 : Game
     {
+        MenuButton menuButton;
+
         Button btn1001;
 
         Font font;
@@ -238,12 +240,16 @@ namespace PuzzleMeWindowsProject
 
             btn1001 = new Button();
             btn1001.SetPosition(new Vector2(250,250));
-            btn1001.SetSize(new Vector2(50,100));
             btn1001.SetTexture(TextureManager.CreateTexture2DByRandomColor());
-            btn1001.SetFrame(Color.Yellow,2f);
-            btn1001.MakeFrameVisible(true);
 
-            btn1001.SetFont("Hello Pluton",Color.Salmon);
+            btn1001.SetFont("Hello Pluton",Color.Salmon,new Vector2(10));
+            btn1001.MakeFrameVisible(true);
+            btn1001.SetFrame(Color.Yellow, 2f);
+
+            menuButton = new MenuButton("hellow jupiter",isPulsating:true);
+            menuButton.LoadContent();
+            menuButton.SetPosition(new Vector2(370,250));
+
         }
 
         /// <summary>
@@ -286,6 +292,9 @@ namespace PuzzleMeWindowsProject
             //message += "\nDraggingObject.ID:" + (InputManager.DraggingObject != null ? InputManager.DraggingObject.Id : (Guid?)null);
             //message+= "\nselecting:"+ testColumn.IsSelecting;
             btn1001.Update();
+            menuButton.Update();
+
+
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Global.OnExit)
                 Exit();
 
@@ -314,6 +323,7 @@ namespace PuzzleMeWindowsProject
             //container.Draw();
             font.Draw();
             btn1001.Draw();
+            menuButton.Draw();
 
             //ScreenManager.Draw();
 
