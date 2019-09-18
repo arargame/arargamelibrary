@@ -29,13 +29,13 @@ namespace ArarGameLibrary.ScreenManagement
 
         void Container_OnChangeRectangle()
         {
-            if (Rows != null)
-            {
-                foreach (var row in Rows)
-                {
-                    row.SetPosition(Position);
-                }
-            }
+            //if (Rows != null)
+            //{
+            //    foreach (var row in Rows)
+            //    {
+            //        row.SetPosition(Position);
+            //    }
+            //}
         }
 
         public override void Update(GameTime gameTime = null)
@@ -87,6 +87,7 @@ namespace ArarGameLibrary.ScreenManagement
                 row.SetMargin(Padding);
 
                 row.SetPosition(new Vector2(Position.X + row.Margin.X, Position.Y + row.Margin.Y + takenHeight));
+                row.SetDistanceToParent();
 
                 row.SetSize(new Vector2(Size.X, maxHeight * row.HeightRatio / 100));
 

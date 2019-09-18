@@ -45,29 +45,21 @@ namespace ArarGameLibrary.ScreenManagement
 
         public Frame Frame { get; set; }
 
-        public float DistanceToParent { get; set; }
+        public Vector2 DistanceToParent { get; set; }
 
         public IComponent SetDistanceToParent()
         {
             if (Parent != null)
             {
-                DistanceToParent = Vector2.Distance(Position, Parent.Position);
+                DistanceToParent = Parent.Position - Position;
             }
             else
             {
-                DistanceToParent = 0f;
+                DistanceToParent = Vector2.Zero;
             }
 
             return this;
         }
-
-        //public Vector2 DistanceToParentAsVector2
-        //{
-        //    get
-        //    {
-        //        return Vector2.
-        //    }
-        //}
 
         public override void IncreaseLayerDepth(float? additionalDepth = null, float? baseDepth = null)
         {
@@ -113,6 +105,9 @@ namespace ArarGameLibrary.ScreenManagement
                 {
                     children.Update(gameTime);
                 }
+
+                if (Parent != null)
+                    SetPosition(Parent.Position - DistanceToParent);
             }
         }
 
