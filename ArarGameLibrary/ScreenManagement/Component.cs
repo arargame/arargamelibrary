@@ -32,6 +32,7 @@ namespace ArarGameLibrary.ScreenManagement
         void Align(Vector2 offset, Rectangle? parentRect = null);
     }
 
+
     public abstract class Component : Sprite , IComponent
     {
         public IScreen Screen { get; set; }
@@ -43,6 +44,30 @@ namespace ArarGameLibrary.ScreenManagement
         public List<IComponent> Child { get; set; }
 
         public Frame Frame { get; set; }
+
+        public float DistanceToParent { get; set; }
+
+        public IComponent SetDistanceToParent()
+        {
+            if (Parent != null)
+            {
+                DistanceToParent = Vector2.Distance(Position, Parent.Position);
+            }
+            else
+            {
+                DistanceToParent = 0f;
+            }
+
+            return this;
+        }
+
+        //public Vector2 DistanceToParentAsVector2
+        //{
+        //    get
+        //    {
+        //        return Vector2.
+        //    }
+        //}
 
         public override void IncreaseLayerDepth(float? additionalDepth = null, float? baseDepth = null)
         {
@@ -121,7 +146,7 @@ namespace ArarGameLibrary.ScreenManagement
             base.Align(offset, parentRect);
         }
 
-        public IComponent SetMargin(Vector2 margin)
+        public new IComponent SetMargin(Vector2 margin)
         {
             Margin = margin;
 
@@ -130,7 +155,7 @@ namespace ArarGameLibrary.ScreenManagement
             return this;
         }
 
-        public IComponent SetPadding(Vector2 padding)
+        public new IComponent SetPadding(Vector2 padding)
         {
             Padding = padding;
 
@@ -150,7 +175,7 @@ namespace ArarGameLibrary.ScreenManagement
             return this;
         }
 
-        public Component SetFrame(Color lineColor, float thickness = 1f)
+        public Component SetFrame(Color lineColor, float thickness = 1f,bool makeFrameVisible = true)
         {
             //if (DestinationRectangle.IsEmpty)
             //    throw new Exception("Prepare 'Position' and 'Size' properties before you set 'Frame'");
@@ -158,6 +183,8 @@ namespace ArarGameLibrary.ScreenManagement
             Frame = Frame.Create(DestinationRectangle, lineColor, thickness);
 
             Frame.LoadContent();
+
+            MakeFrameVisible(makeFrameVisible);
 
             return this;
         }

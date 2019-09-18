@@ -81,6 +81,7 @@
     <Compile Include="ScreenManagement\Container.cs" />
     <Compile Include="ScreenManagement\LightDrop.cs" />
     <Compile Include="ScreenManagement\Menu.cs" />
+    <Compile Include="ScreenManagement\MenuButton.cs" />
     <Compile Include="ScreenManagement\Row.cs" />
     <Compile Include="ScreenManagement\Screen.cs" />
     <Compile Include="ScreenManagement\ScrollBar.cs" />

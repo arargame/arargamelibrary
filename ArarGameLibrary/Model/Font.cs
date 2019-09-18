@@ -10,6 +10,13 @@ using System.Threading.Tasks;
 
 namespace ArarGameLibrary.Model
 {
+    //    font = new Font(text: "HELllow", color: Color.Coral, scale: 4f, position: new Vector2(400, 10), isPulsating: true);
+    //font.SetDragable(true);
+    //font.SetChangeTextEvent(() => 
+    //{
+    //    return font.Scale.ToString("0.0");
+    //});
+
     public class Font : Sprite
     {
         public SpriteFont SpriteFont { get; set; }
@@ -55,11 +62,10 @@ namespace ArarGameLibrary.Model
 
                 pulsateEffect.SetOriginalScale(scale);
 
-                if (pulsateEffect != null)
-                    pulsateEffect.SetWhenToInvoke(() =>
-                    {
-                        return IsHovering;
-                    });
+                pulsateEffect.SetWhenToInvoke(() =>
+                {
+                    return IsHovering;
+                });
             }
 
             SetSpriteEffects(effects);

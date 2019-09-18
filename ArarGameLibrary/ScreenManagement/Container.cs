@@ -23,6 +23,19 @@ namespace ArarGameLibrary.ScreenManagement
         public override void Initialize()
         {
             base.Initialize();
+
+            OnChangeRectangle += Container_OnChangeRectangle;
+        }
+
+        void Container_OnChangeRectangle()
+        {
+            if (Rows != null)
+            {
+                foreach (var row in Rows)
+                {
+                    row.SetPosition(Position);
+                }
+            }
         }
 
         public override void Update(GameTime gameTime = null)
@@ -71,8 +84,11 @@ namespace ArarGameLibrary.ScreenManagement
 
             foreach (var row in rowList)
             {
-                row.SetPosition(new Vector2(row.Parent.Position.X, row.Parent.Position.Y + takenHeight));
-                row.SetSize(new Vector2(row.Parent.Size.X, maxHeight * row.HeightRatio / 100));
+                row.SetMargin(Padding);
+
+                row.SetPosition(new Vector2(Position.X + row.Margin.X, Position.Y + row.Margin.Y + takenHeight));
+
+                row.SetSize(new Vector2(Size.X, maxHeight * row.HeightRatio / 100));
 
                 if (row.Frame != null)
                     row.SetFrame(row.Frame.LinesColor);

@@ -21,18 +21,10 @@ namespace PuzzleMeWindowsProject
     /// </summary>
     public class Game1 : Game
     {
-        MenuButton menuButton;
-
-        Button btn1001;
-
-        Font font;
-
         ScrollBar scrollBar;
         //Column testColumn;
         //Column testColumn2;
         string message = "";
-        Vector2 startPointOfDragging;
-        Vector2 startPointOfDragging2;
 
         Container container;
 
@@ -176,7 +168,11 @@ namespace PuzzleMeWindowsProject
             cnt = new Container();
             cnt.SetTexture(TextureManager.CreateTexture2DBySingleColor(new Color(143, 166,225)));
             cnt.SetSize(new Vector2(250,200));
-            cnt.SetPosition(new Vector2(10,10));
+
+
+            var ppp = new Vector2(0,0);
+            ppp=Vector2.Lerp(new Vector2(0,0),new Vector2(5,5),Vector2.Distance(new Vector2(0,0),new Vector2(10,10)));
+            cnt.SetPosition(ppp);
 
             var cr1 = new Row();
             cr1.SetTexture(TextureManager.CreateTexture2D("Textures/coral"));
@@ -187,6 +183,8 @@ namespace PuzzleMeWindowsProject
             cnt.AddRow(cr1,80);
             cnt.AddRow(cr2,20);
             cnt.PrepareRows();
+
+            cnt.SetDragable(true);
 
             var cr2c1 = new Column();
             cr2c1.SetTexture(TextureManager.CreateTexture2DByRandomColor());
@@ -219,37 +217,6 @@ namespace PuzzleMeWindowsProject
            // piece.Select();
             piece.SetClickable(true);
             piece.SetDragable(true);
-
-            font = new Font(text: "HELllow", color: Color.Coral, scale: 4f, position: new Vector2(400, 10), isPulsating: true);
-            font.SetDragable(true);
-            font.SetChangeTextEvent(() => 
-            {
-                var speed = 2f;
-
-                var startingScale = 2f;
-
-                double time = Global.GameTime.TotalGameTime.TotalSeconds;
-
-                float pulsate = (float)Math.Sin(time * speed);
-
-                //return font.Scale.ToString() + " " + ( pulsate * 0.05f).ToString();
-
-                return font.Scale.ToString("0.0");
-            
-            });
-
-            btn1001 = new Button();
-            btn1001.SetPosition(new Vector2(250,250));
-            btn1001.SetTexture(TextureManager.CreateTexture2DByRandomColor());
-
-            btn1001.SetFont("Hello Pluton",Color.Salmon,new Vector2(10));
-            btn1001.MakeFrameVisible(true);
-            btn1001.SetFrame(Color.Yellow, 2f);
-
-            menuButton = new MenuButton("hellow jupiter",isPulsating:true);
-            menuButton.LoadContent();
-            menuButton.SetPosition(new Vector2(370,250));
-
         }
 
         /// <summary>
@@ -272,10 +239,9 @@ namespace PuzzleMeWindowsProject
 
             InputManager.Update();
             //ScreenManager.Update();
-            //cnt.Update();
+            cnt.Update();
 
             //scrollBar.Update();
-            font.Update();
 
             //testColumn.Update();
             //testColumn2.Update();
@@ -291,9 +257,6 @@ namespace PuzzleMeWindowsProject
 
             //message += "\nDraggingObject.ID:" + (InputManager.DraggingObject != null ? InputManager.DraggingObject.Id : (Guid?)null);
             //message+= "\nselecting:"+ testColumn.IsSelecting;
-            btn1001.Update();
-            menuButton.Update();
-
 
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Global.OnExit)
                 Exit();
@@ -314,16 +277,13 @@ namespace PuzzleMeWindowsProject
 
 
             //scrollBar.Draw();
-            //cnt.Draw();
+            cnt.Draw();
             //piece.Draw();
             //foreach (var item in scrollBar.GetChildAs<Component>())
             //{
             //    item.Draw();
             //}
             //container.Draw();
-            font.Draw();
-            btn1001.Draw();
-            menuButton.Draw();
 
             //ScreenManager.Draw();
 
