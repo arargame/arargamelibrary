@@ -140,5 +140,13 @@ namespace ArarGameLibrary.Model
             return this;
         }
 
+
+        public Vector2 GetPointWithMinXY()
+        {
+            var minX = Points.Min(p => p.X);
+            var minY = Points.Min(p=>p.Y);
+
+            return Points.Where(p => p.X == minX && p.Y == minY).FirstOrDefault();
+        }
     }
 }

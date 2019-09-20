@@ -16,7 +16,7 @@ namespace ArarGameLibrary.Model
 
             PopulateLines(lineColor,thickness);
 
-            SetPosition(point1);
+            SetPosition(GetPointWithMinXY());
 
             SetSize(new Vector2(point2.X - point1.X, point3.Y - point2.Y));
         }

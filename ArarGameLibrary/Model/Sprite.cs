@@ -61,7 +61,7 @@ namespace ArarGameLibrary.Model
         public bool IsClickable { get; set; }
         public bool IsDragable { get; set; }
         public bool IsDragging { get; set; }
-        //public bool IsPulsating { get; set; }
+        public bool IsPulsating { get; set; }
         public bool IsHovering { get; set; }
         public bool IsSelecting { get; set; }
         public bool IsVisible { get; set; }

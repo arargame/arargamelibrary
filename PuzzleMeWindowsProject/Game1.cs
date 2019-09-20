@@ -31,6 +31,14 @@ namespace PuzzleMeWindowsProject
         Container cnt;
         Piece piece;
 
+        Graph graph;
+        RenderTarget2D rt2D;
+        TextureManager tm;
+
+        List<Line> Lines;
+
+        Triangle myTriangle;
+
         public Game1()
         {
             Global.Graphics = new GraphicsDeviceManager(this);
@@ -168,6 +176,7 @@ namespace PuzzleMeWindowsProject
             cnt = new Container();
             cnt.SetTexture(TextureManager.CreateTexture2DBySingleColor(new Color(143, 166,225)));
             cnt.SetSize(new Vector2(250,200));
+            cnt.SetFrame(Color.Black);
 
 
             var ppp = new Vector2(0,0);
@@ -185,12 +194,21 @@ namespace PuzzleMeWindowsProject
             cnt.PrepareRows();
 
             cnt.SetDragable(true);
+            
 
             var cr2c1 = new Column();
             cr2c1.SetTexture(TextureManager.CreateTexture2DByRandomColor());
 
-            cr2.AddColumn(cr2c1, 50);
-            cr2.PrepareColumns(floatTo:"right");
+            cr2.AddColumn(cr2c1, 20);
+            cr2.PrepareColumns(floatTo:"left");
+
+            var cr2c2 = new Column();
+            cr2c2.SetTexture(TextureManager.CreateTexture2DByRandomColor());
+
+            cr2.AddColumn(cr2c2,80);
+            cr2.PrepareColumns(isCentralized:true,floatTo:"left");
+
+
 
             //Button b = new Button("Play with me",new Vector2(400,150));
             //cr2c1.AddChild(b);
@@ -217,6 +235,34 @@ namespace PuzzleMeWindowsProject
            // piece.Select();
             piece.SetClickable(true);
             piece.SetDragable(true);
+
+
+
+            graph = new Graph(false);
+
+            graph.PopulatePoints(new Vector2(100, 100), new Vector2(400, 80), new Vector2(150, 340));
+
+            graph.PopulateLines(Color.Red,1f);
+
+            graph.LoadContent();
+
+            rt2D = new RenderTarget2D(Global.GraphicsDevice,300,300);
+
+            tm = new TextureManager();
+            tm.Load("Textures/coral");
+
+
+            Lines = new List<Line>();
+            for (int i = 0; i < Global.ViewportHeight; i++)
+            {
+                Lines.Add(new Line(Color.Yellow, new Vector2(275, 300), new Vector2(Global.ViewportWidth, i)));
+                Lines[i].LoadContent();
+            }
+
+            myTriangle = new Triangle(new Vector2(100, 100),new Vector2(400, 80),new Vector2(150, 340),Color.Black,1f);
+            myTriangle.LoadContent();
+
+            
         }
 
         /// <summary>
@@ -239,7 +285,7 @@ namespace PuzzleMeWindowsProject
 
             InputManager.Update();
             //ScreenManager.Update();
-            cnt.Update();
+            //cnt.Update();
 
             //scrollBar.Update();
 
@@ -247,6 +293,16 @@ namespace PuzzleMeWindowsProject
             //testColumn2.Update();
             //container.Update();
             //piece.Update();
+            graph.Update();
+
+
+            foreach (var line in Lines)
+            {
+                line.Update();
+            }
+
+
+            myTriangle.Update();
 
             message = "" + InputManager.IsMouseScrolling;
             //message += "\n IsHovering:"+InputManager.IsHovering(testColumn.DestinationRectangle);
@@ -277,7 +333,7 @@ namespace PuzzleMeWindowsProject
 
 
             //scrollBar.Draw();
-            cnt.Draw();
+            //cnt.Draw();
             //piece.Draw();
             //foreach (var item in scrollBar.GetChildAs<Component>())
             //{
@@ -286,6 +342,24 @@ namespace PuzzleMeWindowsProject
             //container.Draw();
 
             //ScreenManager.Draw();
+
+            //List<Texture2D> textures = new List<Texture2D>();
+
+            //GraphicsDevice.SetRenderTarget(rt2D);
+            //graph.Draw();
+            //Global.SpriteBatch.Draw(tm.Texture,new Rectangle(0,0,150,150),Color.LightGoldenrodYellow);
+            //GraphicsDevice.SetRenderTarget(null);
+            //textures.Add(rt2D);
+
+            myTriangle.Draw();
+
+            foreach (var line in Lines)
+            {
+                line.SetVisible(true);
+                line.Draw();
+            }
+
+            //Global.SpriteBatch.Draw(textures.FirstOrDefault(),new Rectangle(250,0,300,300),Color.White);
 
             Global.SpriteBatch.End();
 

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.168
+# Visual Studio 2013
+VisualStudioVersion = 12.0.40629.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PuzzleMeWindowsProject", "PuzzleMeWindowsProject\PuzzleMeWindowsProject.csproj", "{ACB394B4-EDFD-4F17-9E5D-6D34BA0B3BF3}"
 EndProject
@@ -18,6 +18,7 @@ Global
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{ACB394B4-EDFD-4F17-9E5D-6D34BA0B3BF3}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{ACB394B4-EDFD-4F17-9E5D-6D34BA0B3BF3}.Debug|Any CPU.Build.0 = Debug|x86
 		{ACB394B4-EDFD-4F17-9E5D-6D34BA0B3BF3}.Debug|x86.ActiveCfg = Debug|x86
 		{ACB394B4-EDFD-4F17-9E5D-6D34BA0B3BF3}.Debug|x86.Build.0 = Debug|x86
 		{ACB394B4-EDFD-4F17-9E5D-6D34BA0B3BF3}.Release|Any CPU.ActiveCfg = Release|x86
@@ -32,6 +33,7 @@ Global
 		{AED6EC28-C39E-40AA-A3F6-29A3401C67DA}.Release|x86.ActiveCfg = Release|Any CPU
 		{AED6EC28-C39E-40AA-A3F6-29A3401C67DA}.Release|x86.Build.0 = Release|Any CPU
 		{0C7C332D-E289-4519-8DED-DA267665909E}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{0C7C332D-E289-4519-8DED-DA267665909E}.Debug|Any CPU.Build.0 = Debug|x86
 		{0C7C332D-E289-4519-8DED-DA267665909E}.Debug|x86.ActiveCfg = Debug|x86
 		{0C7C332D-E289-4519-8DED-DA267665909E}.Debug|x86.Build.0 = Debug|x86
 		{0C7C332D-E289-4519-8DED-DA267665909E}.Release|Any CPU.ActiveCfg = Release|x86

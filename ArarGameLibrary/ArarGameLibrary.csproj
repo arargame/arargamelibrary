@@ -73,6 +73,7 @@
     <Compile Include="Model\Line.cs" />
     <Compile Include="Model\Piece.cs" />
     <Compile Include="Extension\RectangleExtension.cs" />
+    <Compile Include="Model\Triangle.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Model\Sprite.cs" />
     <Compile Include="ScreenManagement\Button.cs" />

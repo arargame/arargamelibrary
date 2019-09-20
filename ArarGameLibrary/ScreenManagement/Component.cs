@@ -1,4 +1,5 @@
-﻿using ArarGameLibrary.Extension;
+﻿using ArarGameLibrary.Effect;
+using ArarGameLibrary.Extension;
 using ArarGameLibrary.Manager;
 using ArarGameLibrary.Model;
 using Microsoft.Xna.Framework;
@@ -46,6 +47,8 @@ namespace ArarGameLibrary.ScreenManagement
         public Frame Frame { get; set; }
 
         public Vector2 DistanceToParent { get; set; }
+
+        public Font Font { get; private set; }
 
         public IComponent SetDistanceToParent()
         {
@@ -101,13 +104,24 @@ namespace ArarGameLibrary.ScreenManagement
                 if (Frame != null)
                     Frame.Update();
 
+                if (Font != null)
+                    Font.Update();
+
                 foreach (var children in Child)
                 {
                     children.Update(gameTime);
                 }
 
                 if (Parent != null)
+                {
                     SetPosition(Parent.Position - DistanceToParent);
+
+                    //if ((Parent as Sprite).IsPulsating)
+                    //{
+                    //    GetEvent<PulsateEffect>().SetWhenToInvoke((Parent as Sprite).GetEvent<PulsateEffect>().WhenToInvoke);
+                    //}
+                        
+                }
             }
         }
 
@@ -119,6 +133,9 @@ namespace ArarGameLibrary.ScreenManagement
             {
                 if (Frame != null)
                     Frame.Draw();
+
+                if (Font != null)
+                    Font.Draw();
 
                 foreach (var children in Child)
                 {
@@ -180,6 +197,27 @@ namespace ArarGameLibrary.ScreenManagement
             Frame.LoadContent();
 
             MakeFrameVisible(makeFrameVisible);
+
+            return this;
+        }
+
+        public Component SetFont(string text, Color? textColor, Vector2? textPadding = null)
+        {
+            textColor = textColor ?? Color.White;
+
+            textPadding = textPadding ?? Vector2.Zero;
+
+            Font = new Font(text: text, color: textColor);
+
+            Font.IncreaseLayerDepth();
+
+            SetPadding(textPadding ?? Vector2.Zero);
+
+            var newSize = new Vector2(Font.TextMeasure.X + 2 * Padding.X, Font.TextMeasure.Y + 2 * Padding.Y);
+
+            newSize = new Vector2(MathHelper.Clamp(newSize.X, Size.X, newSize.X), MathHelper.Clamp(newSize.Y, Size.Y, newSize.Y));
+
+            SetSize(newSize);
 
             return this;
         }
@@ -257,6 +295,16 @@ namespace ArarGameLibrary.ScreenManagement
 
                     Frame.LoadContent();
                 }
+
+            if (Font != null)
+            {
+                if (Padding == Vector2.Zero)
+                    Font.CalculateCenterVector2(DestinationRectangle);
+                else
+                    Font.SetPosition(new Vector2(Position.X + Padding.X, Position.Y + Padding.Y));
+
+                Font.SetScale(Scale);
+            }
         }
     }
 }

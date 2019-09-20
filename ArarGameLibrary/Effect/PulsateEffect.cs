@@ -40,6 +40,8 @@ namespace ArarGameLibrary.Effect
                 if (WhenToInvoke())
                 {
                     Sprite.SetScale(Pulsate(OriginalScale, Speed, Range, ToUpperOrLower));
+
+                    Sprite.IsPulsating = true;
                 }
                 else
                 {
@@ -68,6 +70,8 @@ namespace ArarGameLibrary.Effect
                     {
                         Sprite.SetScale(OriginalScale);
                     }
+
+                    Sprite.IsPulsating = false;
                 }
             });
         }
