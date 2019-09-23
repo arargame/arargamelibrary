@@ -38,6 +38,8 @@ namespace PuzzleMeWindowsProject
         List<Line> Lines;
 
         Triangle myTriangle;
+        Triangle myTriangle2;
+        Triangle myTriangle3;
 
         public Game1()
         {
@@ -240,7 +242,7 @@ namespace PuzzleMeWindowsProject
 
             graph = new Graph(false);
 
-            graph.PopulatePoints(new Vector2(100, 100), new Vector2(400, 80), new Vector2(150, 340));
+            graph.PopulatePoints(new Vector2(0, 0), new Vector2(100, 0), new Vector2(100, 100));
 
             graph.PopulateLines(Color.Red,1f);
 
@@ -252,17 +254,38 @@ namespace PuzzleMeWindowsProject
             tm.Load("Textures/coral");
 
 
+            myTriangle = new Triangle(new Vector2(0, 0), new Vector2(400, 50), new Vector2(50, 400), Color.Black, 1f);
+            myTriangle.LoadContent();
+
+            myTriangle2 = new Triangle(new Vector2(400, 50),new Vector2(0, 0), new Vector2(50, 400), Color.Black, 1f);
+            myTriangle2.LoadContent();
+
+            myTriangle3 = new Triangle(new Vector2(50, 400),new Vector2(0, 0), new Vector2(400, 50), Color.Black, 1f);
+            myTriangle3.LoadContent();
+
+            var f1 = new Vector2(0, 0);
+            var s2 = new Vector2(400, 50);
+            var t3 = new Vector2(50, 400);
+
             Lines = new List<Line>();
-            for (int i = 0; i < Global.ViewportHeight; i++)
+            for (int i = 0; i < myTriangle.PointListAmongPoint2Point3.Count; i++)
             {
-                Lines.Add(new Line(Color.Yellow, new Vector2(275, 300), new Vector2(Global.ViewportWidth, i)));
+                Lines.Add(new Line(Color.Black,f1, myTriangle.PointListAmongPoint2Point3[i]));
                 Lines[i].LoadContent();
             }
 
-            myTriangle = new Triangle(new Vector2(100, 100),new Vector2(400, 80),new Vector2(150, 340),Color.Black,1f);
-            myTriangle.LoadContent();
+            for (int i = 0; i < myTriangle2.PointListAmongPoint2Point3.Count; i++)
+            {
+                Lines.Add(new Line(Color.Black, s2, myTriangle2.PointListAmongPoint2Point3[i]));
+                Lines[i].LoadContent();
+            }
 
-            
+            for (int i = 0; i < myTriangle3.PointListAmongPoint2Point3.Count; i++)
+            {
+                Lines.Add(new Line(Color.Black, t3, myTriangle3.PointListAmongPoint2Point3[i]));
+                Lines[i].LoadContent();
+            }
+
         }
 
         /// <summary>
@@ -303,6 +326,8 @@ namespace PuzzleMeWindowsProject
 
 
             myTriangle.Update();
+            myTriangle2.Update();
+            myTriangle3.Update();
 
             message = "" + InputManager.IsMouseScrolling;
             //message += "\n IsHovering:"+InputManager.IsHovering(testColumn.DestinationRectangle);
@@ -351,10 +376,22 @@ namespace PuzzleMeWindowsProject
             //GraphicsDevice.SetRenderTarget(null);
             //textures.Add(rt2D);
 
-            myTriangle.Draw();
+            //myTriangle.Draw();
+            //myTriangle2.Draw();
+            //myTriangle3.Draw();
 
+            var counter = 0;
             foreach (var line in Lines)
             {
+                counter++;
+
+
+                //if (counter % 5 != 0)
+                //    continue;
+
+                if (line.Texture == null)
+                    line.LoadContent();
+
                 line.SetVisible(true);
                 line.Draw();
             }
