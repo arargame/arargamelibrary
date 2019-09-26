@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace ArarGameLibrary.Effect
 {
+    //Color.Lerp(Color.Black, Color.Transparent, 0.9f)
     public class SimpleShadowEffect : EventManager
     {
         private Texture2D Texture { get; set; }

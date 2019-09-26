@@ -178,5 +178,29 @@ namespace ArarGameLibrary.Manager
 
             return CreateTexture2DByColorArray(pixels,texture.Width,texture.Height);
         }
+
+        //Texture saving
+            //if (File.Exists("SavedTextures/file.png"))
+            //{
+            //    Stream stream = File.Create("SavedTextures/file.png");
+            //    texture.SaveAsPng(stream, texture.Width, texture.Height);
+            //    stream.Dispose();
+            //}
+
+        public static RenderTarget2D Shot(Action drawingAction,int width,int height)
+        {
+            var rt2D = new RenderTarget2D(Global.GraphicsDevice, width, height);
+
+            Global.GraphicsDevice.SetRenderTarget(rt2D);
+            Global.GraphicsDevice.Clear(Color.Transparent);
+
+            Global.SpriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend);
+            drawingAction();
+            Global.SpriteBatch.End();
+
+            Global.GraphicsDevice.SetRenderTarget(null);
+
+            return rt2D;
+        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using ArarGameLibrary.Manager;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
@@ -15,6 +16,10 @@ namespace ArarGameLibrary.Model
         public LinkedList<Vector2> Points { get; set; }
 
         public bool IsClosedType { get; set; }
+
+        public bool IsFilled { get; set; }
+
+        public List<Line> FillingLines { get; set; }
 
         public Color LinesColor 
         {
@@ -34,9 +39,11 @@ namespace ArarGameLibrary.Model
 
         public Graph(bool isClosedType = false)
         {
+            Points = new LinkedList<Vector2>();
+
             Lines = new List<Line>();
 
-            Points = new LinkedList<Vector2>();
+            FillingLines = new List<Line>();
 
             IsClosedType = isClosedType;
 
@@ -73,6 +80,12 @@ namespace ArarGameLibrary.Model
                     line.SetVisible(IsVisible);
                     line.Update();
                 }
+
+                foreach (var line in FillingLines)
+                {
+                    line.SetVisible(IsVisible);
+                    line.Update();
+                }
             }
         }
 
@@ -80,9 +93,21 @@ namespace ArarGameLibrary.Model
         {
             if (IsVisible)
             {
-                foreach (var line in Lines)
+                if (Texture != null)
                 {
-                    line.Draw();
+                    base.Draw(spriteBatch);
+                }
+                else
+                {
+                    foreach (var line in Lines)
+                    {
+                        line.Draw(spriteBatch);
+                    }
+
+                    foreach (var line in FillingLines)
+                    {
+                        line.Draw(spriteBatch);
+                    }
                 }
             }
         }

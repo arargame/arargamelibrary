@@ -39,6 +39,8 @@ namespace ArarGameLibrary.Model
             Lenght = Vector2.Distance(From, To);
 
             Angle = (float)Math.Atan2(To.Y - From.Y, To.X - From.X);
+
+            IsActive = IsAlive = IsVisible = true;
         }
 
         public override void LoadContent(Texture2D texture = null)
@@ -77,6 +79,20 @@ namespace ArarGameLibrary.Model
             LoadContent();
 
             return this;
+        }
+
+        public static float Slope(Vector2 point1, Vector2 point2)
+        {
+            var deltaY = point2.Y - point1.Y;
+
+            var deltaX = point2.X - point1.X;
+
+            var slope = 0f;
+
+            if (deltaX != 0f)
+                slope = deltaY / deltaX;
+
+            return slope;
         }
     }
 }
