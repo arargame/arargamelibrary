@@ -64,3 +64,4 @@
 -default mouse cursor texture leri lazım ve sprite nesnesi üzerinde o objenin örneğin hoverında hangi cursor texture ının gösterilmesşi isteniliyorsa sağlanmalı
 -pulsate effectin min max dalga boylarını ayarla(3.9.2019)
 -texture saving as png or jpg(25.9.2019)
+-bir obje selectable oluyorsa 2 tip olması lazım 1)direk rectangle dan yakalayan 2)perpikselcollision ile mesela üçgenlerde

@@ -187,9 +187,12 @@ namespace ArarGameLibrary.Manager
             //    stream.Dispose();
             //}
 
-        public static RenderTarget2D Shot(Action drawingAction,int width,int height)
+        public static RenderTarget2D Shot(Action drawingAction, int? width, int? height)
         {
-            var rt2D = new RenderTarget2D(Global.GraphicsDevice, width, height);
+            width = width ?? Global.ViewportWidth;
+            height = height ?? Global.ViewportHeight;
+
+            var rt2D = new RenderTarget2D(Global.GraphicsDevice, width.Value, height.Value);
 
             Global.GraphicsDevice.SetRenderTarget(rt2D);
             Global.GraphicsDevice.Clear(Color.Transparent);

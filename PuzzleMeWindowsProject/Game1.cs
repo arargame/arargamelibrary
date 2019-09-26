@@ -34,13 +34,6 @@ namespace PuzzleMeWindowsProject
 
         Graph graph;
         RenderTarget2D rt2D;
-        TextureManager tm;
-
-        List<Line> Lines;
-
-        Triangle myTriangle;
-        Triangle myTriangle2;
-        Triangle myTriangle3;
 
         Triangle lastTriangle;
 
@@ -257,52 +250,18 @@ namespace PuzzleMeWindowsProject
             lastTriangle = new Triangle(new Vector2(50, 400), new Vector2(0, 0), new Vector2(400, 50), Color.Yellow, 1f);
             lastTriangle.LoadContent();
             lastTriangle.SetFilled(Color.Yellow);
+            lastTriangle.GetEvent<PulsateEffect>().SetWhenToInvoke(() => 
+            {
+                return lastTriangle.IsHovering;
+            });
+            lastTriangle.SetDragable(true);
+
 
             rt2D = lastTriangle.Texture as RenderTarget2D; //Fonk(()=>lastTriangle.Draw(), 400, 400);
 
             Stream stream = File.Create("rt2D.png");
             rt2D.SaveAsPng(stream, rt2D.Width, rt2D.Height);
             stream.Dispose();
-
-
-
-            tm = new TextureManager();
-            tm.Load("Textures/coral");
-
-
-            myTriangle = new Triangle(new Vector2(0, 0), new Vector2(400, 50), new Vector2(50, 400), Color.Black, 1f);
-            myTriangle.LoadContent();
-
-            myTriangle2 = new Triangle(new Vector2(400, 50),new Vector2(0, 0), new Vector2(50, 400), Color.Black, 1f);
-            myTriangle2.LoadContent();
-
-            myTriangle3 = new Triangle(new Vector2(50, 400),new Vector2(0, 0), new Vector2(400, 50), Color.Black, 1f);
-            myTriangle3.LoadContent();
-
-            var f1 = new Vector2(0, 0);
-            var s2 = new Vector2(400, 50);
-            var t3 = new Vector2(50, 400);
-
-            Lines = new List<Line>();
-            //for (int i = 0; i < myTriangle.PointListAmongPoint2Point3.Count; i++)
-            //{
-            //    Lines.Add(new Line(Color.Yellow,f1, myTriangle.PointListAmongPoint2Point3[i]));
-            //    Lines[i].LoadContent();
-            //}
-
-            //for (int i = 0; i < myTriangle2.PointListAmongPoint2Point3.Count; i++)
-            //{
-            //    Lines.Add(new Line(Color.Yellow, s2, myTriangle2.PointListAmongPoint2Point3[i]));
-            //    Lines[i].LoadContent();
-            //}
-
-            //for (int i = 0; i < myTriangle3.PointListAmongPoint2Point3.Count; i++)
-            //{
-            //    Lines.Add(new Line(Color.Yellow, t3, myTriangle3.PointListAmongPoint2Point3[i]));
-            //    Lines[i].LoadContent();
-            //}
-
-
         }
 
         /// <summary>
@@ -335,16 +294,6 @@ namespace PuzzleMeWindowsProject
             //piece.Update();
             graph.Update();
 
-
-            foreach (var line in Lines)
-            {
-                line.Update();
-            }
-
-
-            myTriangle.Update();
-            myTriangle2.Update();
-            myTriangle3.Update();
 
             lastTriangle.Update();
 
@@ -395,82 +344,14 @@ namespace PuzzleMeWindowsProject
 
             
             //graph.Draw();
-            //Global.SpriteBatch.Draw(tm.Texture,new Rectangle(0,0,150,150),Color.LightGoldenrodYellow);
-            
-            //textures.Add(rt2D);
 
-            //myTriangle.Draw();
-            //myTriangle2.Draw();
-            //myTriangle3.Draw();
             lastTriangle.Draw();
-            //Global.SpriteBatch.Draw(lastTriangle.Texture,new Rectangle(400,400,50,50),Color.White);
-
-
-
-            //Global.SpriteBatch.Draw(textures.FirstOrDefault(),new Rectangle(250,0,300,300),Color.White);
-
-           // Global.SpriteBatch.Draw(rt2D, new Rectangle(400, 0, 300, 300), Color.White);
-
-
-            //foreach (var line in lastTriangle.FillingLines)
-            //{
-            //    line.Draw();
-            //}
 
             Global.SpriteBatch.End();
-            //GraphicsDevice.SetRenderTarget(null);
-
-            //GraphicsDevice.Clear(Global.Theme.GetColor());
-            //Global.SpriteBatch.Begin();
-            //Global.SpriteBatch.Draw(rt2D,new Rectangle(350,350,100,100),Color.White);
-            //Global.SpriteBatch.End();
 
 
 
             base.Draw(gameTime);
-        }
-
-        public void DrawingAction()
-        {
-            //var counter = 0;
-            //foreach (var line in Lines)
-            //{
-            //    counter++;
-
-
-            //    //if (counter % 5 != 0)
-            //    //    continue;
-
-            //    if (line.Texture == null)
-            //        line.LoadContent();
-
-            //    line.SetVisible(true);
-            //    line.Draw();
-            //}
-
-            //Global.SpriteBatch.Draw(TextureManager.CreateTexture2DBySingleColor(Color.Tan), new Rectangle(0, 0, 400, 400), Color.White);
-
-            foreach (var line in lastTriangle.FillingLines)
-            {
-                line.SetVisible(true);
-                line.Draw();
-            }
-        }
-
-        public static RenderTarget2D Fonk(Action drawingAction,int width,int height)
-        {
-            var rt2D = new RenderTarget2D(Global.GraphicsDevice, width, height);
-
-            Global.GraphicsDevice.SetRenderTarget(rt2D);
-            Global.GraphicsDevice.Clear(Color.Transparent);
-
-            Global.SpriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend);
-            drawingAction();
-            Global.SpriteBatch.End();
-            
-            Global.GraphicsDevice.SetRenderTarget(null);
-
-            return rt2D;
         }
 
         protected override void OnExiting(object sender, EventArgs args)

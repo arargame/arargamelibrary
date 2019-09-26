@@ -31,55 +31,7 @@ namespace ArarGameLibrary.Model
             PopulatePoints(FirstPoint,SecondPoint,ThirdPoint);
             PopulateLines(lineColor, thickness);
 
-            //PointListAmongPoint2Point3.Add(point1);
-
-            //PointListAmongPoint2Point3.Add(point2);
-
-            //var slopeAmongPoint1Point2 = Slope(point1, point2);
-            //var slopeAmongPoint1Point3 = Slope(point1, point3);
-            //var slopeAmongPoint2Point3 = Slope(point2, point3);
-
-            //for (int x = (int)point2.X; x < point3.X; x++)
-            //{
-            //    var y = point2.Y + (x - point2.X) * slope;
-
-            //    if (PointListAmongPoint2Point3.Any(p => p.X == x && p.Y == y))
-            //        continue;
-
-            //    PointListAmongPoint2Point3.Add(new Vector2(x, y));
-            //}
-
-            //var startY = 0f;
-            //var finishY = 0f;
-
-            //if (point2.Y >= point3.Y)
-            //{
-            //    startY = point3.Y;
-            //    finishY = point2.Y;
-            //}
-            //else
-            //{
-            //    startY = point2.Y;
-            //    finishY = point3.Y;
-            //}
-
-            //for (int y = (int)startY; y < finishY; y++)
-            //{
-            //    var x = point2.X + (y - point2.Y) / slope;
-
-            //    if (PointListAmongPoint2Point3.Any(p => p.X == x && p.Y == y))
-            //        continue;
-
-            //    PointListAmongPoint2Point3.Add(new Vector2(x, y));
-            //}
-
-
-
-            //PointListAmongPoint2Point3.Add(point3);
-
-            //PopulatePoints(PointListAmongPoint2Point3.ToArray());
-
-            SetPosition(GetPointWithMinXY());
+            SetPosition(new Vector2(GetPointWithMinX().X,GetPointWithMinY().Y));
         }
 
         public override void Initialize()
@@ -118,17 +70,6 @@ namespace ArarGameLibrary.Model
             }
 
             return list;
-        }
-
-
-        private List<Vector2> SortPointsByXAscending(params Vector2[] points)
-        {
-            return points.OrderBy(p => p.X).ToList();
-        }
-
-        private List<Vector2> SortPointsByYAscending(params Vector2[] points)
-        {
-            return points.OrderBy(p => p.Y).ToList();
         }
 
         public Triangle SetFilled(Color lineColor,bool enable = true)

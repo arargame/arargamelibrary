@@ -73,18 +73,23 @@ namespace ArarGameLibrary.Model
 
         public override void Update(GameTime gameTime = null)
         {
-            if (IsVisible)
+            if (IsActive)
             {
-                foreach (var line in Lines)
-                {
-                    line.SetVisible(IsVisible);
-                    line.Update();
-                }
+                base.Update(gameTime);
 
-                foreach (var line in FillingLines)
+                if (Texture != null)
                 {
-                    line.SetVisible(IsVisible);
-                    line.Update();
+                    foreach (var line in Lines)
+                    {
+                        line.SetVisible(IsVisible);
+                        line.Update();
+                    }
+
+                    foreach (var line in FillingLines)
+                    {
+                        line.SetVisible(IsVisible);
+                        line.Update();
+                    }
                 }
             }
         }
@@ -166,12 +171,36 @@ namespace ArarGameLibrary.Model
         }
 
 
-        public Vector2 GetPointWithMinXY()
+        public Vector2 GetPointWithMinX()
         {
             var minX = Points.Min(p => p.X);
-            var minY = Points.Min(p=>p.Y);
 
-            return Points.Where(p => p.X == minX && p.Y == minY).FirstOrDefault();
+            return Points.Where(p => p.X == minX).FirstOrDefault();
         }
+
+        public Vector2 GetPointWithMinY()
+        {
+            var minY = Points.Min(p => p.Y);
+
+            return Points.Where(p => p.Y == minY).FirstOrDefault();
+        }
+
+        public Vector2 GetPointWithMinXY()
+        {
+            return Points.Where(p => p.X == GetPointWithMinX().X)
+                        .OrderBy(p => p.Y)
+                        .FirstOrDefault();
+        }
+
+        public static List<Vector2> SortPointsByXAscending(params Vector2[] points)
+        {
+            return points.OrderBy(p => p.X).ToList();
+        }
+
+        public static List<Vector2> SortPointsByYAscending(params Vector2[] points)
+        {
+            return points.OrderBy(p => p.Y).ToList();
+        }
+
     }
 }
