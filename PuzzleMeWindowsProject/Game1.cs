@@ -37,6 +37,18 @@ namespace PuzzleMeWindowsProject
 
         Triangle lastTriangle;
 
+
+        Vector2 point1;
+        Vector2 point2;
+        Vector2 point3;
+
+        Line lineAmongPoint1Point2;
+        Line lineAmongPoint1Point3;
+        
+
+        List<Vector2> pointListAmongPoint2Point3 = new List<Vector2>();
+        List<Line> lineListAmongPoint1Edge23 = new List<Line>();
+
         public Game1()
         {
             Global.Graphics = new GraphicsDeviceManager(this);
@@ -246,22 +258,58 @@ namespace PuzzleMeWindowsProject
 
             rt2D = new RenderTarget2D(Global.GraphicsDevice, GraphicsDevice.PresentationParameters.BackBufferWidth, GraphicsDevice.PresentationParameters.BackBufferHeight, false, SurfaceFormat.Color, DepthFormat.None);
 
+            lastTriangle = Triangle.PlayButton(50,20,400,400,Color.Red);
 
-            lastTriangle = new Triangle(new Vector2(50, 400), new Vector2(0, 0), new Vector2(400, 50), Color.Yellow, 1f);
-            lastTriangle.LoadContent();
-            lastTriangle.SetFilled(Color.Yellow);
-            lastTriangle.GetEvent<PulsateEffect>().SetWhenToInvoke(() => 
+            //lastTriangle = new Triangle(new Vector2(100,100), new Vector2(450,150), new Vector2(50,300), Color.Red);
+
+            //lastTriangle.LoadContent();
+            lastTriangle.SetFilled(Color.Red);
+            
+
+            //rt2D = lastTriangle.Texture as RenderTarget2D; //Fonk(()=>lastTriangle.Draw(), 400, 400);
+
+            //Stream stream = File.Create("rt2D.png");
+            //rt2D.SaveAsPng(stream, rt2D.Width, rt2D.Height);
+            //stream.Dispose();
+
+
+            point1 = new Vector2(100,100);
+            point2 = new Vector2(450,150);
+            point3 = new Vector2(50,300);
+
+            lineAmongPoint1Point2 = new Line(Color.Blue,point1,point2);
+            lineAmongPoint1Point2.LoadContent();
+
+            lineAmongPoint1Point3 = new Line(Color.Blue,point1,point3);
+            lineAmongPoint1Point3.LoadContent();
+
+            var deltaY = point3.Y - point2.Y;
+
+            var deltaX = point3.X - point2.X;
+
+            var slope = 0f;
+
+            if (deltaX != 0f)
+                slope = deltaY / deltaX;
+
+            for (int x = (int)point3.X; x < point2.X; x++)
             {
-                return lastTriangle.IsHovering;
-            });
-            lastTriangle.SetDragable(true);
+                var y = point3.Y + (x - point3.X) * slope;
 
+                if (pointListAmongPoint2Point3.Any(p => p.X == x && p.Y == y))
+                    continue;
 
-            rt2D = lastTriangle.Texture as RenderTarget2D; //Fonk(()=>lastTriangle.Draw(), 400, 400);
+                pointListAmongPoint2Point3.Add(new Vector2(x, y));
+            }
 
-            Stream stream = File.Create("rt2D.png");
-            rt2D.SaveAsPng(stream, rt2D.Width, rt2D.Height);
-            stream.Dispose();
+            foreach (var point in pointListAmongPoint2Point3)
+            {
+                var line = new Line(Color.Red, point1, point);
+                line.LoadContent();
+
+                lineListAmongPoint1Edge23.Add(line);
+            }
+
         }
 
         /// <summary>
@@ -292,10 +340,19 @@ namespace PuzzleMeWindowsProject
             //testColumn2.Update();
             //container.Update();
             //piece.Update();
-            graph.Update();
+            
+            //graph.Update();
 
 
             lastTriangle.Update();
+
+            //lineAmongPoint1Point2.Update();
+            //lineAmongPoint1Point3.Update();
+
+            //foreach (var item in lineListAmongPoint1Edge23)
+            //{
+            //    item.Update();
+            //}
 
             message = "" + InputManager.IsMouseScrolling;
             //message += "\n IsHovering:"+InputManager.IsHovering(testColumn.DestinationRectangle);
@@ -328,6 +385,12 @@ namespace PuzzleMeWindowsProject
 
             Global.SpriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend);
 
+            //lineAmongPoint1Point2.Draw();
+            //lineAmongPoint1Point3.Draw();
+            //foreach (var item in lineListAmongPoint1Edge23)
+            //{
+            //    item.Draw();
+            //}
 
             //scrollBar.Draw();
             //cnt.Draw();

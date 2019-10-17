@@ -17,7 +17,38 @@ namespace ArarGameLibrary.Model
 
         public Vector2 ThirdPoint { get; set; }
 
+        /// <summary>
+        /// .(leftX,topLeftY)Point1
+        /// |\
+        /// | \
+        /// |  \
+        /// |   .(rightX,(topLeftY+bottomLeftY)/2)Point2
+        /// |  /
+        /// | /
+        /// |/
+        /// .(leftX,bottomLeftY)Point3
+        /// </summary>
+        /// <param name="leftX"></param>
+        /// <param name="topLeftY"></param>
+        /// <param name="bottomLeftY"></param>
+        /// <param name="rightX"></param>
+        /// <param name="lineColor"></param>
+        /// <param name="thickness"></param>
+        /// <returns></returns>
+        public static Triangle PlayButton(float leftX, float topLeftY, float bottomLeftY, float rightX, Color lineColor, float thickness = 1f)
+        {
+            var point1 = new Vector2(leftX, topLeftY);
 
+            var point2 = new Vector2(leftX, bottomLeftY);
+
+            var point3 = new Vector2(rightX, (topLeftY + bottomLeftY) / 2);
+
+            var triangle = new Triangle(point1, point2, point3, lineColor, thickness);
+
+            triangle.LoadContent();
+
+            return triangle;
+        }
 
         public Triangle(Vector2 point1, Vector2 point2, Vector2 point3, Color lineColor, float thickness = 1f)
             : base(true)
@@ -50,12 +81,12 @@ namespace ArarGameLibrary.Model
 
             if(point2.X > point1.X)
             {
-                startX = point1.X + 1;
+                startX = point1.X ;
                 finishX = point2.X;
             }
             else
             {
-                startX = point2.X + 1;
+                startX = point2.X ;
                 finishX = point1.X;
             }
 
@@ -86,7 +117,7 @@ namespace ArarGameLibrary.Model
 
                 for (int i = 0; i < PointListAmongPoint1Point2.Count; i++)
                 {
-                    FillingLines.Add(new Line(lineColor, ThirdPoint, PointListAmongPoint1Point2[i]));                    
+                    FillingLines.Add(new Line(lineColor, ThirdPoint, PointListAmongPoint1Point2[i]));
                 }
 
                 for (int i = 0; i < PointListAmongPoint1Point3.Count; i++)
@@ -104,13 +135,19 @@ namespace ArarGameLibrary.Model
                     line.LoadContent();
                 }
 
-                var w = (int)Math.Abs(Points.Max(p => p.X) - Points.Min(p => p.X));
-                var h = (int)Math.Abs(Points.Max(p => p.Y) - Points.Min(p => p.Y));
+                var rect = new Rectangle((int)Points.Min(p => p.X),
+                    (int)Points.Min(p => p.Y),
+                    (int)Points.Max(p => p.X) + 1,
+                    (int)Points.Max(p => p.Y) + 1);
 
                 SetPosition(new Vector2(0,0));
-                SetSize(new Vector2(w, h));
+                SetSize(new Vector2(rect.Width, rect.Height));
 
-                SetTexture(TextureManager.Shot(() => Draw(), w, h));
+                SetTexture(TextureManager.Shot(() => Draw(), rect.Width, rect.Height));
+                SetTexture(TextureManager.Crop(Texture, new Rectangle(rect.X, rect.Y, rect.Width - rect.X, rect.Height - rect.Y)));
+
+                TestInfo.Show(true);
+                TestInfo.AddParameters("DestinationRectangle");
 
                 if (Texture != null)
                 {

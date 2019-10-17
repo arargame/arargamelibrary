@@ -1,0 +1,13 @@
+﻿
+--Triangle
+            lastTriangle = new Triangle(new Vector2(50, 400), new Vector2(0, 0), new Vector2(400, 50), Color.Yellow, 1f);
+            lastTriangle.LoadContent();
+            lastTriangle.SetFilled(Color.Yellow);
+            lastTriangle.GetEvent<PulsateEffect>().SetWhenToInvoke(() => 
+            {
+                return lastTriangle.IsHovering;
+            });
+            lastTriangle.SetDragable(true);
+--TestInfo
+			TestInfo.Show(true);
+            TestInfo.AddParameters("DestinationRectangle");
