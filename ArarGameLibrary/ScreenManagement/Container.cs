@@ -87,7 +87,7 @@ namespace ArarGameLibrary.ScreenManagement
                 row.SetMargin(Padding);
 
                 row.SetPosition(new Vector2(Position.X + row.Margin.X, Position.Y + row.Margin.Y + takenHeight));
-                row.SetDistanceToParent();
+                //row.SetDistanceToParent();
 
                 row.SetSize(new Vector2(Size.X, maxHeight * row.HeightRatio / 100));
 

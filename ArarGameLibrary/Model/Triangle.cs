@@ -17,39 +17,6 @@ namespace ArarGameLibrary.Model
 
         public Vector2 ThirdPoint { get; set; }
 
-        /// <summary>
-        /// .(leftX,topLeftY)Point1
-        /// |\
-        /// | \
-        /// |  \
-        /// |   .(rightX,(topLeftY+bottomLeftY)/2)Point2
-        /// |  /
-        /// | /
-        /// |/
-        /// .(leftX,bottomLeftY)Point3
-        /// </summary>
-        /// <param name="leftX"></param>
-        /// <param name="topLeftY"></param>
-        /// <param name="bottomLeftY"></param>
-        /// <param name="rightX"></param>
-        /// <param name="lineColor"></param>
-        /// <param name="thickness"></param>
-        /// <returns></returns>
-        public static Triangle PlayButton(float leftX, float topLeftY, float bottomLeftY, float rightX, Color lineColor, float thickness = 1f)
-        {
-            var point1 = new Vector2(leftX, topLeftY);
-
-            var point2 = new Vector2(leftX, bottomLeftY);
-
-            var point3 = new Vector2(rightX, (topLeftY + bottomLeftY) / 2);
-
-            var triangle = new Triangle(point1, point2, point3, lineColor, thickness);
-
-            triangle.LoadContent();
-
-            return triangle;
-        }
-
         public Triangle(Vector2 point1, Vector2 point2, Vector2 point3, Color lineColor, float thickness = 1f)
             : base(true)
         {
@@ -156,6 +123,41 @@ namespace ArarGameLibrary.Model
             }
 
             return this;
+        }
+
+        /// <summary>
+        /// .(leftX,topLeftY)Point1
+        /// |\
+        /// | \
+        /// |  \
+        /// |   .(rightX,(topLeftY+bottomLeftY)/2)Point2
+        /// |  /
+        /// | /
+        /// |/
+        /// .(leftX,bottomLeftY)Point3
+        /// </summary>
+        /// <param name="leftX"></param>
+        /// <param name="topLeftY"></param>
+        /// <param name="bottomLeftY"></param>
+        /// <param name="rightX"></param>
+        /// <param name="lineColor"></param>
+        /// <param name="thickness"></param>
+        /// <returns></returns>
+        public static Triangle PlayButton(Color lineColor, float leftX = 50, float topLeftY = 0, float bottomLeftY = 350, float rightX = 400, float thickness = 1f)
+        {
+            var point1 = new Vector2(leftX, topLeftY);
+
+            var point2 = new Vector2(leftX, bottomLeftY);
+
+            var point3 = new Vector2(rightX, (topLeftY + bottomLeftY) / 2);
+
+            var triangle = new Triangle(point1, point2, point3, lineColor, thickness);
+
+            triangle.LoadContent();
+
+            triangle.SetFilled(lineColor);
+
+            return triangle;
         }
 
     }

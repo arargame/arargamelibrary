@@ -46,23 +46,25 @@ namespace ArarGameLibrary.ScreenManagement
 
         public Frame Frame { get; set; }
 
-        public Vector2 DistanceToParent { get; set; }
+        Vector2 distanceToParent = Vector2.Zero;
+        public Vector2 DistanceToParent 
+        {
+            get
+            {
+                if (Parent != null)
+                {
+                    distanceToParent = Parent.Position - Position;
+                }
+                else
+                {
+                    distanceToParent = Vector2.Zero;
+                }
+
+                return distanceToParent;
+            }
+        }
 
         public Font Font { get; private set; }
-
-        public IComponent SetDistanceToParent()
-        {
-            if (Parent != null)
-            {
-                DistanceToParent = Parent.Position - Position;
-            }
-            else
-            {
-                DistanceToParent = Vector2.Zero;
-            }
-
-            return this;
-        }
 
         public override void IncreaseLayerDepth(float? additionalDepth = null, float? baseDepth = null)
         {

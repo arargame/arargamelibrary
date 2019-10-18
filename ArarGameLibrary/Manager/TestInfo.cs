@@ -91,7 +91,7 @@ namespace ArarGameLibrary.Manager
             Font.Draw();
         }
 
-        public TestInfo Show(bool enable)
+        public TestInfo Show(bool enable = true)
         {
             IsVisible = enable;
 
