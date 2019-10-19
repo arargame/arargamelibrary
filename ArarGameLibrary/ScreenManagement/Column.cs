@@ -10,7 +10,7 @@ namespace ArarGameLibrary.ScreenManagement
 {
     public class Column : Component
     {
-        class ColumnImage : Component { }
+        //class ImageColumn : Component { }
 
         public float WidthRatio { get; private set; }
 
@@ -22,7 +22,7 @@ namespace ArarGameLibrary.ScreenManagement
             }
         }
 
-        ColumnImage Image { get; set; }
+        Column Image { get; set; }
 
         public Column()
         {
@@ -38,7 +38,7 @@ namespace ArarGameLibrary.ScreenManagement
 
         public Column AddImage(Texture2D texture)
         {
-            Image = new ColumnImage();
+            Image = new Column();
 
             Image.LoadContent(texture);
 

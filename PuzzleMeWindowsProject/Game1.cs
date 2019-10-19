@@ -170,50 +170,46 @@ namespace PuzzleMeWindowsProject
 
             row.PrepareColumns(true,"right");
 
-
+            ///////Container
             cnt = new Container();
             cnt.SetTexture(TextureManager.CreateTexture2DBySingleColor(new Color(143, 166,225)));
             cnt.SetSize(new Vector2(250,200));
             cnt.SetFrame(Color.Black);
 
 
-            //var ppp = new Vector2(0,0);
-            //ppp = Vector2.Lerp(new Vector2(0, 0), new Vector2(5, 5), Vector2.Distance(new Vector2(0, 0), new Vector2(10, 10)));
-            //cnt.SetPosition(ppp);
+            var firstRow = new Row();
+            firstRow.SetTexture(TextureManager.CreateTexture2D("Textures/coral"));
 
-            var cr1 = new Row();
-            cr1.SetTexture(TextureManager.CreateTexture2D("Textures/coral"));
+            var secondRow = new Row();
+            secondRow.SetTexture(TextureManager.CreateTexture2DByRandomColor());
 
-            var cr2 = new Row();
-            cr2.SetTexture(TextureManager.CreateTexture2DByRandomColor());
-
-            cnt.AddRow(cr1,80);
-            cnt.AddRow(cr2,20);
+            cnt.AddRow(firstRow, 80);
+            cnt.AddRow(secondRow, 20);
             cnt.PrepareRows();
+            cnt.SetDragable(true);
+            
+            var column1 = new Column();
+            column1.SetTexture(TextureManager.CreateTexture2DByRandomColor());
 
-            //cnt.SetDragable(true);
+            var column2 = new Column();
+            column2.SetTexture(TextureManager.CreateTexture2DByRandomColor());
 
+            //secondRow.PrepareColumns(floatTo:"left");
 
+            //cr2c1.SetPadding(new Vector2(10));
 
+            secondRow.AddColumn(column1, 20);
+            secondRow.AddColumn(column2, 80);
+            secondRow.PrepareColumns(isCentralized:true,floatTo:"left");
 
             lastTriangle = Triangle.PlayButton(Color.Red);
+            column1.AddImage(lastTriangle.Texture);
+            column1.SetPadding(new Vector2(10));
             
+            var pulsateEvent = (column1.Child.FirstOrDefault() as Column).GetEvent<PulsateEffect>();
+            pulsateEvent.SetWhenToInvoke(() => { return (column1.Child.FirstOrDefault() as Column).IsHovering; });
 
-            var cr2c1 = new Column();
-            //cr2c1.SetTexture(lastTriangle.Texture);
-            cr2c1.AddImage(lastTriangle.Texture);
-            
-  
-            cr2.AddColumn(cr2c1, 20);
-            cr2.PrepareColumns(floatTo:"left");
-
-            cr2c1.SetPadding(new Vector2(10));
-
-            var cr2c2 = new Column();
-            cr2c2.SetTexture(TextureManager.CreateTexture2DByRandomColor());
-
-            cr2.AddColumn(cr2c2,80);
-            cr2.PrepareColumns(isCentralized:true,floatTo:"left");
+            var x = 100;
 
 
             ////////------------
@@ -248,13 +244,15 @@ namespace PuzzleMeWindowsProject
 
             columnForImageButton = new Column();
 
-            columnForImageButton.SetPosition(new Vector2(10, 10));
-            columnForImageButton.SetSize(new Vector2(240, 240));
+            //columnForImageButton.SetPosition(new Vector2(10, 0));
+            //columnForImageButton.SetSize(new Vector2(240, 250));
+
+            columnForImageButton.SetPosition(new Vector2(0, 0));
+            columnForImageButton.SetSize(new Vector2(200, 200));
 
             columnForImageButton.AddImage(lastTriangle.Texture);
 
-            columnForImageButton.SetPosition(new Vector2(0,0));
-            columnForImageButton.SetSize(new Vector2(250,250));
+
             
             columnForImageButton.TestInfo.Show();
             columnForImageButton.TestInfo.AddParameters("DestinationRectangle");
@@ -262,7 +260,15 @@ namespace PuzzleMeWindowsProject
             
 
             columnForImageButton.SetPadding(new Vector2(20));
+            var columnImage = columnForImageButton.Child.FirstOrDefault() as Component;
+            
+            columnForImageButton.ClickAction = () => 
+            {
+                columnForImageButton.SetPosition(new Vector2(columnForImageButton.Position.X + 10, columnForImageButton.Position.Y));
+            };
         }
+
+        
 
         /// <summary>
         /// UnloadContent will be called once per game and is the place to unload
@@ -284,7 +290,7 @@ namespace PuzzleMeWindowsProject
 
             InputManager.Update();
             //ScreenManager.Update();
-            //cnt.Update();
+            cnt.Update();
 
             //scrollBar.Update();
 
@@ -294,7 +300,7 @@ namespace PuzzleMeWindowsProject
             
 
             //lastTriangle.Update();
-            columnForImageButton.Update();
+            //columnForImageButton.Update();
 
 
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Global.OnExit)
@@ -317,10 +323,10 @@ namespace PuzzleMeWindowsProject
             //GraphicsDevice.Clear(Color.Transparent);
 
             Global.SpriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend);
-            columnForImageButton.Draw();
+            //columnForImageButton.Draw();
 
             //scrollBar.Draw();
-            //cnt.Draw();
+            cnt.Draw();
 
             //foreach (var item in scrollBar.GetChildAs<Component>())
             //{

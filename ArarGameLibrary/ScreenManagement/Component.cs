@@ -46,23 +46,7 @@ namespace ArarGameLibrary.ScreenManagement
 
         public Frame Frame { get; set; }
 
-        Vector2 distanceToParent = Vector2.Zero;
-        public Vector2 DistanceToParent 
-        {
-            get
-            {
-                if (Parent != null)
-                {
-                    distanceToParent = Parent.Position - Position;
-                }
-                else
-                {
-                    distanceToParent = Vector2.Zero;
-                }
-
-                return distanceToParent;
-            }
-        }
+        Vector2 DistanceToParent { get; set; }
 
         public Font Font { get; private set; }
 
@@ -158,6 +142,8 @@ namespace ArarGameLibrary.ScreenManagement
             parentRect = parentRect ?? (Parent != null ? Parent.DestinationRectangle : (Rectangle?)null);
 
             base.Align(offset, parentRect);
+
+            SetDistanceToParent();
         }
 
         public new IComponent SetMargin(Vector2 margin)
@@ -176,6 +162,8 @@ namespace ArarGameLibrary.ScreenManagement
             foreach (var children in Child)
             {
                 children.Align(Padding, DestinationRectangle);
+
+                (children as Component).SetSize(new Vector2(Size.X - padding.X * 2, Size.Y - padding.X * 2));
             }
 
             return this;
@@ -229,6 +217,8 @@ namespace ArarGameLibrary.ScreenManagement
             Parent = parent;
 
             IncreaseLayerDepth();
+
+            SetDistanceToParent();
 
             return this;
         }
@@ -307,6 +297,12 @@ namespace ArarGameLibrary.ScreenManagement
 
                 Font.SetScale(Scale);
             }
+        }
+
+        public void SetDistanceToParent()
+        {
+            if(Parent!=null)
+                DistanceToParent = Parent.Position - Position;
         }
     }
 }

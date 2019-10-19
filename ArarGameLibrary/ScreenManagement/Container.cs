@@ -99,6 +99,8 @@ namespace ArarGameLibrary.ScreenManagement
                 row.IncreaseLayerDepth();
 
                 row.PrepareColumns(isCentralized, floatTo);
+
+                row.SetDistanceToParent();
             }
 
             return this;
