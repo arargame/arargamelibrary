@@ -199,7 +199,7 @@ namespace ArarGameLibrary.ScreenManagement
 
             Font = new Font(text: text, color: textColor);
 
-            Font.IncreaseLayerDepth();
+            Font.IncreaseLayerDepth(baseDepth: LayerDepth);
 
             SetPadding(textPadding ?? Vector2.Zero);
 

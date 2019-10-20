@@ -338,7 +338,7 @@ namespace ArarGameLibrary.Model
             Description = description;
         }
 
-        public void SetDragable(bool enable)
+        public void SetDragable(bool enable = true)
         {
             IsDragable = enable;
 
@@ -380,6 +380,9 @@ namespace ArarGameLibrary.Model
 
         public void SetPosition(Vector2 position)
         {
+            //if (Position != Vector2.Zero && Position == position)
+            //    return;
+
             Position = position;
 
             if (OnChangeRectangle != null)
@@ -401,6 +404,9 @@ namespace ArarGameLibrary.Model
 
         public void SetScale(float scale)
         {
+            //if (Scale != 1f && Scale == scale)
+            //    return;
+
             Scale = scale;
 
             if (OnChangeRectangle != null)
@@ -409,6 +415,9 @@ namespace ArarGameLibrary.Model
 
         public void SetSize(Vector2 size)
         {
+            //if (Size != Vector2.Zero && Size == size)
+            //    return;
+
             Size = size;
 
             if (OnChangeRectangle != null)

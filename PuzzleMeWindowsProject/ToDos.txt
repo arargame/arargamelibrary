@@ -59,10 +59,13 @@
 +scrollarupdate için bir koşul olduğunda bir keree çalışacak bir yapı gerekiyor update-draw gibi fonksiyonların içinde gerekli/singularInvoker modeli geliştirildi
 -   piece = new Piece(100,100); neden parametreler max min boyulara göre ayarlandı incele? beklentide size girişi gibi duruyor
 -scrollbar tasarlanacak
--button font manager kurgusunu düzenle
++button font manager kurgusunu düzenle
 -componentlerde parent child ile prepare fonksiyonu geliştir(bir parentın pozisyonuna göre child lar konumlansın)
 -default mouse cursor texture leri lazım ve sprite nesnesi üzerinde o objenin örneğin hoverında hangi cursor texture ının gösterilmesşi isteniliyorsa sağlanmalı
 -pulsate effectin min max dalga boylarını ayarla(3.9.2019)
 -texture saving as png or jpg(25.9.2019)
 -bir obje selectable oluyorsa 2 tip olması lazım 1)direk rectangle dan yakalayan 2)perpikselcollision ile mesela üçgenlerde
 -SetDistanceToParent component icinde çok kullanılıyor,bir çözüm bulabilir msiin?(19.10.2019 21:11)
+-SetPosition,SetSize,SetScale gibi fonksiyonlar componentlerde sürekli çalışıyor(20.10.2019)
+-Episode Menu Episode Container hazırlandı bunu belli parametrelere göre oluşturan ve scrollbar ile entegre eden bir sistem yap (20.10.2019)
+-Play butonunn üzerine geldiğinde mouse iconu el olsun clickable objelerde ishovering true iken bu yapılabilir(20.10.2019)

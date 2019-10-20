@@ -22,12 +22,9 @@ namespace PuzzleMeWindowsProject
     /// </summary>
     public class Game1 : Game
     {
-        Column columnForImageButton;
-
+        Column TextColumn;
 
         ScrollBar scrollBar;
-        //Column testColumn;
-        //Column testColumn2;
 
         Container container;
 
@@ -113,24 +110,7 @@ namespace PuzzleMeWindowsProject
             c.SetMargin(new Vector2(10, 10));
             c.SetSize(new Vector2(50,50));
             c.IncreaseLayerDepth();
-            
-
-
-            //testColumn = new Column();
-
-            //testColumn.SetTexture(TextureManager.CreateTexture2DByRandomColor());
-            //testColumn.SetSize(new Vector2(100,100));
-            //testColumn.SetPosition(new Vector2(200,200));
-            //testColumn.SetDragable(true);
-            //testColumn.SetClickable(true);
-
-            //testColumn2 = new Column();
-
-            //testColumn2.SetTexture(TextureManager.CreateTexture2DByRandomColor());
-            //testColumn2.SetSize(new Vector2(75, 100));
-            //testColumn2.SetPosition(new Vector2(75, 150));
-            //testColumn2.SetDragable(true);
-            //testColumn2.SetClickable(true);
+           
 
             container = new Container();
             container.SetTexture(TextureManager.CreateTexture2DBySingleColor(Color.Beige));
@@ -170,44 +150,8 @@ namespace PuzzleMeWindowsProject
 
             row.PrepareColumns(true,"right");
 
-            ///////Container
-            cnt = new Container();
-            cnt.SetTexture(TextureManager.CreateTexture2DBySingleColor(new Color(143, 166,225)));
-            cnt.SetSize(new Vector2(250,200));
-            cnt.SetFrame(Color.Black);
 
-
-            var firstRow = new Row();
-            firstRow.SetTexture(TextureManager.CreateTexture2D("Textures/coral"));
-
-            var secondRow = new Row();
-            secondRow.SetTexture(TextureManager.CreateTexture2DByRandomColor());
-
-            cnt.AddRow(firstRow, 80);
-            cnt.AddRow(secondRow, 20);
-            cnt.PrepareRows();
-            cnt.SetDragable(true);
-            
-            var column1 = new Column();
-            column1.SetTexture(TextureManager.CreateTexture2DByRandomColor());
-
-            var column2 = new Column();
-            column2.SetTexture(TextureManager.CreateTexture2DByRandomColor());
-
-            //secondRow.PrepareColumns(floatTo:"left");
-
-            //cr2c1.SetPadding(new Vector2(10));
-
-            secondRow.AddColumn(column1, 20);
-            secondRow.AddColumn(column2, 80);
-            secondRow.PrepareColumns(isCentralized:true,floatTo:"left");
-
-            lastTriangle = Triangle.PlayButton(Color.Red);
-            column1.AddImage(lastTriangle.Texture);
-            column1.SetPadding(new Vector2(10));
-            
-            var pulsateEvent = (column1.Child.FirstOrDefault() as Column).GetEvent<PulsateEffect>();
-            pulsateEvent.SetWhenToInvoke(() => { return (column1.Child.FirstOrDefault() as Column).IsHovering; });
+            cnt = CreateEpisodeMenuContainer();
 
             var x = 100;
 
@@ -234,7 +178,7 @@ namespace PuzzleMeWindowsProject
 
 
             rt2D = new RenderTarget2D(Global.GraphicsDevice, GraphicsDevice.PresentationParameters.BackBufferWidth, GraphicsDevice.PresentationParameters.BackBufferHeight, false, SurfaceFormat.Color, DepthFormat.None);
-            
+
 
             //rt2D = lastTriangle.Texture as RenderTarget2D; //Fonk(()=>lastTriangle.Draw(), 400, 400);
 
@@ -242,30 +186,59 @@ namespace PuzzleMeWindowsProject
             //rt2D.SaveAsPng(stream, rt2D.Width, rt2D.Height);
             //stream.Dispose();
 
-            columnForImageButton = new Column();
-
-            //columnForImageButton.SetPosition(new Vector2(10, 0));
-            //columnForImageButton.SetSize(new Vector2(240, 250));
-
-            columnForImageButton.SetPosition(new Vector2(0, 0));
-            columnForImageButton.SetSize(new Vector2(200, 200));
-
-            columnForImageButton.AddImage(lastTriangle.Texture);
+            //TextColumn = new Column();
+            //TextColumn.SetPosition(new Vector2(250,250));
+            //TextColumn.SetSize(new Vector2(100,100));
+            //TextColumn.SetFrame(Color.BlanchedAlmond);
+            //TextColumn.SetDragable(true);
+            //TextColumn.SetFont("Buttton1001",Color.Blue);
+        }
 
 
+        public Container CreateEpisodeMenuContainer()
+        {
+            ///////Container
+            var container = new Container();
+            container.SetTexture(TextureManager.CreateTexture2DBySingleColor(new Color(143, 166, 225)));
+            container.SetSize(new Vector2(250, 200));
+            container.SetFrame(Color.Black);
+
+
+            var firstRow = new Row();
+            firstRow.SetTexture(TextureManager.CreateTexture2D("Textures/coral"));
+
+            var secondRow = new Row();
+            secondRow.SetTexture(TextureManager.CreateTexture2DByRandomColor());
+
+            container.AddRow(firstRow, 80);
+            container.AddRow(secondRow, 20);
+            container.PrepareRows();
+            container.SetDragable(true);
+
+            var column1 = new Column();
+            column1.SetTexture(TextureManager.CreateTexture2DByRandomColor());
+
+            var column2 = new Column();
+            column2.SetTexture(TextureManager.CreateTexture2DByRandomColor());
             
-            columnForImageButton.TestInfo.Show();
-            columnForImageButton.TestInfo.AddParameters("DestinationRectangle");
 
-            
+            //secondRow.PrepareColumns(floatTo:"left");
 
-            columnForImageButton.SetPadding(new Vector2(20));
-            var columnImage = columnForImageButton.Child.FirstOrDefault() as Component;
-            
-            columnForImageButton.ClickAction = () => 
-            {
-                columnForImageButton.SetPosition(new Vector2(columnForImageButton.Position.X + 10, columnForImageButton.Position.Y));
-            };
+            //cr2c1.SetPadding(new Vector2(10));
+
+            secondRow.AddColumn(column1, 20);
+            secondRow.AddColumn(column2, 80);
+            secondRow.PrepareColumns(isCentralized: true, floatTo: "left");
+
+            lastTriangle = Triangle.PlayButton(Color.Green);
+            column1.AddImage(lastTriangle.Texture);
+            column1.SetPadding(new Vector2(10));
+
+            column2.SetFont("Episode 1", Color.White);
+
+            column2.Font.SetLayerDepth(0.55f);
+
+            return container;
         }
 
         
@@ -294,14 +267,11 @@ namespace PuzzleMeWindowsProject
 
             //scrollBar.Update();
 
-            //testColumn.Update();
-            //testColumn2.Update();
             //container.Update();
-            
+
 
             //lastTriangle.Update();
-            //columnForImageButton.Update();
-
+            //TextColumn.Update();
 
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Global.OnExit)
                 Exit();
@@ -318,12 +288,7 @@ namespace PuzzleMeWindowsProject
 
             GraphicsDevice.Clear(Global.Theme.GetColor());
 
-
-            //GraphicsDevice.SetRenderTarget(rt2D);
-            //GraphicsDevice.Clear(Color.Transparent);
-
             Global.SpriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend);
-            //columnForImageButton.Draw();
 
             //scrollBar.Draw();
             cnt.Draw();
@@ -339,7 +304,7 @@ namespace PuzzleMeWindowsProject
             //List<Texture2D> textures = new List<Texture2D>();
 
             //lastTriangle.Draw();
-
+            //TextColumn.Draw();
             Global.SpriteBatch.End();
 
 
