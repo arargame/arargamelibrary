@@ -22,8 +22,6 @@ namespace PuzzleMeWindowsProject
     /// </summary>
     public class Game1 : Game
     {
-        Column TextColumn;
-
         ScrollBar scrollBar;
 
         Container container;
@@ -90,29 +88,28 @@ namespace PuzzleMeWindowsProject
             }
 
             scrollBar = new ScrollBar(3, 3, 2.5f, scrollBarColumns);
-            scrollBar.LoadContent(TextureManager.CreateTexture2DBySingleColor(Color.Tan));
+            //scrollBar.LoadContent(TextureManager.CreateTexture2DBySingleColor(Color.Tan));
             //scrollBar.SetFrame(Color.Yellow,2f);
             //scrollBar.PrepareRows(true);
 
-
-
-            //scrollBar.SetListContainer(columns: scrollBarColumns);
+            scrollBar.SetFrame(makeFrameVisible:false);
             scrollBar.RefreshRectangle();
 
-            var firstScrollBarRow = scrollBar.Rows.FirstOrDefault();
-            var firstScrollBarRowColumn = firstScrollBarRow.Columns.FirstOrDefault();
+            //var firstScrollBarRow = scrollBar.Rows.FirstOrDefault();
+            //var firstScrollBarRowColumn = firstScrollBarRow.Columns.FirstOrDefault();
 
-            var c = new Column();
-            c.SetTexture(TextureManager.CreateTexture2DByRandomColor());
+            //var c = new Column();
+            //c.SetTexture(TextureManager.CreateTexture2DByRandomColor());
 
 
-            firstScrollBarRowColumn.AddChild(c);
-            c.SetMargin(new Vector2(10, 10));
-            c.SetSize(new Vector2(50,50));
-            c.IncreaseLayerDepth();
+            //firstScrollBarRowColumn.AddChild(c);
+            //c.SetMargin(new Vector2(10, 10));
+            //c.SetSize(new Vector2(50,50));
+            //c.IncreaseLayerDepth();
            
 
             container = new Container();
+            container.SetDragable();
             container.SetTexture(TextureManager.CreateTexture2DBySingleColor(Color.Beige));
             container.SetSize(new Vector2(300,200));
             container.SetMargin(new Vector2(10,10));
@@ -186,12 +183,6 @@ namespace PuzzleMeWindowsProject
             //rt2D.SaveAsPng(stream, rt2D.Width, rt2D.Height);
             //stream.Dispose();
 
-            //TextColumn = new Column();
-            //TextColumn.SetPosition(new Vector2(250,250));
-            //TextColumn.SetSize(new Vector2(100,100));
-            //TextColumn.SetFrame(Color.BlanchedAlmond);
-            //TextColumn.SetDragable(true);
-            //TextColumn.SetFont("Buttton1001",Color.Blue);
         }
 
 
@@ -263,18 +254,18 @@ namespace PuzzleMeWindowsProject
 
             InputManager.Update();
             //ScreenManager.Update();
-            cnt.Update();
+            //cnt.Update();
 
-            //scrollBar.Update();
+            scrollBar.Update();
 
             //container.Update();
 
 
             //lastTriangle.Update();
-            //TextColumn.Update();
 
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Global.OnExit)
                 Exit();
+
 
             base.Update(gameTime);
         }
@@ -290,13 +281,13 @@ namespace PuzzleMeWindowsProject
 
             Global.SpriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend);
 
-            //scrollBar.Draw();
-            cnt.Draw();
+            scrollBar.Draw();
+            //cnt.Draw();
 
-            //foreach (var item in scrollBar.GetChildAs<Component>())
-            //{
-            //    item.Draw();
-            //}
+            foreach (var item in scrollBar.GetChildAs<Component>())
+            {
+                item.Draw();
+            }
             //container.Draw();
 
             //ScreenManager.Draw();
@@ -304,10 +295,9 @@ namespace PuzzleMeWindowsProject
             //List<Texture2D> textures = new List<Texture2D>();
 
             //lastTriangle.Draw();
-            //TextColumn.Draw();
+
+
             Global.SpriteBatch.End();
-
-
 
             base.Draw(gameTime);
         }

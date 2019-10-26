@@ -50,6 +50,8 @@ namespace ArarGameLibrary.ScreenManagement
 
         public Font Font { get; private set; }
 
+        public bool IsFixedToParentPosition { get; private set; }
+
         public override void IncreaseLayerDepth(float? additionalDepth = null, float? baseDepth = null)
         {
             baseDepth = baseDepth ?? Parent.LayerDepth;
@@ -68,11 +70,13 @@ namespace ArarGameLibrary.ScreenManagement
 
             SetDrawMethodType(5);
 
-            base.Initialize();
+            FixToParentPosition();
 
             SetClickable(true);
 
             OnChangeRectangle += Component_OnChangeRectangle;
+
+            base.Initialize();
         }
 
         public override void Update(GameTime gameTime = null)
@@ -98,15 +102,17 @@ namespace ArarGameLibrary.ScreenManagement
                     children.Update(gameTime);
                 }
 
-                if (Parent != null)
+                if (IsFixedToParentPosition)
                 {
-                    SetPosition(Parent.Position - DistanceToParent);
+                    if (Parent != null)
+                    {
+                        SetPosition(Parent.Position - DistanceToParent);
 
-                    //if ((Parent as Sprite).IsPulsating)
-                    //{
-                    //    GetEvent<PulsateEffect>().SetWhenToInvoke((Parent as Sprite).GetEvent<PulsateEffect>().WhenToInvoke);
-                    //}
-                        
+                        //if ((Parent as Sprite).IsPulsating)
+                        //{
+                        //    GetEvent<PulsateEffect>().SetWhenToInvoke((Parent as Sprite).GetEvent<PulsateEffect>().WhenToInvoke);
+                        //}
+                    }
                 }
             }
         }
@@ -177,12 +183,14 @@ namespace ArarGameLibrary.ScreenManagement
             return this;
         }
 
-        public Component SetFrame(Color lineColor, float thickness = 1f,bool makeFrameVisible = true)
+        public Component SetFrame(Color? lineColor = null, float thickness = 1f,bool makeFrameVisible = true)
         {
             //if (DestinationRectangle.IsEmpty)
             //    throw new Exception("Prepare 'Position' and 'Size' properties before you set 'Frame'");
 
-            Frame = Frame.Create(DestinationRectangle, lineColor, thickness);
+            lineColor = lineColor ?? Color.Black;
+
+            Frame = Frame.Create(DestinationRectangle, lineColor.Value, thickness);
 
             Frame.LoadContent();
 
@@ -303,6 +311,13 @@ namespace ArarGameLibrary.ScreenManagement
         {
             if(Parent!=null)
                 DistanceToParent = Parent.Position - Position;
+        }
+
+        public Component FixToParentPosition(bool enable = true)
+        {
+            IsFixedToParentPosition = enable;
+
+            return this;
         }
     }
 }

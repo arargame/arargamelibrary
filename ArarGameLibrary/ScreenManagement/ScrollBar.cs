@@ -48,7 +48,7 @@ namespace ArarGameLibrary.ScreenManagement
 
         public float ScrollContainerWidthRatio { get; set; }
 
-        public int MaxRowPageCount
+        public int PageCount
         {
             get
             {
@@ -129,7 +129,7 @@ namespace ArarGameLibrary.ScreenManagement
             {
                 var listContainer = new Container();
                 listContainer.SetName("ListContainer");
-                listContainer.SetFrame(Color.Blue);
+                //listContainer.SetFrame(Color.Blue);
                 listContainer.SetTexture(TextureManager.CreateTexture2DByRandomColor());
 
                 AddChild(listContainer);
@@ -186,20 +186,20 @@ namespace ArarGameLibrary.ScreenManagement
 
             var scrollContainer = new Container();
             scrollContainer.SetName("ScrollContainer");
-            scrollContainer.SetFrame(Color.Black);
+            //scrollContainer.SetFrame(Color.Black);
             scrollContainer.SetTexture(TextureManager.CreateTexture2DByRandomColor());
             scrollContainer.SetPosition(new Vector2(Position.X + Size.X - scrollContainerSizeX, Position.Y));
             scrollContainer.SetSize(new Vector2(scrollContainerSizeX, Size.Y));
 
             AddChild(scrollContainer);
 
-            for (int i = 0; i < MaxRowPageCount; i++)
+            for (int i = 0; i < PageCount; i++)
             {
                 var row = new Row();
                 //row.SetFrame(Color.Black, 2f);
                 row.SetTexture(TextureManager.CreateTexture2DBySingleColor(new Color(62,62,66,255)));
 
-                var heightRatio = (float)1 / MaxRowPageCount * 100;
+                var heightRatio = (float)1 / PageCount * 100;
 
                 scrollContainer.AddRow(row,heightRatio);
             }
@@ -208,9 +208,11 @@ namespace ArarGameLibrary.ScreenManagement
             bar.SetName("Bar");
             bar.SetTexture(TextureManager.CreateTexture2DBySingleColor(new Color(104, 104, 104, 255)));
             bar.SetDragable(true);
+            bar.FixToParentPosition(false);
 
             var scrollContainerRows = scrollContainer.GetChildAs<Row>();
             scrollContainerRows.FirstOrDefault().AddColumn(bar, 70);
+
 
             scrollContainer.PrepareRows(isCentralized: true);
 
