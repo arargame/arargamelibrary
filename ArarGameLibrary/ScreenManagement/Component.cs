@@ -57,6 +57,21 @@ namespace ArarGameLibrary.ScreenManagement
             baseDepth = baseDepth ?? Parent.LayerDepth;
 
             base.IncreaseLayerDepth(additionalDepth, baseDepth);
+
+            if (Frame != null)
+            {
+                Frame.IncreaseLayerDepth(baseDepth: LayerDepth);
+            }
+
+            if (Font != null)
+            {
+                Font.IncreaseLayerDepth(baseDepth: LayerDepth);
+            }
+
+            foreach (var children in Child)
+            {
+                (children as Sprite).IncreaseLayerDepth(baseDepth: LayerDepth);
+            }
         }
 
         public void OnClick(Action action)
@@ -175,10 +190,15 @@ namespace ArarGameLibrary.ScreenManagement
             return this;
         }
 
-        public Component MakeFrameVisible(bool enable)
+        public Component MakeFrameVisible(bool enable = true)
         {
             if (Frame != null)
-                Frame.SetVisible(enable);
+            {
+                if (enable)
+                    Frame.SetVisible(enable);
+                else
+                    SetFrame();
+            }
 
             return this;
         }
@@ -226,14 +246,13 @@ namespace ArarGameLibrary.ScreenManagement
 
             IncreaseLayerDepth();
 
+            SetPosition(parent.Position);
+
             SetDistanceToParent();
 
-            return this;
-        }
+            SetDragable(false);
 
-        public override void SetVisible(bool enable)
-        {
-            base.SetVisible(enable);
+            return this;
         }
 
         public Component AddChild(params IComponent[] child)
@@ -309,7 +328,7 @@ namespace ArarGameLibrary.ScreenManagement
 
         public void SetDistanceToParent()
         {
-            if(Parent!=null)
+            if (Parent != null)
                 DistanceToParent = Parent.Position - Position;
         }
 
@@ -319,5 +338,6 @@ namespace ArarGameLibrary.ScreenManagement
 
             return this;
         }
+
     }
 }

@@ -455,6 +455,11 @@ namespace ArarGameLibrary.Model
             Texture = texture;
         }
 
+        public void SetTexture()
+        {
+            Texture = TextureManager.CreateTexture2DByRandomColor();
+        }
+
         public virtual void SetVisible(bool enable)
         {
             IsVisible = enable;

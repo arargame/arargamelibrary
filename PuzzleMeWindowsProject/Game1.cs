@@ -32,6 +32,8 @@ namespace PuzzleMeWindowsProject
 
         Triangle lastTriangle;
 
+        Column TextColumn;
+
         public Game1()
         {
             Global.Graphics = new GraphicsDeviceManager(this);
@@ -95,17 +97,21 @@ namespace PuzzleMeWindowsProject
             scrollBar.SetFrame(makeFrameVisible:false);
             scrollBar.RefreshRectangle();
 
-            //var firstScrollBarRow = scrollBar.Rows.FirstOrDefault();
-            //var firstScrollBarRowColumn = firstScrollBarRow.Columns.FirstOrDefault();
+            var firstScrollBarRow = scrollBar.Rows.FirstOrDefault();
+            var firstScrollBarRowColumn = firstScrollBarRow.Columns.FirstOrDefault();
 
-            //var c = new Column();
-            //c.SetTexture(TextureManager.CreateTexture2DByRandomColor());
-
-
-            //firstScrollBarRowColumn.AddChild(c);
-            //c.SetMargin(new Vector2(10, 10));
-            //c.SetSize(new Vector2(50,50));
+            var c = new Column();
+            c.SetTexture(TextureManager.CreateTexture2DByRandomColor());
+            c.SetMargin(new Vector2(10, 10));
+            c.SetSize(new Vector2(50,50));
             //c.IncreaseLayerDepth();
+            c.SetFont("Hewllow",Color.Yellow);
+
+
+            firstScrollBarRowColumn.AddChild(c);
+
+
+
            
 
             container = new Container();
@@ -151,6 +157,17 @@ namespace PuzzleMeWindowsProject
             cnt = CreateEpisodeMenuContainer();
 
             var x = 100;
+
+            TextColumn = new Column();
+            TextColumn.SetPosition(new Vector2(250, 250));
+            TextColumn.SetSize(new Vector2(250, 200));
+            TextColumn.SetFrame(Color.BlanchedAlmond);
+            TextColumn.SetDragable(true);
+            TextColumn.SetFont("Buttton1001", Color.Blue);
+
+            TextColumn.AddChild(cnt);
+            TextColumn.SetPadding(new Vector2(0));
+            
 
 
             ////////------------
@@ -254,9 +271,11 @@ namespace PuzzleMeWindowsProject
 
             InputManager.Update();
             //ScreenManager.Update();
-            //cnt.Update();
 
-            scrollBar.Update();
+            TextColumn.Update();
+            cnt.Update();
+
+            //scrollBar.Update();
 
             //container.Update();
 
@@ -281,13 +300,11 @@ namespace PuzzleMeWindowsProject
 
             Global.SpriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend);
 
-            scrollBar.Draw();
-            //cnt.Draw();
+            //scrollBar.Draw();
 
-            foreach (var item in scrollBar.GetChildAs<Component>())
-            {
-                item.Draw();
-            }
+            TextColumn.Draw();
+            cnt.Draw();
+
             //container.Draw();
 
             //ScreenManager.Draw();

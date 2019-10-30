@@ -118,7 +118,7 @@ namespace ArarGameLibrary.ScreenManagement
                 }
 
                 column.SetPosition(new Vector2(positionX,positionY));
-                //column.SetDistanceToParent();
+
                 column.SetSize(new Vector2(sizeX,sizeY));
 
                 column.IncreaseLayerDepth();
