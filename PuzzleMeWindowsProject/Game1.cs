@@ -284,10 +284,10 @@ namespace PuzzleMeWindowsProject
             scrollBar.Draw();
             //cnt.Draw();
 
-            foreach (var item in scrollBar.GetChildAs<Component>())
-            {
-                item.Draw();
-            }
+            //foreach (var item in scrollBar.GetChildAs<Component>())
+            //{
+            //    item.Draw();
+            //}
             //container.Draw();
 
             //ScreenManager.Draw();
