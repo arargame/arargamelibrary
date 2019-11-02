@@ -28,3 +28,40 @@
             TextColumn.SetFrame(Color.BlanchedAlmond);
             TextColumn.SetDragable(true);
             TextColumn.SetFont("Buttton1001",Color.Blue);
+--Container inside Column
+			container = new Container();
+            container.SetFrame(Color.Yellow,2f);
+            container.SetSize(new Vector2(100,100));
+            container.SetPosition(new Vector2(250,250));
+            container.SetTexture(TextureManager.CreateTexture2DByRandomColor());
+            container.SetDragable();
+
+            var row = new Row();
+            row.SetTexture(TextureManager.CreateTexture2DByRandomColor());
+            container.AddRow(row,70);
+
+            var row2 = new Row();
+            row2.SetTexture();
+            container.AddRow(row2, 30);
+
+            var r2c1 = new Column();
+            r2c1.SetTexture(Triangle.PlayButton(Color.Moccasin).Texture);
+
+            var r2c2 = new Column();
+            r2c2.SetFont("Right", Color.Khaki);
+
+            row2.AddColumn(r2c1,40);
+            row2.AddColumn(r2c2,60);
+            
+            container.PrepareRows();
+
+            
+
+            column = new Column();
+            column.SetFrame(Color.SteelBlue);
+            column.SetSize(new Vector2(200,200));
+            column.SetPosition(new Vector2(0,0));
+            column.SetTexture();
+            column.SetDragable();
+
+            column.AddChild(container);
