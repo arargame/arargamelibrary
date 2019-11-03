@@ -16,47 +16,15 @@ namespace ArarGameLibrary.ScreenManagement
         {
             get
             {
-                return GetChildAs<Row>().ToList();
+                return GetChildAs<Row>(fetchAllDescandents: false).ToList();
             }
         }
 
         public override void Initialize()
         {
             base.Initialize();
-
-            OnChangeRectangle += Container_OnChangeRectangle;
         }
 
-        void Container_OnChangeRectangle()
-        {
-            //if (Rows != null)
-            //{
-            //    foreach (var row in Rows)
-            //    {
-            //        row.SetPosition(Position);
-            //    }
-            //}
-        }
-
-        public override void Update(GameTime gameTime = null)
-        {
-            //foreach (var row in Rows)
-            //{
-            //    row.Update();
-            //}
-
-            base.Update(gameTime);
-        }
-
-        public override void Draw(SpriteBatch spriteBatch = null)
-        {
-            //foreach (var row in Rows)
-            //{
-            //    row.Draw(spriteBatch);
-            //}
-
-           base.Draw(spriteBatch);
-        }
 
         public Container AddRow(Row row,float heightRatio)
         {

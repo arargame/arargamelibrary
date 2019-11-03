@@ -22,6 +22,14 @@ namespace ArarGameLibrary.ScreenManagement
             }
         }
 
+        //List<Row> ListContainerRows
+        //{
+        //    get
+        //    {
+        //        return ListContainer.GetChildAs<Row>(r => r.Name == "ListContainerRow").ToList();
+        //    }
+        //}
+
         public Container ScrollContainer
         {
             get
@@ -129,8 +137,12 @@ namespace ArarGameLibrary.ScreenManagement
             {
                 var listContainer = new Container();
                 listContainer.SetName("ListContainer");
-                //listContainer.SetFrame(Color.Blue);
-                listContainer.SetTexture(TextureManager.CreateTexture2DByRandomColor());
+                //listContainer.SetTexture(TextureManager.CreateTexture2DBySingleColor(Color.Blue));
+                listContainer.FixToParentPosition(false);
+
+                var scrollContainerSizeX = (float)Size.X * ScrollContainerWidthRatio / 100;
+                listContainer.SetPosition(Position);
+                listContainer.SetSize(new Vector2(Size.X - scrollContainerSizeX, Size.Y));
 
                 AddChild(listContainer);
             }
@@ -150,10 +162,16 @@ namespace ArarGameLibrary.ScreenManagement
                                         .ToList();
 
                     var row = new Row();
-                    //row.SetFrame(Color.White);
+                    row.SetFrame(Color.White);
+                    row.SetName("ListContainerRow");
                     //row.SetTexture(TextureManager.CreateTexture2DByRandomColor());
-                    columnsToAdd.ForEach(c => row.AddColumn(c, columnRatio));
-                    columnsToAdd.ForEach(c => c.SetTexture(TextureManager.CreateTexture2DByRandomColor()));
+
+                    foreach (var column in columnsToAdd)
+                    {
+                        row.AddColumn(column,columnRatio);
+                    }
+                    //columnsToAdd.ForEach(c => row.AddColumn(c, columnRatio));
+                    //columnsToAdd.ForEach(c => c.SetTexture(TextureManager.CreateTexture2DByRandomColor()));
                     ListContainer.AddRow(row, rowRatio);
                 }
             }
@@ -172,11 +190,6 @@ namespace ArarGameLibrary.ScreenManagement
                 item.TestInfo.Font.SetText(((RowsCountToShow * page) + counter++).ToString());
             }
 
-
-            var scrollContainerSizeX = (float)Size.X * ScrollContainerWidthRatio / 100;
-            ListContainer.SetPosition(Position);
-            ListContainer.SetSize(new Vector2(Size.X - scrollContainerSizeX, Size.Y));
-
             RefreshRectangle();
         }
 
@@ -190,6 +203,7 @@ namespace ArarGameLibrary.ScreenManagement
             scrollContainer.SetTexture(TextureManager.CreateTexture2DByRandomColor());
             scrollContainer.SetPosition(new Vector2(Position.X + Size.X - scrollContainerSizeX, Position.Y));
             scrollContainer.SetSize(new Vector2(scrollContainerSizeX, Size.Y));
+            scrollContainer.FixToParentPosition(false);
 
             AddChild(scrollContainer);
 
@@ -244,17 +258,6 @@ namespace ArarGameLibrary.ScreenManagement
                 else
                     Bar.ClampManager.RefreshClampObject(coY.PropertyName, coY.Min, coY.Max);
             }
-        }
-
-        //under the construction 
-        public override void Update(GameTime gameTime = null)
-        {
-            base.Update(gameTime);
-        }
-
-        public override void Draw(SpriteBatch spriteBatch = null)
-        {
-            base.Draw(spriteBatch);
         }
 
         public ScrollBar SetColumns(Column[] columns)

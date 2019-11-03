@@ -529,6 +529,9 @@ namespace ArarGameLibrary.Model
         #endregion
 
 
-
+        public Sprite AsSprite()
+        {
+            return this as Sprite;
+        }
     }
 }

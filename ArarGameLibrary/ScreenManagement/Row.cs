@@ -17,7 +17,7 @@ namespace ArarGameLibrary.ScreenManagement
         {
             get
             {
-                return GetChildAs<Column>().ToList();
+                return GetChildAs<Column>(fetchAllDescandents: false).ToList();
             }
         }
 

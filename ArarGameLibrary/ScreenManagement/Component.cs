@@ -14,15 +14,21 @@ namespace ArarGameLibrary.ScreenManagement
 {
     public interface IComponent :  IDrawableObject
     {
+        Guid Id { get; set; }
+
         IScreen Screen { get; set; }
 
         void OnClick(Action action);
+
+        IComponent Parent { get; set; }
+
+        List<IComponent> Child { get; set; }
 
         Component SetParent(IComponent parent);
 
         Component AddChild(params IComponent[] child);
 
-        List<T> GetChildAs<T>(Func<T, bool> predicate = null) where T : IComponent;
+        List<T> GetChildAs<T>(Func<T, bool> predicate = null, bool fetchAllDescandents = true) where T : IComponent;
 
         List<T> GetParentAs<T>(Func<T, bool> predicate = null) where T : IComponent;
 
@@ -46,7 +52,7 @@ namespace ArarGameLibrary.ScreenManagement
 
         public Frame Frame { get; set; }
 
-        Vector2 DistanceToParent { get; set; }
+        public Vector2 DistanceToParent { get; set; }
 
         public Font Font { get; private set; }
 
@@ -246,7 +252,15 @@ namespace ArarGameLibrary.ScreenManagement
 
             IncreaseLayerDepth();
 
-            SetPosition(parent.Position);
+            if (IsFixedToParentPosition)
+            {
+                SetPosition(parent.Position);
+
+                foreach (var children in Child)
+                {
+                    (children as Sprite).SetPosition(Parent.Position - DistanceToParent);
+                }
+            }
 
             SetDistanceToParent();
 
@@ -264,7 +278,7 @@ namespace ArarGameLibrary.ScreenManagement
             return this;
         }
 
-        public List<T> GetChildAs<T>(Func<T, bool> predicate = null) where T : IComponent
+        public List<T> GetChildAs<T>(Func<T, bool> predicate = null,bool fetchAllDescandents = true) where T : IComponent
         {
             var list = new List<T>();
 
@@ -281,6 +295,9 @@ namespace ArarGameLibrary.ScreenManagement
             {
                 list.AddRange(children.GetChildAs<T>(predicate));
             }
+
+            if (!fetchAllDescandents)
+                list.RemoveAll(l => l.Parent.Id != this.Id);
 
             return list.ToList();
         }
@@ -337,6 +354,16 @@ namespace ArarGameLibrary.ScreenManagement
             IsFixedToParentPosition = enable;
 
             return this;
+        }
+
+        public override void SetVisible(bool enable)
+        {
+            IsVisible = enable;
+
+            foreach (var children in Child)
+            {
+                children.SetVisible(enable);
+            }
         }
 
     }

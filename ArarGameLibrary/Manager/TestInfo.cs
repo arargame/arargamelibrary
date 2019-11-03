@@ -97,5 +97,12 @@ namespace ArarGameLibrary.Manager
 
             return this;
         }
+
+        public TestInfo Show(string text)
+        {
+            Font.SetText(text);
+
+            return Show(true);
+        }
     }
 }
