@@ -22,7 +22,7 @@ namespace ArarGameLibrary.Event
 
             SetTask(() => 
             {
-                if (ScrollBar.Bar.IsDragging || InputManager.IsMouseScrolling)
+                if (ScrollBar.Bar.IsDragging || (ScrollBar.Bar.IsDragable && InputManager.IsMouseScrolling))
                 {
                     //var counter2 = 0;
                     //var xxx = ScrollContainer.Rows.Select(row => new

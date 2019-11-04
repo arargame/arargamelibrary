@@ -67,7 +67,7 @@ namespace ArarGameLibrary.ScreenManagement
 
                 row.PrepareColumns(isCentralized, floatTo);
 
-                row.SetDistanceToParent();
+                //row.SetDistanceToParent();
             }
 
             return this;

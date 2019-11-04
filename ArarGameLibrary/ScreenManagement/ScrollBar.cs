@@ -22,14 +22,6 @@ namespace ArarGameLibrary.ScreenManagement
             }
         }
 
-        //List<Row> ListContainerRows
-        //{
-        //    get
-        //    {
-        //        return ListContainer.GetChildAs<Row>(r => r.Name == "ListContainerRow").ToList();
-        //    }
-        //}
-
         public Container ScrollContainer
         {
             get
@@ -96,15 +88,21 @@ namespace ArarGameLibrary.ScreenManagement
             Events.Add(new MouseScrollEvent(sprite: this,
                 whenScrollStateIsUp: () => 
                 {
-                    var mouseScrollValue = (Bar.Size.Y / 4);
+                    if (Bar.IsDragable)
+                    {
+                        var mouseScrollValue = (Bar.Size.Y / 4);
 
-                    Bar.SetPosition(new Vector2(Bar.Position.X, MathHelper.Clamp(Bar.Position.Y - mouseScrollValue, ScrollContainer.Position.Y, ScrollContainer.Position.Y + ScrollContainer.Size.Y - Bar.Size.Y)));
+                        Bar.SetPosition(new Vector2(Bar.Position.X, MathHelper.Clamp(Bar.Position.Y - mouseScrollValue, ScrollContainer.Position.Y, ScrollContainer.Position.Y + ScrollContainer.Size.Y - Bar.Size.Y)));
+                    }
                 },
                 whenScrollStateIsDown: () => 
                 {
-                    var mouseScrollValue = (Bar.Size.Y / 4);
+                    if (Bar.IsDragable)
+                    {
+                        var mouseScrollValue = (Bar.Size.Y / 4);
 
-                    Bar.SetPosition(new Vector2(Bar.Position.X, MathHelper.Clamp(Bar.Position.Y + mouseScrollValue, ScrollContainer.Position.Y, ScrollContainer.Position.Y + ScrollContainer.Size.Y - Bar.Size.Y)));
+                        Bar.SetPosition(new Vector2(Bar.Position.X, MathHelper.Clamp(Bar.Position.Y + mouseScrollValue, ScrollContainer.Position.Y, ScrollContainer.Position.Y + ScrollContainer.Size.Y - Bar.Size.Y)));
+                    }
                 },
                 whenScrollStateIsIdle: null));
 
@@ -162,7 +160,7 @@ namespace ArarGameLibrary.ScreenManagement
                                         .ToList();
 
                     var row = new Row();
-                    row.SetFrame(Color.White);
+                    //row.SetFrame(Color.White);
                     row.SetName("ListContainerRow");
                     //row.SetTexture(TextureManager.CreateTexture2DByRandomColor());
 

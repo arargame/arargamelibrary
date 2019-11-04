@@ -16,6 +16,8 @@ namespace ArarGameLibrary.ScreenManagement
     {
         Guid Id { get; set; }
 
+        bool IsDragable { get; set; }
+
         IScreen Screen { get; set; }
 
         void OnClick(Action action);
@@ -37,6 +39,8 @@ namespace ArarGameLibrary.ScreenManagement
         IComponent SetPadding(Vector2 padding);
 
         void Align(Vector2 offset, Rectangle? parentRect = null);
+
+        void SetPosition(Vector2 position);
     }
 
 
@@ -54,9 +58,13 @@ namespace ArarGameLibrary.ScreenManagement
 
         public Vector2 DistanceToParent { get; set; }
 
+        public Vector2 SizeDifferenceWithParent { get; set; }
+
         public Font Font { get; private set; }
 
         public bool IsFixedToParentPosition { get; private set; }
+
+        public bool IsFixedToParentSize { get; private set; }
 
         public override void IncreaseLayerDepth(float? additionalDepth = null, float? baseDepth = null)
         {
@@ -92,6 +100,8 @@ namespace ArarGameLibrary.ScreenManagement
             SetDrawMethodType(5);
 
             FixToParentPosition();
+
+            FixToParentSize();
 
             SetClickable(true);
 
@@ -135,6 +145,16 @@ namespace ArarGameLibrary.ScreenManagement
                         //}
                     }
                 }
+
+                //SetDistanceToParent();
+
+                if (IsFixedToParentSize)
+                {
+                    if (Parent != null)
+                    {
+                        SetSize(Parent.Size - SizeDifferenceWithParent);
+                    }
+                }
             }
         }
 
@@ -157,27 +177,25 @@ namespace ArarGameLibrary.ScreenManagement
             }
         }
 
-        public Component SetScreen(IScreen screen)
-        {
-            Screen = screen;
-
-            return this;
-        }
-
         public override void Align(Vector2 offset, Rectangle? parentRect = null)
         {
             parentRect = parentRect ?? (Parent != null ? Parent.DestinationRectangle : (Rectangle?)null);
 
             base.Align(offset, parentRect);
 
-            SetDistanceToParent();
+            //SetDistanceToParent();
         }
 
         public new IComponent SetMargin(Vector2 margin)
         {
             Margin = margin;
 
-            Align(Margin,Parent != null ? Parent.DestinationRectangle : (Rectangle?)null);
+            Align(Margin, Parent != null ? Parent.DestinationRectangle : (Rectangle?)null);
+
+            if (Parent != null)
+            {
+                SetSize(new Vector2(Parent.Size.X - margin.X * 2, Parent.Size.Y - margin.X * 2));
+            }
 
             return this;
         }
@@ -196,55 +214,7 @@ namespace ArarGameLibrary.ScreenManagement
             return this;
         }
 
-        public Component MakeFrameVisible(bool enable = true)
-        {
-            if (Frame != null)
-            {
-                if (enable)
-                    Frame.SetVisible(enable);
-                else
-                    SetFrame();
-            }
 
-            return this;
-        }
-
-        public Component SetFrame(Color? lineColor = null, float thickness = 1f,bool makeFrameVisible = true)
-        {
-            //if (DestinationRectangle.IsEmpty)
-            //    throw new Exception("Prepare 'Position' and 'Size' properties before you set 'Frame'");
-
-            lineColor = lineColor ?? Color.Black;
-
-            Frame = Frame.Create(DestinationRectangle, lineColor.Value, thickness);
-
-            Frame.LoadContent();
-
-            MakeFrameVisible(makeFrameVisible);
-
-            return this;
-        }
-
-        public Component SetFont(string text, Color? textColor, Vector2? textPadding = null)
-        {
-            textColor = textColor ?? Color.White;
-
-            textPadding = textPadding ?? Vector2.Zero;
-
-            Font = new Font(text: text, color: textColor);
-
-            Font.IncreaseLayerDepth(baseDepth: LayerDepth);
-
-            SetPadding(textPadding ?? Vector2.Zero);
-
-            var newSize = new Vector2(Font.TextMeasure.X + 2 * Padding.X, Font.TextMeasure.Y + 2 * Padding.Y);
-
-            newSize = new Vector2(MathHelper.Clamp(newSize.X, Size.X, newSize.X), MathHelper.Clamp(newSize.Y, Size.Y, newSize.Y));
-
-            SetSize(newSize);
-
-            return this;
-        }
 
         public Component SetParent(IComponent parent)
         {
@@ -256,15 +226,18 @@ namespace ArarGameLibrary.ScreenManagement
             {
                 SetPosition(parent.Position);
 
-                foreach (var children in Child)
-                {
-                    (children as Sprite).SetPosition(Parent.Position - DistanceToParent);
-                }
+                //foreach (Component children in Child)
+                //{
+                //    children.SetPosition(Parent.Position - DistanceToParent);
+                //    //children.SetDistanceToParent();
+                //}
             }
 
-            SetDistanceToParent();
 
-            SetDragable(false);
+            //SetDistanceToParent();
+
+            if(parent.IsDragable)
+                SetDragable(false);
 
             return this;
         }
@@ -325,12 +298,14 @@ namespace ArarGameLibrary.ScreenManagement
         void Component_OnChangeRectangle()
         {
             if (Frame != null)
+            {
                 if (Frame.DestinationRectangle != DestinationRectangle)
                 {
                     Frame = Frame.Create(DestinationRectangle, Frame.LinesColor, Frame.LinesThickness);
 
                     Frame.LoadContent();
                 }
+            }
 
             if (Font != null)
             {
@@ -341,6 +316,10 @@ namespace ArarGameLibrary.ScreenManagement
 
                 Font.SetScale(Scale);
             }
+
+            SetDistanceToParent();
+
+            SetSizeDifferenceWithParent();
         }
 
         public void SetDistanceToParent()
@@ -349,9 +328,22 @@ namespace ArarGameLibrary.ScreenManagement
                 DistanceToParent = Parent.Position - Position;
         }
 
+        public void SetSizeDifferenceWithParent()
+        {
+            if (Parent != null)
+                SizeDifferenceWithParent = Parent.Size - Size;
+        }
+
         public Component FixToParentPosition(bool enable = true)
         {
             IsFixedToParentPosition = enable;
+
+            return this;
+        }
+
+        public Component FixToParentSize(bool enable = true)
+        {
+            IsFixedToParentSize = enable;
 
             return this;
         }
@@ -364,6 +356,63 @@ namespace ArarGameLibrary.ScreenManagement
             {
                 children.SetVisible(enable);
             }
+        }
+
+        public Component MakeFrameVisible(bool enable = true)
+        {
+            if (Frame != null)
+            {
+                if (enable)
+                    Frame.SetVisible(enable);
+                else
+                    SetFrame();
+            }
+
+            return this;
+        }
+
+        public Component SetFrame(Color? lineColor = null, float thickness = 1f, bool makeFrameVisible = true)
+        {
+            //if (DestinationRectangle.IsEmpty)
+            //    throw new Exception("Prepare 'Position' and 'Size' properties before you set 'Frame'");
+
+            lineColor = lineColor ?? Color.Black;
+
+            Frame = Frame.Create(DestinationRectangle, lineColor.Value, thickness);
+
+            Frame.LoadContent();
+
+            MakeFrameVisible(makeFrameVisible);
+
+            return this;
+        }
+
+        public Component SetFont(string text, Color? textColor, Vector2? textPadding = null)
+        {
+            textColor = textColor ?? Color.White;
+
+            textPadding = textPadding ?? Vector2.Zero;
+
+            Font = new Font(text: text, color: textColor);
+
+            Font.IncreaseLayerDepth(baseDepth: LayerDepth);
+
+            SetPadding(textPadding ?? Vector2.Zero);
+
+            var newSize = new Vector2(Font.TextMeasure.X + 2 * Padding.X, Font.TextMeasure.Y + 2 * Padding.Y);
+
+            newSize = new Vector2(MathHelper.Clamp(newSize.X, Size.X, newSize.X), MathHelper.Clamp(newSize.Y, Size.Y, newSize.Y));
+
+            SetSize(newSize);
+
+            return this;
+        }
+
+        public Component SetScreen(IScreen screen)
+        {
+            Screen = screen;
+
+            return this;
         }
 
     }

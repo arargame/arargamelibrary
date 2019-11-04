@@ -123,7 +123,7 @@ namespace ArarGameLibrary.ScreenManagement
 
                 column.IncreaseLayerDepth();
 
-                column.SetDistanceToParent();
+                //column.SetDistanceToParent();
             }
         }
     }

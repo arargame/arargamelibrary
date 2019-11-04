@@ -342,7 +342,8 @@ namespace ArarGameLibrary.Model
         {
             IsDragable = enable;
 
-            SetClickable(true);
+            if (enable)
+                SetClickable(true);
         }
 
         public void SetDrawMethodType(int methodType)

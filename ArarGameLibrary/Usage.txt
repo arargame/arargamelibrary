@@ -55,7 +55,6 @@
             
             container.PrepareRows();
 
-            
 
             column = new Column();
             column.SetFrame(Color.SteelBlue);
