@@ -136,7 +136,7 @@ namespace ArarGameLibrary.ScreenManagement
                 var listContainer = new Container();
                 listContainer.SetName("ListContainer");
                 //listContainer.SetTexture(TextureManager.CreateTexture2DBySingleColor(Color.Blue));
-                listContainer.FixToParentPosition(false);
+                //listContainer.FixToParentPosition(false);
 
                 var scrollContainerSizeX = (float)Size.X * ScrollContainerWidthRatio / 100;
                 listContainer.SetPosition(Position);

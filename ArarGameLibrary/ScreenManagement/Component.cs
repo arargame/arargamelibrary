@@ -146,15 +146,19 @@ namespace ArarGameLibrary.ScreenManagement
                     }
                 }
 
-                //SetDistanceToParent();
-
                 if (IsFixedToParentSize)
                 {
                     if (Parent != null)
                     {
-                        SetSize(Parent.Size - SizeDifferenceWithParent);
+                        var sizeX = Parent.Size.X * SizeDifferenceWithParent.X;
+                        var sizeY = Parent.Size.Y * SizeDifferenceWithParent.Y;
+
+                        SetSize(new Vector2(sizeX, sizeY));
                     }
                 }
+
+                if (Parent!=null && Parent.IsDragable)
+                    SetDragable(false);
             }
         }
 
@@ -183,7 +187,7 @@ namespace ArarGameLibrary.ScreenManagement
 
             base.Align(offset, parentRect);
 
-            //SetDistanceToParent();
+            SetDistanceToParent();
         }
 
         public new IComponent SetMargin(Vector2 margin)
@@ -226,18 +230,10 @@ namespace ArarGameLibrary.ScreenManagement
             {
                 SetPosition(parent.Position);
 
-                //foreach (Component children in Child)
-                //{
-                //    children.SetPosition(Parent.Position - DistanceToParent);
-                //    //children.SetDistanceToParent();
-                //}
             }
 
-
-            //SetDistanceToParent();
-
-            if(parent.IsDragable)
-                SetDragable(false);
+            if(IsFixedToParentSize)
+                SetSizeDifferenceWithParent();
 
             return this;
         }
@@ -317,6 +313,15 @@ namespace ArarGameLibrary.ScreenManagement
                 Font.SetScale(Scale);
             }
 
+            //foreach (Component children in Child)
+            //{
+            //    if (children.IsFixedToParentPosition)
+            //        children.SetDistanceToParent();
+
+            //    if (children.IsFixedToParentSize)
+            //        children.SetSizeDifferenceWithParent();
+            //}
+
             SetDistanceToParent();
 
             SetSizeDifferenceWithParent();
@@ -326,12 +331,31 @@ namespace ArarGameLibrary.ScreenManagement
         {
             if (Parent != null)
                 DistanceToParent = Parent.Position - Position;
+
+            foreach (Component children in Child)
+            {
+                if(children.IsFixedToParentPosition)
+                    children.SetPosition(children.Parent.Position - children.DistanceToParent);
+
+                children.SetDistanceToParent();
+            }
         }
 
         public void SetSizeDifferenceWithParent()
         {
             if (Parent != null)
-                SizeDifferenceWithParent = Parent.Size - Size;
+            {
+                var sizeX = Parent.Size.X != 0 && Size.X != 0 ? Size.X / Parent.Size.X : 1;
+
+                var sizeY = Parent.Size.Y != 0 && Size.Y != 0 ? Size.Y / Parent.Size.Y : 1;
+
+                SizeDifferenceWithParent = new Vector2(sizeX, sizeY);
+            }
+
+            foreach (Component children in Child)
+            {
+                children.SetSizeDifferenceWithParent();
+            }
         }
 
         public Component FixToParentPosition(bool enable = true)
