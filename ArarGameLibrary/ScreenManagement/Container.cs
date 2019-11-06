@@ -30,6 +30,11 @@ namespace ArarGameLibrary.ScreenManagement
         {
             AddChild(row);
 
+            //if (row.SizeDifferenceWithParent.Y == 1)
+            //{
+            //    row.SizeDifferenceWithParent = new Vector2(row.SizeDifferenceWithParent.X, heightRatio / 100);
+            //}
+
             row.SetHeightRatio(heightRatio);
 
             return this;

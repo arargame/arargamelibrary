@@ -12,7 +12,7 @@ namespace ArarGameLibrary.ScreenManagement
 {
     public abstract class Menu : Screen
     {
-        public List<IComponent> Components = new List<IComponent>();
+        public List<Component> Components = new List<Component>();
 
         private LightDrop[] Drops = new LightDrop[15];
 

@@ -43,34 +43,35 @@ namespace TestProject
         protected override void LoadContent()
         {
             container = new Container();
-            //container.SetSize(new Vector2(200, 200));
+            container.SetSize(new Vector2(150, 150));
             container.SetPosition(new Vector2(250, 250));
             container.SetTexture(TextureManager.CreateTexture2DBySingleColor(Color.Pink));
             container.SetDragable();
-            container.TestInfo.Show();
+            //container.TestInfo.Show();
             container.SetName("Cnt");
-            container.SetFrame();
+            //container.SetFrame();
 
             var row = new Row();
             row.SetTexture(TextureManager.CreateTexture2DByRandomColor());
             row.SetName("row1");
-            //row.TestInfo.Show("row");
+            row.TestInfo.Show("row");
+            row.SetPosition(new Vector2(25, 25));
             container.AddRow(row, 70);
 
             var row2 = new Row();
             row2.SetTexture(TextureManager.CreateTexture2DBySingleColor(Color.BurlyWood));
             row2.SetName("row2");
-            //row2.TestInfo.Show("row2");
+            row2.TestInfo.Show("row2");
             container.AddRow(row2, 30);
 
             //var r2c1 = new Column();
             //r2c1.SetTexture(Triangle.PlayButton(Color.Moccasin).Texture);
             ////r2c1.SetFont("Left", Color.Khaki);
-            //r2c1.SetFrame(Color.Green, 2f);
+            ////r2c1.SetFrame(Color.Green, 2f);
 
             //var r2c2 = new Column();
             //r2c2.SetFont("Right", Color.Khaki);
-            //r2c2.SetFrame(Color.Brown, 2f);
+            ////r2c2.SetFrame(Color.Brown, 2f);
 
             //row2.AddColumn(r2c1, 40);
             //row2.AddColumn(r2c2, 60);
@@ -81,10 +82,11 @@ namespace TestProject
 
 
 
+
             column = new Column();
             column.SetFrame(Color.SteelBlue);
             column.SetSize(new Vector2(150, 150));
-            column.SetPosition(new Vector2(300, 300));
+            column.SetPosition(new Vector2(200, 200));
             //column.SetTexture(TextureManager.CreateTexture2DBySingleColor(Color.Cornsilk));
             //column.SetDragable();
             //column.TestInfo.Show();
@@ -92,6 +94,8 @@ namespace TestProject
             column.SetPadding(new Vector2(10));
 
             column.AddChild(container);
+
+            //column.SetPadding(new Vector2(10));
 
             
 
@@ -176,18 +180,28 @@ namespace TestProject
             //cnt1.Update();
             //clmn1.Update();
 
-            //if (InputManager.IsKeyDown(Keys.Up))
-            //    cnt1.SetSize(new Vector2(cnt1.Size.X, cnt1.Size.Y-20));
+            if (InputManager.IsKeyDown(Keys.Up))
+                column.SetSize(new Vector2(column.Size.X, column.Size.Y - 20));
 
-            //if (InputManager.IsKeyDown(Keys.Down))
-            //    cnt1.SetSize(new Vector2(cnt1.Size.X, cnt1.Size.Y+20));
+            if (InputManager.IsKeyDown(Keys.Down))
+                column.SetSize(new Vector2(column.Size.X, column.Size.Y + 20));
 
 
-            //if (InputManager.IsKeyDown(Keys.Left))
-            //    cnt1.SetSize(new Vector2(cnt1.Size.X-20, cnt1.Size.Y));
+            if (InputManager.IsKeyDown(Keys.Left))
+                column.SetSize(new Vector2(column.Size.X - 20, column.Size.Y));
 
-            //if (InputManager.IsKeyDown(Keys.Right))
-            //    cnt1.SetSize(new Vector2(cnt1.Size.X + 20, cnt1.Size.Y));
+            if (InputManager.IsKeyDown(Keys.Right))
+                column.SetSize(new Vector2(column.Size.X + 20, column.Size.Y));
+
+            if (InputManager.IsKeyDown(Keys.W))
+                column.SetPosition(new Vector2(column.Position.X, column.Position.Y-20));
+            if (InputManager.IsKeyDown(Keys.S))
+                column.SetPosition(new Vector2(column.Position.X, column.Position.Y + 20));
+
+            if (InputManager.IsKeyDown(Keys.A))
+                column.SetPosition(new Vector2(column.Position.X-20, column.Position.Y));
+            if (InputManager.IsKeyDown(Keys.D))
+                column.SetPosition(new Vector2(column.Position.X+20, column.Position.Y));
 
             base.Update(gameTime);
         }
