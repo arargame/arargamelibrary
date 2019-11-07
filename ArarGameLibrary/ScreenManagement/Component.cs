@@ -303,23 +303,41 @@ namespace ArarGameLibrary.ScreenManagement
             {
                 if (children.IsFixedToParentPosition)
                 {
-                    children.SetPosition(Position - children.DistanceToParent);
+                    var newDistanceToParent = Position - children.Position;
+
+                    if (newDistanceToParent != children.DistanceToParent)
+                        children.SetPosition(Position - children.DistanceToParent);
                 }
+
+                var collection = Child.Select(c => new 
+                {
+                    Id = c.Id,
+                    PreviousSize = c.Size,
+                    CurrentSize = c.Size
+                });
 
                 if (children.IsFixedToParentSize)
                 {
-                    var sizeX = Size.X * children.SizeDifferenceWithParent.X;
-                    var sizeY = Size.Y * children.SizeDifferenceWithParent.Y;
+                    var newSizeDifferenceWithParent = children.CalculateSizeDifferenceWithParent();
 
-                    var sizeDifferenceY = Size.Y - sizeY;
-
-                    children.SetSize(new Vector2(sizeX, sizeY));
-
-                    if (Child.Any(c => (c.ChildrenOrderNumberOnYAxis < children.ChildrenOrderNumberOnYAxis)))
+                    if (newSizeDifferenceWithParent != children.SizeDifferenceWithParent)
                     {
-                        var anotherChildren = Child.FirstOrDefault(c => c.ChildrenOrderNumberOnYAxis < children.ChildrenOrderNumberOnYAxis);
+                        var sizeX = children.Size.X * children.SizeDifferenceWithParent.X;
+                        var sizeY = children.Size.Y * children.SizeDifferenceWithParent.Y;
 
-                        anotherChildren.SetPosition(new Vector2(anotherChildren.Position.X, anotherChildren.Position.Y + sizeDifferenceY));
+                        var sizeDifferenceY = children.Size.Y - sizeY;
+
+                        var obj = collection.FirstOrDefault(c => c.Id == children.Id);
+
+
+                        children.SetSize(new Vector2(sizeX, sizeY));
+
+                        if (Child.Any(c => (c.ChildrenOrderNumberOnYAxis < children.ChildrenOrderNumberOnYAxis)))
+                        {
+                            var anotherChildren = Child.FirstOrDefault(c => c.ChildrenOrderNumberOnYAxis < children.ChildrenOrderNumberOnYAxis);
+
+                            children.SetPosition(new Vector2(children.Position.X, children.Position.Y + 10));
+                        }
                     }
                 }
             }
@@ -501,13 +519,13 @@ namespace ArarGameLibrary.ScreenManagement
         private void CalculateChildOrderNumbers()
         {
             var counter = 1;
-            foreach (Component children in Child.OrderByDescending(c => c.Position.X))
+            foreach (Component children in Child.OrderBy(c => c.Position.X))
             {
                 children.SetChildrenOrderNumberOnXAxis(counter++);
             }
 
             counter = 1;
-            foreach (Component children in Child.OrderByDescending(c => c.Position.Y))
+            foreach (Component children in Child.OrderBy(c => c.Position.Y))
             {
                 children.SetChildrenOrderNumberOnYAxis(counter++);
             }
