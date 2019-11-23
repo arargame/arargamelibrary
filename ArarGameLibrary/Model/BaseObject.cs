@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ValueHistoryManagement;
 
 namespace ArarGameLibrary.Model
 {
@@ -35,11 +36,15 @@ namespace ArarGameLibrary.Model
 
         public bool IsInPerformanceMode { get; set; }
 
+        public ValueHistoryManager ValueHistoryManager { get; set; }
+
         public BaseObject()
         {
             Id = Guid.NewGuid();
 
             CreateDate = UpdateDate = DateTime.Now;
+
+            ValueHistoryManager = new ValueHistoryManager();
         }
 
         public Object Clone()
