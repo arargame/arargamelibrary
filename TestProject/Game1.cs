@@ -10,15 +10,10 @@ namespace TestProject
 {
     public class Game1 : Game
     {
-        Container cnt1;
-        Column clmn1;
-
-        ScrollBar scrollBar;
 
         //52 133 111 255
-        Container container;
-
         Column column;
+        
 
         public Game1()
         {
@@ -42,119 +37,60 @@ namespace TestProject
 
         protected override void LoadContent()
         {
-            container = new Container();
-            container.SetSize(new Vector2(150, 150));
-            container.SetPosition(new Vector2(250, 250));
-            container.SetTexture(TextureManager.CreateTexture2DBySingleColor(Color.Pink));
-            container.SetDragable();
-            //container.TestInfo.Show();
-            container.SetName("Cnt");
-            //container.SetFrame();
+            var container = new Container();
+            container.SetTexture(TextureManager.CreateTexture2DBySingleColor(new Color(52,133,111,255)));
+            container.SetFrame(Color.HotPink);
+            container.SetSize(new Vector2(400,400));
+            container.SetName("cnt");
+            //container.SetMargin(new Vector2(10));
+            //container.SetPadding(new Vector2(10));
 
-            var row = new Row();
-            row.SetTexture(TextureManager.CreateTexture2DByRandomColor());
-            row.SetName("row1");
-            row.TestInfo.Show("row");
-            row.SetPosition(new Vector2(25, 25));
-            container.AddRow(row, 70);
+            var row1 = new Row();
+            row1.SetName("row1");
+            //row1.SetVisible(false);
+            row1.SetTexture();
 
             var row2 = new Row();
-            row2.SetTexture(TextureManager.CreateTexture2DBySingleColor(Color.BurlyWood));
             row2.SetName("row2");
-            row2.TestInfo.Show("row2");
-            container.AddRow(row2, 30);
+            row2.SetTexture();
 
-            //var r2c1 = new Column();
-            //r2c1.SetTexture(Triangle.PlayButton(Color.Moccasin).Texture);
-            ////r2c1.SetFont("Left", Color.Khaki);
-            ////r2c1.SetFrame(Color.Green, 2f);
+            var column1 = new Column();
+            //column1.SetTexture();
+            column1.SetName("col1");
+            
+            
+            //column1.TestInfo.Show();
+            row2.AddColumn(column1,30);
 
-            //var r2c2 = new Column();
-            //r2c2.SetFont("Right", Color.Khaki);
-            ////r2c2.SetFrame(Color.Brown, 2f);
 
-            //row2.AddColumn(r2c1, 40);
-            //row2.AddColumn(r2c2, 60);
 
-            ////row2.SetFrame(Color.Yellow,2f);
+            var column2 = new Column();
+            column2.SetTexture();
+            column2.SetName("col2");
+            column2.TestInfo.Show();
+            row2.AddColumn(column2, 70);
 
+            container.AddRow(row1,70);
+            container.AddRow(row2,30);
             container.PrepareRows();
 
-
-
+            //column1.SetPadding(new Vector2(10));
+            column1.AddImage(Triangle.PlayButton(Color.Moccasin).Texture);
 
             column = new Column();
-            column.SetFrame(Color.SteelBlue);
-            column.SetSize(new Vector2(150, 150));
-            column.SetPosition(new Vector2(200, 200));
-            //column.SetTexture(TextureManager.CreateTexture2DBySingleColor(Color.Cornsilk));
-            //column.SetDragable();
-            //column.TestInfo.Show();
-            //column.SetName("Column1001");
-            column.SetPadding(new Vector2(10));
+            column.SetPosition(new Vector2(0, 0));
+            column.SetSize(new Vector2(400, 400));
+            column.SetFrame();
+            column.SetDragable();
 
             column.AddChild(container);
 
-            //column.SetPadding(new Vector2(10));
-
             
+            column.SetMargin(new Vector2(50));
 
-
-            ////columns: new Column[] { column }
-            var clm = new Column();
-            clm.SetSize(new Vector2(150, 150));
-            //clm.SetFrame(Color.Red);
-            clm.SetTexture();
-
-            var clm2 = new Column();
-            clm2.SetSize(new Vector2(50, 50));
-            //clm2.SetFrame(Color.DarkBlue);
-            clm2.SetTexture();
-
-            var clm3 = new Column();
-            clm3.SetSize(new Vector2(50, 50));
-            clm3.SetTexture();
-
-            var clm4 = new Column();
-            clm4.SetSize(new Vector2(50, 50));
-            clm4.SetTexture();
-
-            //scrollBar = new ScrollBar(2,2,columns:new Column[] { clm,clm2,clm3,clm4,column });
-
-
-
-            //var ccc = scrollBar.GetChildAs<Column>(c=>c.Name=="Column1001");
-
-
-            //cnt1 = new Container();
-            //cnt1.TestInfo.Show();
-            //cnt1.SetFrame();
-            //cnt1.SetPosition(new Vector2(100,100));
-            //cnt1.SetSize(new Vector2(150,150));
-            //cnt1.SetDragable(true);
-
-            //clmn1 = new Column();
-            //clmn1.TestInfo.Show("C1");
-            //clmn1.SetFrame();
-            //clmn1.SetPosition(new Vector2(350,350));
-            //clmn1.SetSize(new Vector2(25,25));
-            ////clmn1.FixToParentSize(false);
-
-            //var row1 = new Row();
-            //row1.SetTexture();
-            //row1.SetSize(new Vector2(100, 10));
-            //row1.AddColumn(clmn1, 50);
-
-            ////var row2 = new Row();
-            ////row2.SetSize(new Vector2(100, 30));
-            ////row2.SetTexture();
-
-            //cnt1.AddRow(row1,100);
-            ////cnt1.AddRow(row2,30);
-            //cnt1.PrepareRows();
-
-
+            column.Prepare();
         }
+
 
         protected override void UnloadContent()
         {
@@ -171,14 +107,8 @@ namespace TestProject
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            //container.Update();
-
             column.Update();
-            //container2.Update();
 
-            //scrollBar.Update();
-            //cnt1.Update();
-            //clmn1.Update();
 
             if (InputManager.IsKeyDown(Keys.Up))
                 column.SetSize(new Vector2(column.Size.X, column.Size.Y - 20));
@@ -213,18 +143,12 @@ namespace TestProject
 
             Global.SpriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend);
 
-            //container.Draw();
-
             column.Draw();
-            //container2.Draw();
-
-            //scrollBar.Draw();
-            //cnt1.Draw();
-            //clmn1.Draw();
 
             Global.SpriteBatch.End();
 
             base.Draw(gameTime);
+
         }
     }
 }

@@ -119,13 +119,13 @@ namespace ArarGameLibrary.ScreenManagement
 
                 column.SetPosition(new Vector2(positionX,positionY));
 
-                column.SetDistanceToParent();
+                //column.SetDistanceToParent();
 
                 column.SetSize(new Vector2(sizeX,sizeY));
 
-                column.SetSizeDifferenceWithParent();
+                //column.SetSizeDifferenceWithParent();
 
-                column.IncreaseLayerDepth();
+                //column.IncreaseLayerDepth();
             }
         }
     }

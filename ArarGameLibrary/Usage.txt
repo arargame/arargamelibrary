@@ -64,3 +64,10 @@
             column.SetDragable();
 
             column.AddChild(container);
+--Button.cs
+            button = new Button();
+            button.LoadContent();
+            button.SetFont("Hellow",Color.White,new Vector2(10)).SetPosition(new Vector2(150,200));
+            button.SetFrame(Color.Beige);
+            button.SetDragable();
+            button.OnClick(Fonk);

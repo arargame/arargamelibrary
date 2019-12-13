@@ -57,22 +57,22 @@ namespace ArarGameLibrary.ScreenManagement
 
             foreach (var row in rowList)
             {
-                row.SetMargin(Padding);
+                //row.SetMargin(Padding);
 
                 row.SetPosition(new Vector2(Position.X + row.Margin.X, Position.Y + row.Margin.Y + takenHeight));
 
-                row.SetDistanceToParent();
+                //row.SetDistanceToParent();
 
                 row.SetSize(new Vector2(Size.X, maxHeight * row.HeightRatio / 100));
 
-                row.SetSizeDifferenceWithParent();
+                //row.SetSizeDifferenceWithParent();
 
                 if (row.Frame != null)
                     row.SetFrame(row.Frame.LinesColor);
 
                 takenHeight += row.Size.Y;
 
-                row.IncreaseLayerDepth();
+                //row.IncreaseLayerDepth();
 
                 row.PrepareColumns(isCentralized, floatTo);
             }

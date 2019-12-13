@@ -110,8 +110,13 @@ namespace ArarGameLibrary.ScreenManagement
 
             OnChangeRectangle += Component_OnChangeRectangle;
 
+            OnChangePadding += Component_OnChangePadding;
+
+            OnChangeMargin += Component_OnChangeMargin;
+
             base.Initialize();
         }
+
 
         public override void Update(GameTime gameTime = null)
         {
@@ -136,53 +141,46 @@ namespace ArarGameLibrary.ScreenManagement
                     children.Update(gameTime);
                 }
 
-                CalculateChildOrderNumbers();
+                //CalculateChildOrderNumbers();
 
-                if (IsFixedToParentPosition)
-                {
-                    if (Parent != null)
-                    {
-                        var newDistanceToParent = Parent.Position - Position;
+                //if (IsFixedToParentPosition)
+                //{
+                //    if (Parent != null)
+                //    {
+                //        var newDistanceToParent = Parent.Position - Position;
 
-                        if (newDistanceToParent != DistanceToParent)
-                            SetPosition(Parent.Position - DistanceToParent);
+                //        if (newDistanceToParent != DistanceToParent)
+                //            SetPosition(Parent.Position - DistanceToParent);
+                //    }
+                //}
 
-                        //if ((Parent as Sprite).IsPulsating)
-                        //{
-                        //    GetEvent<PulsateEffect>().SetWhenToInvoke((Parent as Sprite).GetEvent<PulsateEffect>().WhenToInvoke);
-                        //}
-                    }
-                }
+                //if (IsFixedToParentSize)
+                //{
+                //    if (Parent != null)
+                //    {
+                //        var newSizeDifferenceWithParent = CalculateSizeDifferenceWithParent();
 
-                if (IsFixedToParentSize)
-                {
-                    if (Parent != null)
-                    {
-                        var newSizeDifferenceWithParent = CalculateSizeDifferenceWithParent();
+                //        if (newSizeDifferenceWithParent != SizeDifferenceWithParent)
+                //        {
+                //            var sizeXRatio = Parent.Size.X * SizeDifferenceWithParent.X;
+                //            var sizeYRatio = Parent.Size.Y * SizeDifferenceWithParent.Y;
 
-                        if (newSizeDifferenceWithParent != SizeDifferenceWithParent)
-                        {
-                            var sizeXRatio = Parent.Size.X * SizeDifferenceWithParent.X;
-                            var sizeYRatio = Parent.Size.Y * SizeDifferenceWithParent.Y;
+                //            SetSize(new Vector2(sizeXRatio, sizeYRatio));
 
-                            SetSize(new Vector2(sizeXRatio, sizeYRatio));
+                //            var parentChild = Parent.Child;
 
-                            var parentChild = Parent.Child;
+                //            if (parentChild.Any(c => (c.ChildrenOrderNumberOnYAxis < ChildrenOrderNumberOnYAxis))) 
+                //            {
+                //                var anotherChildren = parentChild.FirstOrDefault(c=>c.ChildrenOrderNumberOnYAxis<ChildrenOrderNumberOnYAxis);
 
-                            if (parentChild.Any(c => (c.ChildrenOrderNumberOnYAxis < ChildrenOrderNumberOnYAxis))) 
-                            {
-                                var anotherChildren = parentChild.FirstOrDefault(c=>c.ChildrenOrderNumberOnYAxis<ChildrenOrderNumberOnYAxis);
-
-                                //SetPosition(,);
-                            }
-                        }
-                    }
-                }
+                //                //SetPosition(,);
+                //            }
+                //        }
+                //    }
+                //}
 
 
-                //SetDistanceToParent();
-
-                if (Parent!=null && Parent.IsDragable)
+                if (Parent != null && Parent.IsDragable)
                     SetDragable(false);
             }
         }
@@ -193,11 +191,9 @@ namespace ArarGameLibrary.ScreenManagement
 
             if (IsActive && IsVisible)
             {
-                if (Frame != null)
-                    Frame.Draw();
+                Frame?.Draw();
 
-                if (Font != null)
-                    Font.Draw();
+                Font?.Draw();
 
                 foreach (var children in Child)
                 {
@@ -212,19 +208,14 @@ namespace ArarGameLibrary.ScreenManagement
 
             base.Align(offset, parentRect);
 
-            SetDistanceToParent();
+            //SetDistanceToParent();
         }
 
         public new Component SetMargin(Vector2 margin)
         {
             Margin = margin;
 
-            Align(Margin, Parent != null ? Parent.DestinationRectangle : (Rectangle?)null);
-
-            if (Parent != null)
-            {
-                SetSize(new Vector2(Parent.Size.X - margin.X * 2, Parent.Size.Y - margin.X * 2));
-            }
+           // Component_OnChangeMargin();
 
             return this;
         }
@@ -233,17 +224,45 @@ namespace ArarGameLibrary.ScreenManagement
         {
             Padding = padding;
 
-            foreach (Component children in Child)
-            {
-                children.Align(Padding, DestinationRectangle);
-
-                children.SetSize(new Vector2(Size.X - padding.X * 2, Size.Y - padding.X * 2));
-            }
+           // Component_OnChangePadding();
 
             return this;
         }
 
+        public Component Prepare()
+        {
+            CalculateChildOrderNumbers();
 
+            if (Parent == null)
+                Align(Margin);
+
+            if (Parent != null)
+            {
+                //SetSize(new Vector2(Parent.Size.X - Margin.X * 2, Parent.Size.Y - Margin.X * 2));
+            }
+
+            //SetSizeDifferenceWithParent();
+
+            foreach (Component children in Child)
+            {
+               // DistanceToParent = DistanceToParent + Padding + children.Margin;
+
+                //children.Align(Padding + children.Margin, DestinationRectangle);
+
+                children.SetPosition(children.Position + Padding + children.Margin);
+
+                //children.SetSize(new Vector2(Size.X - Padding.X * 2, Size.Y - Padding.X * 2));
+            }
+
+            foreach (Component children in Child)
+            {
+                //children.SetSizeDifferenceWithParent();
+
+                children.Prepare();
+            }
+
+            return this;
+        }
 
         public Component SetParent(Component parent)
         {
@@ -253,14 +272,17 @@ namespace ArarGameLibrary.ScreenManagement
 
             if (IsFixedToParentPosition)
             {
-                SetPosition(parent.Position);
+               //SetPosition(parent.Position + parent.Padding + Margin);
             }
 
-            if(IsFixedToParentSize)
-                SetSizeDifferenceWithParent();
+           // Component_OnChangeMargin();
+
+            //if (IsFixedToParentSize)
+            //    SetSizeDifferenceWithParent();
 
             return this;
         }
+
 
         public Component AddChild(params Component[] child)
         {
@@ -271,6 +293,27 @@ namespace ArarGameLibrary.ScreenManagement
             return this;
         }
 
+        void Component_OnChangeMargin()
+        {
+            Align(Margin, Parent?.DestinationRectangle);
+
+            if (Parent != null)
+            {
+                SetSize(new Vector2(Parent.Size.X - Margin.X * 2, Parent.Size.Y - Margin.X * 2));
+            }
+
+            SetSizeDifferenceWithParent();
+        }
+
+        void Component_OnChangePadding()
+        {
+            foreach (Component children in Child)
+            {
+                children.Align(Padding, DestinationRectangle);
+
+                children.SetSize(new Vector2(Size.X - Padding.X * 2, Size.Y - Padding.X * 2));
+            }
+        }
 
 
         void Component_OnChangeRectangle()
@@ -297,7 +340,7 @@ namespace ArarGameLibrary.ScreenManagement
 
             SetDistanceToParent();
 
-            //SetSizeDifferenceWithParent();
+            SetSizeDifferenceWithParent();
 
             foreach (Component children in Child)
             {
@@ -309,71 +352,122 @@ namespace ArarGameLibrary.ScreenManagement
                         children.SetPosition(Position - children.DistanceToParent);
                 }
 
-                var collection = Child.Select(c => new 
-                {
-                    Id = c.Id,
-                    PreviousSize = c.Size,
-                    CurrentSize = c.Size
-                });
-
                 if (children.IsFixedToParentSize)
                 {
                     var newSizeDifferenceWithParent = children.CalculateSizeDifferenceWithParent();
 
+                    children.SetSizeDifferenceWithParent();
+
                     if (newSizeDifferenceWithParent != children.SizeDifferenceWithParent)
                     {
-                        var sizeX = children.Size.X * children.SizeDifferenceWithParent.X;
-                        var sizeY = children.Size.Y * children.SizeDifferenceWithParent.Y;
-
-                        var sizeDifferenceY = children.Size.Y - sizeY;
-
-                        var obj = collection.FirstOrDefault(c => c.Id == children.Id);
-
+                        var sizeX = Size.X * children.SizeDifferenceWithParent.X;
+                        var sizeY = Size.Y * children.SizeDifferenceWithParent.Y;
 
                         children.SetSize(new Vector2(sizeX, sizeY));
 
-                        if (Child.Any(c => (c.ChildrenOrderNumberOnYAxis < children.ChildrenOrderNumberOnYAxis)))
-                        {
-                            var anotherChildren = Child.FirstOrDefault(c => c.ChildrenOrderNumberOnYAxis < children.ChildrenOrderNumberOnYAxis);
 
-                            children.SetPosition(new Vector2(children.Position.X, children.Position.Y + 10));
+                        if (Child.Any(c => c.ChildrenOrderNumberOnYAxis < children.ChildrenOrderNumberOnYAxis))
+                        {
+                            var previousChildrenY = Child.FirstOrDefault(c => c.ChildrenOrderNumberOnYAxis < children.ChildrenOrderNumberOnYAxis);
+
+                            var previousChildrenSizeHistoryList = previousChildrenY.ValueHistoryManager
+                                                                    .Records
+                                                                    .Where(r => r.PropertyName == "Size")
+                                                                    .OrderByDescending(r => r.RecordDate)
+                                                                    .Take(2)
+                                                                    .ToList();
+
+                            var previousChildrenLast2SizeDifference = (Vector2)previousChildrenSizeHistoryList[0].Value - (Vector2)previousChildrenSizeHistoryList[1].Value;
+
+                            children.SetPosition(new Vector2(children.Position.X, children.Position.Y + previousChildrenLast2SizeDifference.Y));
                         }
+
+                        if (Child.Any(c => c.ChildrenOrderNumberOnXAxis < children.ChildrenOrderNumberOnXAxis))
+                        {
+                            var previousChildrenX = Child.FirstOrDefault(c => c.ChildrenOrderNumberOnXAxis < children.ChildrenOrderNumberOnXAxis);
+
+                            var previousChildrenSizeHistoryList = previousChildrenX.ValueHistoryManager
+                                                                    .Records
+                                                                    .Where(r => r.PropertyName == "Size")
+                                                                    .OrderByDescending(r => r.RecordDate)
+                                                                    .Take(2)
+                                                                    .ToList();
+
+                            var previousChildrenLast2SizeDifference = (Vector2)previousChildrenSizeHistoryList[0].Value - (Vector2)previousChildrenSizeHistoryList[1].Value;
+
+                            children.SetPosition(new Vector2(previousChildrenX.DestinationRectangle.Right, children.Position.Y));
+                        }
+
                     }
                 }
             }
+
+
+            //foreach (Component children in Child)
+            //{
+            //    if (children.IsFixedToParentPosition)
+            //    {
+            //        var newDistanceToParent = Position - children.Position;
+
+            //        if (newDistanceToParent != children.DistanceToParent)
+            //            children.SetPosition(Position - children.DistanceToParent);
+            //    }
+
+            //    var collection = Child.Select(c => new 
+            //    {
+            //        Id = c.Id,
+            //        PreviousSize = c.Size,
+            //        CurrentSize = c.Size
+            //    });
+
+            //    if (children.IsFixedToParentSize)
+            //    {
+            //        var newSizeDifferenceWithParent = children.CalculateSizeDifferenceWithParent();
+
+            //        if (newSizeDifferenceWithParent != children.SizeDifferenceWithParent)
+            //        {
+            //            var sizeX = children.Size.X * children.SizeDifferenceWithParent.X;
+            //            var sizeY = children.Size.Y * children.SizeDifferenceWithParent.Y;
+
+            //            var sizeDifferenceY = children.Size.Y - sizeY;
+
+            //            var obj = collection.FirstOrDefault(c => c.Id == children.Id);
+
+
+            //            children.SetSize(new Vector2(sizeX, sizeY));
+
+            //            if (Child.Any(c => (c.ChildrenOrderNumberOnYAxis < children.ChildrenOrderNumberOnYAxis)))
+            //            {
+            //                var anotherChildren = Child.FirstOrDefault(c => c.ChildrenOrderNumberOnYAxis < children.ChildrenOrderNumberOnYAxis);
+
+            //                children.SetPosition(new Vector2(children.Position.X, children.Position.Y + 10));
+            //            }
+            //        }
+            //    }
+            //}
         }
 
         public void SetDistanceToParent()
         {
             if (Parent != null)
                 DistanceToParent = Parent.Position - Position;
-
-            //foreach (Component children in Child)
-            //{
-            //    if(children.IsFixedToParentPosition)
-            //        children.SetPosition(children.Parent.Position - children.DistanceToParent);
-
-            //    children.SetDistanceToParent();
-            //}
         }
 
         public void SetSizeDifferenceWithParent()
         {
-            SizeDifferenceWithParent = CalculateSizeDifferenceWithParent();
+            var newSizeDifferenceWithParent = CalculateSizeDifferenceWithParent();
 
-            //foreach (Component children in Child)
-            //{
-            //    children.SetSizeDifferenceWithParent();
-            //}
+            if (SizeDifferenceWithParent == Vector2.Zero && newSizeDifferenceWithParent != Vector2.Zero)
+                SizeDifferenceWithParent = newSizeDifferenceWithParent;
         }
 
         private Vector2 CalculateSizeDifferenceWithParent()
         {
             if (Parent != null)
             {
-                var sizeXRatio = Parent.Size.X != 0 && Size.X != 0 ? Size.X / Parent.Size.X : 1;
+                var sizeXRatio = Parent.Size.X != 0 && Size.X != 0 ? Size.X / Parent.Size.X : 0;
 
-                var sizeYRatio = Parent.Size.Y != 0 && Size.Y != 0 ? Size.Y / Parent.Size.Y : 1;
+                var sizeYRatio = Parent.Size.Y != 0 && Size.Y != 0 ? Size.Y / Parent.Size.Y : 0;
 
                 return new Vector2(sizeXRatio, sizeYRatio);
             }
@@ -434,7 +528,7 @@ namespace ArarGameLibrary.ScreenManagement
             return this;
         }
 
-        public Component SetFont(string text, Color? textColor, Vector2? textPadding = null)
+        public Component SetFont(string text, Color? textColor = null, Vector2? textPadding = null)
         {
             textColor = textColor ?? Color.White;
 
@@ -519,16 +613,58 @@ namespace ArarGameLibrary.ScreenManagement
         private void CalculateChildOrderNumbers()
         {
             var counter = 1;
-            foreach (Component children in Child.OrderBy(c => c.Position.X))
-            {
-                children.SetChildrenOrderNumberOnXAxis(counter++);
-            }
+
+            var xGroups = Child.OrderBy(c => c.Position.X)
+                                .Select(c => c.Position.X)
+                                .Distinct()
+                                .Select(px => new
+                                {
+                                    PositionX = px,
+                                    Number = counter++
+                                })
+                                .ToList();
 
             counter = 1;
-            foreach (Component children in Child.OrderBy(c => c.Position.Y))
+
+            var yGroups = Child.OrderBy(c => c.Position.Y)
+                                .Select(c => c.Position.Y)
+                                .Distinct()
+                                .Select(py => new
+                                {
+                                    PositionY = py,
+                                    Number = counter++
+                                })
+                                .ToList();
+
+            foreach (Component children in Child)
             {
-                children.SetChildrenOrderNumberOnYAxis(counter++);
+                if (xGroups.Any(xg => children.Position.X == xg.PositionX))
+                {
+                    children.SetChildrenOrderNumberOnXAxis(xGroups.FirstOrDefault(xg => children.Position.X == xg.PositionX).Number);
+                }
+
+                if (yGroups.Any(yg => children.Position.Y == yg.PositionY))
+                {
+                    children.SetChildrenOrderNumberOnYAxis(yGroups.FirstOrDefault(yg => children.Position.Y == yg.PositionY).Number);
+                }
             }
+
+            //foreach (Component children in Child.OrderBy(c => c.Position.X))
+            //{
+            //    if (counter != 1 && Child.Any(c => c.Id != children.Id && c.Position.X == children.Position.X))
+            //        children.SetChildrenOrderNumberOnXAxis(Child.FirstOrDefault(c => c.Id != children.Id && c.Position.X == children.Position.X).ChildrenOrderNumberOnXAxis);
+            //    else
+            //        children.SetChildrenOrderNumberOnXAxis(counter++);
+            //}
+
+            //counter = 1;
+            //foreach (Component children in Child.OrderBy(c => c.Position.Y))
+            //{
+            //    if (counter!=1 && Child.Any(c => c.Id != children.Id && c.Position.Y == children.Position.Y))
+            //        children.SetChildrenOrderNumberOnYAxis(Child.FirstOrDefault(c => c.Id != children.Id && c.Position.Y == children.Position.Y).ChildrenOrderNumberOnYAxis);
+            //    else
+            //        children.SetChildrenOrderNumberOnYAxis(counter++);
+            //}
         }
 
     }

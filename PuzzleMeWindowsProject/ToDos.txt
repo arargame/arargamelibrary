@@ -69,3 +69,5 @@
 -SetPosition,SetSize,SetScale gibi fonksiyonlar componentlerde sürekli çalışıyor(20.10.2019)
 -Episode Menu Episode Container hazırlandı bunu belli parametrelere göre oluşturan ve scrollbar ile entegre eden bir sistem yap (20.10.2019)
 -Play butonunn üzerine geldiğinde mouse iconu el olsun clickable objelerde ishovering true iken bu yapılabilir(20.10.2019)
+
+-SetDistanceToParent fonksiyonu component içersinde poisyon değişimlerinden sonra çağrılmış madem new Setposition denerek bu fonksiyonu içine gömülebilir

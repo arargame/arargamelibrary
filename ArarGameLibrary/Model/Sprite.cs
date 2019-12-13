@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ValueHistoryManagement;
 
 namespace ArarGameLibrary.Model
 {
@@ -90,8 +91,10 @@ namespace ArarGameLibrary.Model
         public TestInfo TestInfo { get; set; }
         public Texture2D Texture { get; set; }
 
-        public delegate void ChangingSomething();
-        public event ChangingSomething OnChangeRectangle;
+        public delegate void SomethingHasBeenChanged();
+        public event SomethingHasBeenChanged OnChangeRectangle;
+        public event SomethingHasBeenChanged OnChangePadding;
+        public event SomethingHasBeenChanged OnChangeMargin;
 
         //public virtual void Refresh(Action action = null)
         //{
@@ -146,6 +149,18 @@ namespace ArarGameLibrary.Model
             TestInfo = new TestInfo(this);
 
             SpriteBatch = Global.SpriteBatch;
+
+            ValueHistoryManager.AddSetting(new ValueHistorySetting("Position", 2,
+                (previousValue, currentValue) =>
+                {
+                    var previousValueAsVector2 = (Vector2)previousValue;
+
+                    var currentValueAsVector2 = (Vector2)currentValue;
+
+                    return previousValueAsVector2.X != currentValueAsVector2.X || previousValueAsVector2.Y != currentValueAsVector2.Y;
+                }));
+
+            ValueHistoryManager.AddSetting(new ValueHistorySetting("Size", 2));
         }
 
         public virtual void LoadContent(Texture2D texture = null)
@@ -180,14 +195,16 @@ namespace ArarGameLibrary.Model
 
                 ClampManager.Update();
 
-                TestInfo.Update();
-
                 IsHovering = InputManager.IsHovering(DestinationRectangle);
 
                 if (IsClickable)
                 {
                     IsSelecting = InputManager.Selected(DestinationRectangle);
                 }
+
+                TestInfo.Update();
+
+                ValueHistoryManager.Update();
             }
         }
 
@@ -386,8 +403,9 @@ namespace ArarGameLibrary.Model
 
             Position = position;
 
-            if (OnChangeRectangle != null)
-                OnChangeRectangle();
+            ValueHistoryManager.HasChangedFor(new ValueHistoryRecord("Position", position));
+
+            OnChangeRectangle?.Invoke();
         }
 
         public void SetRectangle()
@@ -421,8 +439,9 @@ namespace ArarGameLibrary.Model
 
             Size = size;
 
-            if (OnChangeRectangle != null)
-                OnChangeRectangle();
+            ValueHistoryManager.HasChangedFor(new ValueHistoryRecord("Size", size));
+
+            OnChangeRectangle?.Invoke();
         }
 
         public void SetSpeed(Vector2 speed)
