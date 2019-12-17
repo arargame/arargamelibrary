@@ -50,9 +50,9 @@ namespace ArarGameLibrary.ScreenManagement
 
         public Component Parent { get; set; }
 
+        public int ChildrenOrderNumberOnXAxis { get; private set; }
+        public int ChildrenOrderNumberOnYAxis { get; private set; }
         public Action ClickAction;
-
-        public List<Component> Child { get; set; }
 
         public Frame Frame { get; set; }
 
@@ -66,8 +66,37 @@ namespace ArarGameLibrary.ScreenManagement
 
         public bool IsFixedToParentSize { get; private set; }
 
-        public int ChildrenOrderNumberOnXAxis { get; private set; }
-        public int ChildrenOrderNumberOnYAxis { get; private set; }
+        public Vector2 MarginRatio { get; set; }
+
+        public Vector2 PaddingRatio { get; set; }
+        public Vector2 PlainPosition
+        {
+            get
+            {
+                return Position - Margin - (Parent?.Padding).Value;
+            }
+        }
+
+        public Vector2 SizeChangingRatio
+        {
+            get
+            {
+                var sizeHistories = ValueHistoryManager.GetRecordsByPropertyName("Size", 2).ToList();
+
+                if (sizeHistories.Count() == 2)
+                {
+                    var previousSize = (Vector2)sizeHistories[1].Value;
+
+                    var currentSize = (Vector2)sizeHistories[0].Value;
+
+                    return (previousSize != Vector2.Zero && currentSize != Vector2.Zero) || previousSize != Vector2.Zero ? currentSize / previousSize : Vector2.Zero;
+                }
+
+                return new Vector2(1, 1);
+            }
+        }
+
+        public List<Component> Child { get; set; }
 
         public override void IncreaseLayerDepth(float? additionalDepth = null, float? baseDepth = null)
         {
@@ -215,7 +244,9 @@ namespace ArarGameLibrary.ScreenManagement
         {
             Margin = margin;
 
-           // Component_OnChangeMargin();
+            // Component_OnChangeMargin();
+
+            MarginRatio = CalculateMarginRatio();
 
             return this;
         }
@@ -223,6 +254,8 @@ namespace ArarGameLibrary.ScreenManagement
         public new Component SetPadding(Vector2 padding)
         {
             Padding = padding;
+
+            PaddingRatio = CalculatePaddingRatio();
 
            // Component_OnChangePadding();
 
@@ -338,6 +371,18 @@ namespace ArarGameLibrary.ScreenManagement
                 Font.SetScale(Scale);
             }
 
+            //if (PaddingRatio != CalculatePaddingRatio())
+            //{
+            //    PaddingRatio = CalculatePaddingRatio();//new Vector2(Size.X / Padding.X, Size.Y / Padding.Y);
+
+            //    Padding = Size * PaddingRatio;//new Vector2(Size.X * PaddingRatio.X, Size.Y * PaddingRatio.Y);
+
+            //    foreach (Component children in Child)
+            //    {
+            //        children.SetPosition(Position + Padding);
+            //    }
+            //}
+
             SetDistanceToParent();
 
             SetSizeDifferenceWithParent();
@@ -371,10 +416,7 @@ namespace ArarGameLibrary.ScreenManagement
                             var previousChildrenY = Child.FirstOrDefault(c => c.ChildrenOrderNumberOnYAxis < children.ChildrenOrderNumberOnYAxis);
 
                             var previousChildrenSizeHistoryList = previousChildrenY.ValueHistoryManager
-                                                                    .Records
-                                                                    .Where(r => r.PropertyName == "Size")
-                                                                    .OrderByDescending(r => r.RecordDate)
-                                                                    .Take(2)
+                                                                    .GetRecordsByPropertyName("Size",2)
                                                                     .ToList();
 
                             var previousChildrenLast2SizeDifference = (Vector2)previousChildrenSizeHistoryList[0].Value - (Vector2)previousChildrenSizeHistoryList[1].Value;
@@ -387,10 +429,7 @@ namespace ArarGameLibrary.ScreenManagement
                             var previousChildrenX = Child.FirstOrDefault(c => c.ChildrenOrderNumberOnXAxis < children.ChildrenOrderNumberOnXAxis);
 
                             var previousChildrenSizeHistoryList = previousChildrenX.ValueHistoryManager
-                                                                    .Records
-                                                                    .Where(r => r.PropertyName == "Size")
-                                                                    .OrderByDescending(r => r.RecordDate)
-                                                                    .Take(2)
+                                                                    .GetRecordsByPropertyName("Size", 2)
                                                                     .ToList();
 
                             var previousChildrenLast2SizeDifference = (Vector2)previousChildrenSizeHistoryList[0].Value - (Vector2)previousChildrenSizeHistoryList[1].Value;
@@ -400,6 +439,28 @@ namespace ArarGameLibrary.ScreenManagement
 
                     }
                 }
+            }
+
+
+            if (PaddingRatio != CalculatePaddingRatio())
+            {
+                var newPadding = Padding * SizeChangingRatio;
+
+                foreach (Component children in Child)
+                {
+                    children.SetPosition(children.PlainPosition + newPadding + children.Margin);
+                }
+
+                SetPadding(newPadding);
+            }
+
+            if (MarginRatio != CalculateMarginRatio())
+            {
+                var newMargin = Margin * (Parent?.SizeChangingRatio).Value;
+
+                SetPosition((Parent?.Position).Value + newMargin);
+
+                SetMargin(newMargin);
             }
 
 
@@ -452,6 +513,18 @@ namespace ArarGameLibrary.ScreenManagement
             if (Parent != null)
                 DistanceToParent = Parent.Position - Position;
         }
+
+        //private Vector2 CalculateDistanceToParent()
+        //{
+        //    if (Parent != null)
+        //    {
+        //        var distance = Parent.Position - Position;
+
+        //        return distance;
+        //    }
+
+        //    return DistanceToParent;
+        //}
 
         public void SetSizeDifferenceWithParent()
         {
@@ -608,6 +681,37 @@ namespace ArarGameLibrary.ScreenManagement
         private void SetChildrenOrderNumberOnYAxis(int childrenOrderNumberOnYAxis)
         {
             ChildrenOrderNumberOnYAxis = childrenOrderNumberOnYAxis;
+        }
+
+        private Vector2 CalculatePaddingRatio()
+        {
+            float paddingX = Size.X / Padding.X;
+
+            float paddingY = Size.Y / Padding.Y;
+
+            paddingX = float.IsNaN(paddingX) || float.IsInfinity(paddingX) ? 0 : paddingX;
+
+            paddingY = float.IsNaN(paddingY) || float.IsInfinity(paddingY) ? 0 : paddingY;
+
+            return new Vector2(paddingX, paddingY);
+        }
+
+        private Vector2 CalculateMarginRatio()
+        {
+            if (Parent != null)
+            {
+                float marginX = Parent.Size.X / Margin.X;
+
+                float marginY = Parent.Size.Y / Margin.Y;
+
+                marginX = float.IsNaN(marginX) || float.IsInfinity(marginX) ? 0 : marginX;
+
+                marginY = float.IsNaN(marginY) || float.IsInfinity(marginY) ? 0 : marginY;
+
+                return new Vector2(marginX, marginY);
+            }
+
+            return MarginRatio;
         }
 
         private void CalculateChildOrderNumbers()

@@ -45,10 +45,12 @@ namespace ArarGameLibrary.ScreenManagement
 
             AddChild(Image);
 
-            Image.SetPosition(Position + new Vector2(10));
+            Image.SetPosition(Position);
             //Image.SetSize(new Vector2(Size.X - Size.X * 0.2f, Size.Y - Size.Y * 0.2f));
             Image.SetSize(new Vector2(Size.X - 20, Size.Y - 20));
-            //Image.SetFrame();
+            Image.SetFrame();
+
+            Image.SetName("ColumnImage");
 
             return this;
         }

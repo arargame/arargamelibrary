@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
+using System.Linq;
 
 namespace TestProject
 {
@@ -74,7 +75,7 @@ namespace TestProject
             container.AddRow(row2,30);
             container.PrepareRows();
 
-            //column1.SetPadding(new Vector2(10));
+            column1.SetPadding(new Vector2(10));
             column1.AddImage(Triangle.PlayButton(Color.Moccasin).Texture);
 
             column = new Column();
@@ -85,7 +86,8 @@ namespace TestProject
 
             column.AddChild(container);
 
-            
+            //column1.GetChildAs<Column>().FirstOrDefault().SetMargin(new Vector2(10));
+
             column.SetMargin(new Vector2(50));
 
             column.Prepare();
