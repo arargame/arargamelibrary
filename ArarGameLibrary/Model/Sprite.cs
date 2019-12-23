@@ -77,12 +77,56 @@ namespace ArarGameLibrary.Model
 
         public Vector2 Padding { get; set; }
         public Vector2 Position { get; set; }
+        public Vector2 PositionChangingRatio
+        {
+            get
+            {
+                var histories = ValueHistoryManager.GetRecordsByPropertyName("Position", 2).ToList();
+
+                if (histories.Count() == 2)
+                {
+                    var previousValue = (Vector2)histories[1].Value;
+
+                    var currentValue = (Vector2)histories[0].Value;
+
+                    return (previousValue != Vector2.Zero && currentValue != Vector2.Zero) || previousValue != Vector2.Zero ? currentValue / previousValue : Vector2.Zero;
+                }
+
+                return new Vector2(1, 1);
+            }
+        }
 
         public float Rotation { get; set; }
 
         public float Scale { get; set; }
         //public bool SimpleShadowVisibility { get; set; }
         public Vector2 Size { get; set; }
+        public Vector2 SizeChangingRatio
+        {
+            get
+            {
+                var histories = ValueHistoryManager.GetRecordsByPropertyName("Size", 2).ToList();
+
+                if (histories.Count() == 2)
+                {
+                    var previousValue = (Vector2)histories[1].Value;
+
+                    var currentValue = (Vector2)histories[0].Value;
+
+                    var result = currentValue / previousValue;
+
+                    if (float.IsInfinity(result.X) || float.IsNaN(result.X))
+                        result.X = 0;
+
+                    if (float.IsInfinity(result.Y) || float.IsNaN(result.Y))
+                        result.Y = 0;
+
+                    return result;
+                }
+
+                return new Vector2(1, 1);
+            }
+        }
         public Rectangle SourceRectangle { get; set; }
         public Vector2 Speed { get; set; }
         public SpriteEffects SpriteEffects { get; set; }
@@ -93,8 +137,6 @@ namespace ArarGameLibrary.Model
 
         public delegate void SomethingHasBeenChanged();
         public event SomethingHasBeenChanged OnChangeRectangle;
-        public event SomethingHasBeenChanged OnChangePadding;
-        public event SomethingHasBeenChanged OnChangeMargin;
 
         //public virtual void Refresh(Action action = null)
         //{
@@ -144,23 +186,25 @@ namespace ArarGameLibrary.Model
 
             Events.Add(new PulsateEffect(this));
 
-            ClampManager = new ClampManager(this);
+            ClampManager = new ClampManager(this)
+                            .Add(new ClampObject("Size.X", 0f, float.MaxValue));
 
             TestInfo = new TestInfo(this);
 
             SpriteBatch = Global.SpriteBatch;
 
-            ValueHistoryManager.AddSetting(new ValueHistorySetting("Position", 2,
-                (previousValue, currentValue) =>
-                {
-                    var previousValueAsVector2 = (Vector2)previousValue;
+            var equalityFunctionForVector2 = new Func<object, object, bool>((previousValue, currentValue) =>
+            {
+                var previousValueAsVector2 = (Vector2)previousValue;
 
-                    var currentValueAsVector2 = (Vector2)currentValue;
+                var currentValueAsVector2 = (Vector2)currentValue;
 
-                    return previousValueAsVector2.X != currentValueAsVector2.X || previousValueAsVector2.Y != currentValueAsVector2.Y;
-                }));
+                return previousValueAsVector2 != currentValueAsVector2;
+            });
 
-            ValueHistoryManager.AddSetting(new ValueHistorySetting("Size", 2));
+            ValueHistoryManager.AddSetting(new ValueHistorySetting("Position", 2, equalityFunctionForVector2));
+
+            ValueHistoryManager.AddSetting(new ValueHistorySetting("Size", 2, equalityFunctionForVector2));
         }
 
         public virtual void LoadContent(Texture2D texture = null)
@@ -403,9 +447,8 @@ namespace ArarGameLibrary.Model
 
             Position = position;
 
-            ValueHistoryManager.HasChangedFor(new ValueHistoryRecord("Position", position));
-
-            OnChangeRectangle?.Invoke();
+            if(ValueHistoryManager.HasChangedFor(new ValueHistoryRecord("Position", position)))
+                OnChangeRectangle?.Invoke();
         }
 
         public void SetRectangle()
@@ -439,9 +482,8 @@ namespace ArarGameLibrary.Model
 
             Size = size;
 
-            ValueHistoryManager.HasChangedFor(new ValueHistoryRecord("Size", size));
-
-            OnChangeRectangle?.Invoke();
+            if (ValueHistoryManager.HasChangedFor(new ValueHistoryRecord("Size", size)))
+                OnChangeRectangle?.Invoke();
         }
 
         public void SetSpeed(Vector2 speed)

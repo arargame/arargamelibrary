@@ -36,8 +36,7 @@ namespace ArarGameLibrary.ScreenManagement
             return this;
         }
 
-        //vektorel cizim yapılabilr
-        public Column AddImage(Texture2D texture)
+        public Column AddImage(Texture2D texture,Vector2? padding = null)
         {
             Image = new Column();
 
@@ -46,8 +45,12 @@ namespace ArarGameLibrary.ScreenManagement
             AddChild(Image);
 
             Image.SetPosition(Position);
-            //Image.SetSize(new Vector2(Size.X - Size.X * 0.2f, Size.Y - Size.Y * 0.2f));
-            Image.SetSize(new Vector2(Size.X - 20, Size.Y - 20));
+
+            //if (padding != null)
+             //   Image.SetSize(new Vector2(Size.X - padding.Value.X * 2, Size.Y - padding.Value.Y * 2));
+            //else
+                Image.SetSize(new Vector2(50,50));
+
             Image.SetFrame();
 
             Image.SetName("ColumnImage");

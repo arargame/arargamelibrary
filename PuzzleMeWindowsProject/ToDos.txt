@@ -71,3 +71,6 @@
 -Play butonunn üzerine geldiğinde mouse iconu el olsun clickable objelerde ishovering true iken bu yapılabilir(20.10.2019)
 
 -SetDistanceToParent fonksiyonu component içersinde poisyon değişimlerinden sonra çağrılmış madem new Setposition denerek bu fonksiyonu içine gömülebilir
+
+-isnan or isinfinity konularında bir çözüm geliştir gelenl bir fonksiyon olabilir
+-isdragable olayında içi içe objelerden parent olanı küçülttüğünde child bir eksende durmadan ilerleyerek kayboluyor
