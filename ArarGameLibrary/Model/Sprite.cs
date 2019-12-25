@@ -7,8 +7,6 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ValueHistoryManagement;
 
 namespace ArarGameLibrary.Model
@@ -75,7 +73,8 @@ namespace ArarGameLibrary.Model
 
         public Vector2 Origin { get; set; }
 
-        public Vector2 Padding { get; set; }
+        public Padding Padding { get; set; }
+       // public Vector2 Padding { get; set; }
         public Vector2 Position { get; set; }
         public Vector2 PositionChangingRatio
         {
@@ -101,7 +100,7 @@ namespace ArarGameLibrary.Model
         public float Scale { get; set; }
         //public bool SimpleShadowVisibility { get; set; }
         public Vector2 Size { get; set; }
-        public Vector2 SizeChangingRatio
+        public Vector2? SizeChangingRatio
         {
             get
             {
@@ -121,10 +120,10 @@ namespace ArarGameLibrary.Model
                     if (float.IsInfinity(result.Y) || float.IsNaN(result.Y))
                         result.Y = 0;
 
-                    return result;
+                    return result != Vector2.Zero ? result : (Vector2?)null;
                 }
 
-                return new Vector2(1, 1);
+                return null;
             }
         }
         public Rectangle SourceRectangle { get; set; }
@@ -169,6 +168,10 @@ namespace ArarGameLibrary.Model
 
             IsActive = IsAlive = IsVisible = true;
 
+            ClampManager = new ClampManager(this)
+                .Add(new ClampObject("Size.X", 0f, float.MaxValue))
+                .Add(new ClampObject("Size.Y", 0f, float.MaxValue));
+
             SetStartingSettings();
 
             //DestinationRectangle = new Rectangle((int)Position.X, (int)Position.Y, (int)Size.X, (int)Size.Y);
@@ -185,9 +188,6 @@ namespace ArarGameLibrary.Model
             Events.Add(new SimpleShadowEffect(this, new Vector2(-6, -6)));
 
             Events.Add(new PulsateEffect(this));
-
-            ClampManager = new ClampManager(this)
-                            .Add(new ClampObject("Size.X", 0f, float.MaxValue));
 
             TestInfo = new TestInfo(this);
 
@@ -435,7 +435,7 @@ namespace ArarGameLibrary.Model
                 Origin = Vector2.Zero;
         }
 
-        public void SetPadding(Vector2 padding)
+        public void SetPadding(Padding padding)
         {
             Padding = padding;
         }
@@ -471,8 +471,7 @@ namespace ArarGameLibrary.Model
 
             Scale = scale;
 
-            if (OnChangeRectangle != null)
-                OnChangeRectangle();
+            OnChangeRectangle?.Invoke();
         }
 
         public void SetSize(Vector2 size)
@@ -482,7 +481,9 @@ namespace ArarGameLibrary.Model
 
             Size = size;
 
-            if (ValueHistoryManager.HasChangedFor(new ValueHistoryRecord("Size", size)))
+            ClampManager.Update();
+
+            if (ValueHistoryManager.HasChangedFor(new ValueHistoryRecord("Size", Size)))
                 OnChangeRectangle?.Invoke();
         }
 

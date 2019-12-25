@@ -8,6 +8,42 @@ using System.Threading.Tasks;
 
 namespace ArarGameLibrary.Model
 {
+    public enum OffsetValueType
+    {
+        Piksel,
+        Ratio
+    }
+
+    public struct Padding
+    {
+        public OffsetValueType OffsetValueType { get; set; }
+
+        public float Left { get; set; }
+
+        public float Right { get; set; }
+
+        public float Top { get; set; }
+
+        public float Bottom { get; set; }
+
+        public Padding(float left, float top, float right, float bottom, OffsetValueType offsetValueType)
+        {
+            Left = left;
+            Top = top;
+            Right = right;
+            Bottom = bottom;
+            OffsetValueType = offsetValueType;
+        }
+
+        public bool IsZero
+        {
+            get
+            {
+                return Left == 0f && Right == 0f && Top == 0f && Bottom == 0f;
+            }
+        }
+    }
+
     public interface IDrawableObject : IXna
     {
         Rectangle CollisionRectangle { get; set; }
@@ -26,7 +62,8 @@ namespace ArarGameLibrary.Model
 
         Vector2 Origin { get; set; }
 
-        Vector2 Padding { get; set; }
+        Padding Padding { get; set; }
+        //Vector2 Padding { get; set; }
         Vector2 Position { get; set; }
 
         float Rotation { get; set; }

@@ -135,7 +135,7 @@ namespace ArarGameLibrary.ScreenManagement
             {
                 var listContainer = new Container();
                 listContainer.SetName("ListContainer");
-                //listContainer.SetTexture(TextureManager.CreateTexture2DBySingleColor(Color.Blue));
+                listContainer.SetTexture();
                 //listContainer.FixToParentPosition(false);
 
                 var scrollContainerSizeX = (float)Size.X * ScrollContainerWidthRatio / 100;
@@ -233,9 +233,9 @@ namespace ArarGameLibrary.ScreenManagement
 
         private void ScrollBar_OnChangeRectangle()
         {
-            if (ListContainer!=null)
+            if (ListContainer != null)
             {
-                ListContainer.PrepareRows(floatTo:"left");
+                ListContainer.PrepareRows(floatTo: "left");
             }
 
             if (ScrollContainer != null)

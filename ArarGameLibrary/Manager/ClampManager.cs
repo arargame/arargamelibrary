@@ -89,19 +89,19 @@ namespace ArarGameLibrary.Manager
                 switch (co.PropertyName)
                 {
                     case "Position.X":
-                        Sprite.SetPosition(new Vector2(MathHelper.Clamp(Sprite.Position.X, co.Min, co.Max), Sprite.Position.Y));
+                        Sprite.Position = new Vector2(MathHelper.Clamp(Sprite.Position.X, co.Min, co.Max), Sprite.Position.Y);
                         break;
 
                     case "Position.Y":
-                        Sprite.SetPosition(new Vector2(Sprite.Position.X, MathHelper.Clamp(Sprite.Position.Y, co.Min, co.Max)));
+                        Sprite.Position = new Vector2(Sprite.Position.X, MathHelper.Clamp(Sprite.Position.Y, co.Min, co.Max));
                         break;
 
                     case "Size.X":
-                        Sprite.SetSize(new Vector2(MathHelper.Clamp(Sprite.Size.X, co.Min, co.Max), Sprite.Size.Y));
+                        Sprite.Size = new Vector2(MathHelper.Clamp(Sprite.Size.X, co.Min, co.Max), Sprite.Size.Y);
                         break;
 
                     case "Size.Y":
-                        Sprite.SetSize(new Vector2(Sprite.Size.X, MathHelper.Clamp(Sprite.Size.Y, co.Min, co.Max)));
+                        Sprite.Size = new Vector2(Sprite.Size.X, MathHelper.Clamp(Sprite.Size.Y, co.Min, co.Max));
                         break;
 
                     default:

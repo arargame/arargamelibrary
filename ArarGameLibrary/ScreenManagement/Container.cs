@@ -23,6 +23,12 @@ namespace ArarGameLibrary.ScreenManagement
         public override void Initialize()
         {
             base.Initialize();
+
+        }
+
+        public override void SetStartingSize()
+        {
+            SetSize(new Vector2(100,100));
         }
 
 
@@ -59,8 +65,8 @@ namespace ArarGameLibrary.ScreenManagement
             {
                 row.SetPosition(new Vector2(Position.X + row.Margin.X, Position.Y + row.Margin.Y + takenHeight));
 
-                row.SetSizeDifferenceWithParent(new Vector2(100, row.HeightRatio));
-                //row.SetSize(new Vector2(Size.X, maxHeight * row.HeightRatio / 100));
+                //row.SetSizeDifferenceWithParent(new Vector2(100, row.HeightRatio));
+                row.SetSize(new Vector2(Size.X, maxHeight * row.HeightRatio / 100));
 
                 if (row.Frame != null)
                     row.SetFrame(row.Frame.LinesColor);

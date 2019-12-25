@@ -74,3 +74,5 @@
 
 -isnan or isinfinity konularında bir çözüm geliştir gelenl bir fonksiyon olabilir
 -isdragable olayında içi içe objelerden parent olanı küçülttüğünde child bir eksende durmadan ilerleyerek kayboluyor
+
+-Mesela size ın minimum değeri 0 olsun dedik fakat örneğin -10 verildiğinde anlık -10 olup sonradan 0 mı oluyor? (24.12.2019)

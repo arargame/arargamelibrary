@@ -117,7 +117,7 @@ namespace ArarGameLibrary.ScreenManagement
                         break;
                 }
 
-                column.SetPosition(new Vector2(positionX,positionY));;
+                column.SetPosition(new Vector2(positionX,positionY));
 
                 column.SetSize(new Vector2(sizeX,sizeY));
             }

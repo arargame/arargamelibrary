@@ -1,5 +1,6 @@
 ﻿using ArarGameLibrary.Event;
 using ArarGameLibrary.Manager;
+using ArarGameLibrary.Model;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -26,14 +27,14 @@ namespace ArarGameLibrary.ScreenManagement
 
         Color OppositeColor { get; set; }
 
-        public MenuButton(string text, Color? textColor = null, Vector2? textPadding = null, bool isPulsating = false)
+        public MenuButton(string text, Color? textColor = null, Padding? textPadding = null, bool isPulsating = false)
             : base(isPulsating)
         {
             ThemeColor = textColor ?? Global.Theme.GetColor();
 
             OppositeColor = Global.Theme.Mode == ThemeMode.White ? Theme.GetDefaultColorByMode(ThemeMode.Dark) : Theme.GetDefaultColorByMode(ThemeMode.White);
 
-            textPadding = textPadding ?? new Vector2(10);
+            textPadding = textPadding ?? new Padding(10,10,0,0,OffsetValueType.Piksel);
 
             SetFont(text, OppositeColor, textPadding);
 
