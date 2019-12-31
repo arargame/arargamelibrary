@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
+using System.Diagnostics;
 using System.Linq;
 
 namespace TestProject
@@ -13,8 +14,6 @@ namespace TestProject
     {
         //52 133 111 255
         Column column;
-
-        ScrollBar scrollBar;
         
         public Game1()
         {
@@ -38,44 +37,39 @@ namespace TestProject
 
         protected override void LoadContent()
         {
-            var cnt = new Container();
-            cnt.SetTexture();
-            cnt.SetSizeDifferenceRatioWithParent(new Vector2(100,90));
-            
+            var container = new Container();
+            container.SetTexture(Color.Yellow);
+            //container.SetSize(new Vector2(70,100));
+            container.SetSizeDifferenceRatioWithParent(new Vector2(70,100));
+            container.SetFrame();
 
+            var row = new Row();
+            row.SetTexture();
+            container.AddRow(row,80);
+
+            var row2 = new Row();
+            row2.SetTexture();
+            container.AddRow(row2, 20);
+
+            container.PrepareRows();
+
+            row.SetMargin(Offset.CreatePadding(OffsetValueType.Ratio,10,0,10,0));
+
+            var container2 = new Container();
+            container2.SetTexture(Color.Red);
+            container2.SetPosition(new Vector2(70,0));
+            container2.SetSize(new Vector2(30, 100));
+            container2.SetFrame();
 
             column = new Column();
-            column.SetSize(new Vector2(250, 250));
+            column.SetSize(new Vector2(100, 100));
             column.SetTexture();
-            column.SetPadding(new Padding(10,0,0,0,OffsetValueType.Ratio));
-            //column.SetActive(false);
-            column.AddChild(cnt);
-            //Sorun var burada total bir rechange e ihtiyaç var
-            var columns = new Column[15];
+            column.SetName("clmn");
+            column.SetActive(true);
 
-            for (int i = 0; i < columns.Length; i++)
-            {
-                columns[i] = new Column();
-                columns[i].SetTexture();
-            }
+            column.AddChild(container);
+            column.AddChild(container2);
 
-            var container = new Container();
-
-            container.SetSizeDifferenceRatioWithParent(new Vector2(100,100));
-            //container.SetPosition(new Vector2(columns[13].Position.X + columns[13].Size.X * 90 /100, columns[13].Position.Y));
-
-         //   container.SetMargin(new Vector2(10));
-            container.SetTexture();
-
-            columns[13].SetPadding(new Padding(10,0,10,0,OffsetValueType.Ratio));
-            columns[13].SetName("column13");
-            columns[13].AddChild(container);
-          //  columns[13].Prepare();
-
-            scrollBar = new ScrollBar(columns:columns);
-
-            scrollBar.Prepare();
-            scrollBar.SetActive(false);
         }
 
 
@@ -99,7 +93,6 @@ namespace TestProject
 
             column.Update();
 
-            scrollBar.Update();
 
             if (InputManager.IsKeyDown(Keys.Up))
                 column.SetSize(new Vector2(column.Size.X, column.Size.Y - 20));
@@ -135,8 +128,6 @@ namespace TestProject
             Global.SpriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend);
 
             column.Draw();
-
-            scrollBar.Draw();
 
             Global.SpriteBatch.End();
 

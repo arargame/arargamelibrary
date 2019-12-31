@@ -71,3 +71,24 @@
             button.SetFrame(Color.Beige);
             button.SetDragable();
             button.OnClick(Fonk);
+-Container inside Column
+	        var container = new Container();
+            container.SetTexture(Color.Yellow);
+            //container.SetSize(new Vector2(70,100));
+            container.SetSizeDifferenceRatioWithParent(new Vector2(70,100));
+            container.SetFrame();
+
+            var container2 = new Container();
+            container2.SetTexture(Color.Red);
+            container2.SetPosition(new Vector2(70,0));
+            container2.SetSize(new Vector2(30, 100));
+            container2.SetFrame();
+
+            column = new Column();
+            column.SetSize(new Vector2(100, 100));
+            column.SetTexture();
+            column.SetName("clmn");
+            column.SetActive(true);
+
+            column.AddChild(container);
+            column.AddChild(container2);

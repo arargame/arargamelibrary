@@ -49,7 +49,7 @@ namespace ArarGameLibrary.ScreenManagement
             //if (padding != null)
              //   Image.SetSize(new Vector2(Size.X - padding.Value.X * 2, Size.Y - padding.Value.Y * 2));
             //else
-                Image.SetSize(new Vector2(50,50));
+            Image.SetSize(new Vector2(50,50));
 
             Image.SetFrame();
 
@@ -57,5 +57,12 @@ namespace ArarGameLibrary.ScreenManagement
 
             return this;
         }
+
+        //public override void SetStartingSize()
+        //{
+        //    SetSize(new Vector2(200, 200));
+        //}
+
+
     }
 }

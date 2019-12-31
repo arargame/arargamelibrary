@@ -46,6 +46,12 @@ namespace ArarGameLibrary.ScreenManagement
             base.Draw(spriteBatch);
         }
 
+        public override void SetStartingSize()
+        {
+            SetSize(new Vector2(100, 100));
+        }
+
+
         public Row SetHeightRatio(float heightRatio)
         {
             HeightRatio = MathHelper.Clamp(heightRatio, 0, 100);

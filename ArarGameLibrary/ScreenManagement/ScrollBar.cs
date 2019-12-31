@@ -40,6 +40,8 @@ namespace ArarGameLibrary.ScreenManagement
             }
         }
 
+        public float DistanceAmongRows { get; private set; }
+
         public int RowsCountToShow { get; set; }
 
         public int MaxRowsCount { get; set; }
@@ -58,7 +60,7 @@ namespace ArarGameLibrary.ScreenManagement
 
         public Column[] Columns { get; set; }
 
-        public ScrollBar(int rowsCountToShow = 4, int columnsCountPerRow = 3, float scrollContainerWidthRatio = 2.5f, params Column[] columns)
+        public ScrollBar(int rowsCountToShow = 4, int columnsCountPerRow = 3, float scrollContainerWidthRatio = 2.5f,float distanceAmongRows = 20f, params Column[] columns)
         {
             OnChangeRectangle += ScrollBar_OnChangeRectangle;
 
@@ -69,6 +71,8 @@ namespace ArarGameLibrary.ScreenManagement
             ColumnsCountPerRow = columnsCountPerRow;
 
             ScrollContainerWidthRatio = scrollContainerWidthRatio;
+
+            DistanceAmongRows = distanceAmongRows;
 
             SetColumns(columns);
 
@@ -166,10 +170,13 @@ namespace ArarGameLibrary.ScreenManagement
 
                     foreach (var column in columnsToAdd)
                     {
+                        column.TestInfo.Font.SetChangeTextEvent(() => { return column.DestinationRectangle.ToString(); });
+                        column.TestInfo.Show();
                         row.AddColumn(column,columnRatio);
                     }
                     //columnsToAdd.ForEach(c => row.AddColumn(c, columnRatio));
                     //columnsToAdd.ForEach(c => c.SetTexture(TextureManager.CreateTexture2DByRandomColor()));
+
                     ListContainer.AddRow(row, rowRatio);
                 }
             }
@@ -235,7 +242,7 @@ namespace ArarGameLibrary.ScreenManagement
         {
             if (ListContainer != null)
             {
-                ListContainer.PrepareRows(floatTo: "left");
+                ListContainer.PrepareRows(floatTo: "left", distanceAmongRows: DistanceAmongRows);
             }
 
             if (ScrollContainer != null)

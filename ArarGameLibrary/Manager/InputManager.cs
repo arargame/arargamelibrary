@@ -143,6 +143,14 @@ namespace ArarGameLibrary.Manager
             }
         }
 
+        public static bool IsRightClicked
+        {
+            get
+            {
+                return CurrentMouseState.RightButton == ButtonState.Pressed && PreviousMouseState.RightButton == ButtonState.Released;
+            }
+        }
+
         public static bool IsPressing
         {
             get

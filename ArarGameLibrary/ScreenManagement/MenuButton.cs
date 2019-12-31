@@ -27,14 +27,14 @@ namespace ArarGameLibrary.ScreenManagement
 
         Color OppositeColor { get; set; }
 
-        public MenuButton(string text, Color? textColor = null, Padding? textPadding = null, bool isPulsating = false)
+        public MenuButton(string text, Color? textColor = null, Offset? textPadding = null, bool isPulsating = false)
             : base(isPulsating)
         {
             ThemeColor = textColor ?? Global.Theme.GetColor();
 
             OppositeColor = Global.Theme.Mode == ThemeMode.White ? Theme.GetDefaultColorByMode(ThemeMode.Dark) : Theme.GetDefaultColorByMode(ThemeMode.White);
 
-            textPadding = textPadding ?? new Padding(10,10,0,0,OffsetValueType.Piksel);
+            textPadding = textPadding ?? Offset.CreatePadding(OffsetValueType.Piksel, 10, 10, 0, 0);
 
             SetFont(text, OppositeColor, textPadding);
 

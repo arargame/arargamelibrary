@@ -1,21 +1,24 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ArarGameLibrary.Model
 {
+    public enum OffsetType
+    {
+        Margin,
+        Padding
+    }
+
     public enum OffsetValueType
     {
         Piksel,
         Ratio
     }
 
-    public struct Padding
+    public struct Offset
     {
+        public OffsetType OffsetType { get; set; }
+
         public OffsetValueType OffsetValueType { get; set; }
 
         public float Left { get; set; }
@@ -26,13 +29,24 @@ namespace ArarGameLibrary.Model
 
         public float Bottom { get; set; }
 
-        public Padding(float left, float top, float right, float bottom, OffsetValueType offsetValueType)
+        public Offset(OffsetType offsetType, OffsetValueType offsetValueType, float left, float top, float right, float bottom)
         {
+            OffsetType = offsetType;
+            OffsetValueType = offsetValueType;
             Left = left;
             Top = top;
             Right = right;
             Bottom = bottom;
-            OffsetValueType = offsetValueType;
+        }
+
+        public static Offset CreatePadding(OffsetValueType offsetValueType, float left, float top, float right, float bottom)
+        {
+            return new Offset(OffsetType.Padding, offsetValueType, left, top, right, bottom);
+        }
+
+        public static Offset CreateMargin(OffsetValueType offsetValueType, float left, float top, float right, float bottom)
+        {
+            return new Offset(OffsetType.Margin, offsetValueType, left, top, right, bottom);
         }
 
         public bool IsZero
@@ -58,11 +72,11 @@ namespace ArarGameLibrary.Model
 
         float LayerDepth { get; set; }
 
-        Vector2 Margin { get; set; }
+        Offset Margin { get; set; }
 
         Vector2 Origin { get; set; }
 
-        Padding Padding { get; set; }
+        Offset Padding { get; set; }
         //Vector2 Padding { get; set; }
         Vector2 Position { get; set; }
 

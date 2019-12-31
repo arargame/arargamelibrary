@@ -26,10 +26,10 @@ namespace ArarGameLibrary.ScreenManagement
 
         }
 
-        public override void SetStartingSize()
-        {
-            SetSize(new Vector2(100,100));
-        }
+        //public override void SetStartingSize()
+        //{
+        //    SetSize(new Vector2(200, 200));
+        //}
 
 
         public Container AddRow(Row row,float heightRatio)
@@ -46,16 +46,16 @@ namespace ArarGameLibrary.ScreenManagement
             return this;
         }
 
-        public Container PrepareRows(bool isCentralized = false, string floatTo = null)
+        public Container PrepareRows(bool isCentralized = false, string floatTo = null, float distanceAmongRows = 0f)
         {
             var maxHeight = Size.Y;
-            var takenHeight = 0f;
+            var takenHeight = 0f + distanceAmongRows;
 
             var rowList = Rows.Where(r => r.IsActive).ToList();
 
-            if (rowList.Sum(r => r.HeightRatio) > 100)
+            if (rowList.Sum(r => r.HeightRatio) + distanceAmongRows > 100)
             {
-                var averageHeightPerRow = 100 / rowList.Count;
+                var averageHeightPerRow = 100 / (distanceAmongRows == 0f ? rowList.Count : rowList.Count + 1);
 
                 rowList.ForEach(r => r.SetHeightRatio(averageHeightPerRow));
             }
@@ -63,15 +63,18 @@ namespace ArarGameLibrary.ScreenManagement
 
             foreach (var row in rowList)
             {
-                row.SetPosition(new Vector2(Position.X + row.Margin.X, Position.Y + row.Margin.Y + takenHeight));
+                var rowPosition = new Vector2(Position.X, Position.Y + takenHeight);
 
-                //row.SetSizeDifferenceWithParent(new Vector2(100, row.HeightRatio));
+                row.SetPosition(rowPosition);
+
+                row.SetSizeDifferenceRatioWithParent(new Vector2(100, row.HeightRatio));
+
                 row.SetSize(new Vector2(Size.X, maxHeight * row.HeightRatio / 100));
 
                 if (row.Frame != null)
                     row.SetFrame(row.Frame.LinesColor);
 
-                takenHeight += row.Size.Y;
+                takenHeight += row.Size.Y + distanceAmongRows;
 
                 row.PrepareColumns(isCentralized, floatTo);
             }

@@ -37,7 +37,7 @@ namespace ArarGameLibrary.Model
             float scale = 1f,
             SpriteEffects effects = SpriteEffects.None,
             float layerDepth = 0.5f,
-            Vector2? margin = null,
+            Offset? margin = null,
             Func<string> changeTextEvent = null,
             bool isPulsating = false)
         {
@@ -72,7 +72,7 @@ namespace ArarGameLibrary.Model
 
             SetLayerDepth(layerDepth);
 
-            SetMargin(margin ?? Vector2.Zero);
+            SetMargin(margin ?? Offset.CreateMargin(OffsetValueType.Piksel, 0, 0, 0, 0));
 
             SetChangeTextEvent(changeTextEvent);
         }

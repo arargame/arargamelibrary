@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using ValueHistoryManagement;
 
@@ -69,11 +70,11 @@ namespace ArarGameLibrary.Model
         public float LayerDepth { get; set; }
         public const float LayerDepthPlus = 0.01f;
 
-        public Vector2 Margin { get; set; }
+        public Offset Margin { get; set; }
 
         public Vector2 Origin { get; set; }
 
-        public Padding Padding { get; set; }
+        public Offset Padding { get; set; }
        // public Vector2 Padding { get; set; }
         public Vector2 Position { get; set; }
         public Vector2 PositionChangingRatio
@@ -88,7 +89,7 @@ namespace ArarGameLibrary.Model
 
                     var currentValue = (Vector2)histories[0].Value;
 
-                    return (previousValue != Vector2.Zero && currentValue != Vector2.Zero) || previousValue != Vector2.Zero ? currentValue / previousValue : Vector2.Zero;
+                    return (previousValue != Vector2.Zero && currentValue != Vector2.Zero) || previousValue != Vector2.Zero ? currentValue / previousValue : new Vector2(1,1);
                 }
 
                 return new Vector2(1, 1);
@@ -112,7 +113,7 @@ namespace ArarGameLibrary.Model
 
                     var currentValue = (Vector2)histories[0].Value;
 
-                    var result = currentValue / previousValue;
+                    var result = ((currentValue - previousValue) / previousValue) * 100;
 
                     if (float.IsInfinity(result.X) || float.IsNaN(result.X))
                         result.X = 0;
@@ -417,7 +418,7 @@ namespace ArarGameLibrary.Model
             LayerDepth = MathHelper.Clamp(layerDepth, 0f, 1f);
         }
 
-        public void SetMargin(Vector2 margin)
+        public void SetMargin(Offset margin)
         {
             Margin = margin;
         }
@@ -435,7 +436,7 @@ namespace ArarGameLibrary.Model
                 Origin = Vector2.Zero;
         }
 
-        public void SetPadding(Padding padding)
+        public void SetPadding(Offset padding)
         {
             Padding = padding;
         }
@@ -478,7 +479,6 @@ namespace ArarGameLibrary.Model
         {
             //if (Size != Vector2.Zero && Size == size)
             //    return;
-
             Size = size;
 
             ClampManager.Update();
@@ -521,6 +521,11 @@ namespace ArarGameLibrary.Model
         public void SetTexture()
         {
             Texture = TextureManager.CreateTexture2DByRandomColor();
+        }
+
+        public void SetTexture(Color color, int width = 1, int height = 1)
+        {
+            Texture = TextureManager.CreateTexture2DBySingleColor(color, width, height);
         }
 
         public virtual void SetVisible(bool enable)

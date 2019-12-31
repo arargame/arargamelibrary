@@ -1,0 +1,3 @@
+﻿-31.12.2019
++ValueHistory tarafındaki tarih sıralamasıyla ilgili bir hata herşeyi mahvediyordu
+-En son padding margin kısımları kaldı ve PrepareColumns fonksiyonundaki emptyspaceamongrows olayı sanki scrollbar için yapılmış gibi duruyor kullanışlı hale getirilmesi gerekiyor

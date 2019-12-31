@@ -89,7 +89,7 @@ namespace PuzzleMeWindowsProject
                 //scrollBarColumns[i].SetTexture(TextureManager.CreateTexture2DByRandomColor());
             }
 
-            scrollBar = new ScrollBar(3, 3, 2.5f, scrollBarColumns);
+            scrollBar = new ScrollBar(3, 3, 2.5f,20f, scrollBarColumns);
             //scrollBar.LoadContent(TextureManager.CreateTexture2DBySingleColor(Color.Tan));
             //scrollBar.SetFrame(Color.Yellow,2f);
             //scrollBar.PrepareRows(true);
@@ -102,7 +102,7 @@ namespace PuzzleMeWindowsProject
 
             var c = new Column();
             c.SetTexture(TextureManager.CreateTexture2DByRandomColor());
-            c.SetMargin(new Vector2(10, 10));
+
             c.SetSize(new Vector2(50,50));
             //c.IncreaseLayerDepth();
             c.SetFont("Hewllow",Color.Yellow);
@@ -118,7 +118,7 @@ namespace PuzzleMeWindowsProject
             container.SetDragable();
             container.SetTexture(TextureManager.CreateTexture2DBySingleColor(Color.Beige));
             container.SetSize(new Vector2(300,200));
-            container.SetMargin(new Vector2(10,10));
+
 
             var row = new Row();
             row.SetTexture(TextureManager.CreateTexture2DBySingleColor(new Color(36,220,151)));
@@ -166,7 +166,7 @@ namespace PuzzleMeWindowsProject
             TextColumn.SetFont("Buttton1001", Color.Blue);
 
             TextColumn.AddChild(cnt);
-            TextColumn.SetPadding(new Vector2(0));
+
             
 
 
@@ -240,7 +240,7 @@ namespace PuzzleMeWindowsProject
 
             lastTriangle = Triangle.PlayButton(Color.Green);
             column1.AddImage(lastTriangle.Texture);
-            column1.SetPadding(new Vector2(10));
+
 
             column2.SetFont("Episode 1", Color.White);
 
