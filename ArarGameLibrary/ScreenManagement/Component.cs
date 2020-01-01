@@ -155,7 +155,7 @@ namespace ArarGameLibrary.ScreenManagement
                 {
                     newPosition = Parent.Position + new Vector2(Margin.Left, Margin.Top);
 
-                    newSize = Parent.Size - new Vector2(Margin.Left + Margin.Right, Margin.Top + Margin.Bottom);
+                    newSize = Size - new Vector2(Margin.Left + Margin.Right, Margin.Top + Margin.Bottom);
                 }
                 else if (Margin.OffsetValueType == OffsetValueType.Ratio)
                 {
@@ -164,7 +164,9 @@ namespace ArarGameLibrary.ScreenManagement
 
                     newPosition = Parent.Position + new Vector2(sizeX * Margin.Left / 100, sizeY * Margin.Top / 100);
 
-                    newSize = Parent.Size - new Vector2((Parent.Size.X * Margin.Left / 100) + (Parent.Size.X * Margin.Right / 100), (Parent.Size.Y * Margin.Top / 100) + (Parent.Size.Y * Margin.Bottom / 100));
+                    newSize = new Vector2(Size.X - (Size.X * Margin.Left / 100) - (Size.X * Margin.Right / 100), Size.Y - (Size.Y * Margin.Top / 100) - (Size.Y * Margin.Bottom / 100));
+
+                    //newSize = new Vector2(Margin.Right != 0f ? (Size.X - (Size.X * Margin.Right / 100)) : Size.X, Size.Y);
                 }
 
                 if (newPosition != Vector2.Zero)
