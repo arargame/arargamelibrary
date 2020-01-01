@@ -43,6 +43,8 @@ namespace ArarGameLibrary.ScreenManagement
 
             row.SetHeightRatio(heightRatio);
 
+            row.SetSizeDifferenceRatioWithParent(new Vector2(100, heightRatio));
+
             return this;
         }
 

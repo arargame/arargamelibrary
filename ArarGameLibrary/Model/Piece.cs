@@ -185,7 +185,7 @@ namespace ArarGameLibrary.Model
 
             if (Font != null)
             {
-                Font.CalculateCenterVector2(DestinationRectangle);
+                Font.CalculateNewPosition(DestinationRectangle, null, true);
 
                 Font.Update();
             }

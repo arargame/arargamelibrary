@@ -10,8 +10,6 @@ namespace ArarGameLibrary.ScreenManagement
 {
     public class Column : Component
     {
-        //class ImageColumn : Component { }
-
         public float WidthRatio { get; private set; }
 
         public Row Row
@@ -21,8 +19,6 @@ namespace ArarGameLibrary.ScreenManagement
                 return Parent as Row;
             }
         }
-
-        Column Image { get; set; }
 
         public Column()
         {
@@ -36,33 +32,21 @@ namespace ArarGameLibrary.ScreenManagement
             return this;
         }
 
-        public Column AddImage(Texture2D texture,Vector2? padding = null)
+        public Column AddImage(Texture2D texture)
         {
-            Image = new Column();
+            var imageColumn = new Column();
 
-            Image.LoadContent(texture);
+            SetTexture();
 
-            AddChild(Image);
+            imageColumn.LoadContent(texture);
 
-            Image.SetPosition(Position);
+            imageColumn.SetPosition(Position);
 
-            //if (padding != null)
-             //   Image.SetSize(new Vector2(Size.X - padding.Value.X * 2, Size.Y - padding.Value.Y * 2));
-            //else
-            Image.SetSize(new Vector2(50,50));
+            imageColumn.SetSizeDifferenceRatioWithParent(new Vector2(100, 100));
 
-            Image.SetFrame();
-
-            Image.SetName("ColumnImage");
+            AddChild(imageColumn);
 
             return this;
         }
-
-        //public override void SetStartingSize()
-        //{
-        //    SetSize(new Vector2(200, 200));
-        //}
-
-
     }
 }

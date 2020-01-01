@@ -56,6 +56,11 @@ namespace ArarGameLibrary.Model
                 return Left == 0f && Right == 0f && Top == 0f && Bottom == 0f;
             }
         }
+
+        public static Offset Zero(OffsetType offsetType = OffsetType.Padding, OffsetValueType offsetValueType = OffsetValueType.Ratio)
+        {
+            return new Offset(offsetType, offsetValueType, 0, 0, 0, 0);
+        }
     }
 
     public interface IDrawableObject : IXna

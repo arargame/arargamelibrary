@@ -351,9 +351,9 @@ namespace ArarGameLibrary.ScreenManagement
             if (Font != null)
             {
                 if (Padding.IsZero)
-                    Font.CalculateCenterVector2(DestinationRectangle);
-                //else
-                //    Font.SetPosition(new Vector2(Position.X + Padding.X, Position.Y + Padding.Y));
+                    Font.CalculateNewPosition(DestinationRectangle, null, true);
+                else
+                    Font.CalculateNewPosition(DestinationRectangle, Padding);
 
                 Font.SetScale(Scale);
             }

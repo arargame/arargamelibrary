@@ -40,39 +40,53 @@ namespace TestProject
             var container = new Container();
             container.SetTexture(Color.Yellow);
             //container.SetSize(new Vector2(70,100));
-            container.SetSizeDifferenceRatioWithParent(new Vector2(70,100));
-            container.SetFrame();
+            container.SetSizeDifferenceRatioWithParent(new Vector2(70, 100));
+            //container.SetFrame(Color.Red);
 
             var row = new Row();
             row.SetTexture();
-            container.AddRow(row,80);
+            container.AddRow(row, 80);
             //row.SetVisible(false);
 
             var row2 = new Row();
             row2.SetTexture();
             container.AddRow(row2, 20);
-            
+
+            var c = new Column();
+            c.SetTexture();
+            row2.AddColumn(c, 20);
+            c.AddImage(Triangle.PlayButton(Color.Yellow).Texture);
+
+            var c2 = new Column();
+            c2.SetTexture(Color.SandyBrown);
+            c2.SetName("c2");
+            //c2.SetFrame();
+            row2.AddColumn(c2, 80);
+            //c2.SetFont("Hellow",textPadding: Offset.CreatePadding(OffsetValueType.Ratio,50,10,0,0));
+            c2.SetFont("Hellow");
 
             container.PrepareRows();
+            
+            var imageColumn = c.Child.FirstOrDefault();
 
-            //row.SetMargin(Offset.CreateMargin(OffsetValueType.Ratio,10,10,10,10));
-            container.SetPadding(Offset.CreatePadding(OffsetValueType.Ratio,0,0,0,0));
+            imageColumn.SetMargin(Offset.CreateMargin(OffsetValueType.Ratio,10,10,10,10));
+            //c.SetPadding(Offset.CreatePadding(OffsetValueType.Ratio, 10, 10, 10, 10));
 
             var container2 = new Container();
             container2.SetTexture(Color.Red);
-            container2.SetPosition(new Vector2(70,0));
-            container2.SetSize(new Vector2(30, 100));
-            container2.SetFrame();
+            container2.SetPosition(new Vector2(210, 0));
+            //container2.SetSize(new Vector2(30, 100));
+            container2.SetSizeDifferenceRatioWithParent(new Vector2(30, 100));
+            //container2.SetFrame(Color.Yellow);
 
             column = new Column();
-            column.SetSize(new Vector2(100, 100));
+            column.SetSize(new Vector2(300, 300));
             column.SetTexture();
             column.SetName("clmn");
             column.SetActive(true);
 
             column.AddChild(container);
             column.AddChild(container2);
-
         }
 
 

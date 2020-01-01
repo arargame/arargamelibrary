@@ -89,12 +89,47 @@ namespace ArarGameLibrary.Model
             return this;
         }
 
-        public void CalculateCenterVector2(Rectangle rect)
-        {
-            var x = rect.Center.X - TextMeasure.X / 2;
-            var y = rect.Center.Y - TextMeasure.Y / 2;
 
-            SetPosition(new Vector2(x, y));
+        public void CalculateNewPosition(Rectangle rectangle, Offset? offset = null, bool isCentered = false)
+        {
+            var newPosition = Vector2.Zero;
+
+            var x = 0f;
+            var y = 0f;
+
+            offset = offset ?? Offset.Zero();
+
+            if (offset.Value.OffsetType == OffsetType.Margin)
+                isCentered = true;
+
+            if (isCentered)
+            {
+                x = rectangle.Center.X - TextMeasure.X / 2;
+                y = rectangle.Center.Y - TextMeasure.Y / 2;
+            }
+            else
+            {
+                switch (offset.Value.OffsetValueType)
+                {
+                    case OffsetValueType.Piksel:
+
+                        x = rectangle.Left + offset.Value.Left;
+                        y = rectangle.Top + offset.Value.Top;
+
+                        break;
+
+                    case OffsetValueType.Ratio:
+
+                        x = rectangle.Left + (rectangle.Width * offset.Value.Left / 100);
+                        y = rectangle.Top + (rectangle.Height * offset.Value.Top / 100);
+
+                        break;
+                }
+            }
+
+            newPosition = new Vector2(x, y);
+
+            SetPosition(newPosition);
         }
 
         public override void Initialize()
