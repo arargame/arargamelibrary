@@ -202,15 +202,15 @@ namespace ArarGameLibrary.ScreenManagement
 
                 if (Padding.OffsetValueType == OffsetValueType.Piksel)
                 {
-                    childrenNewPosition = Position + new Vector2(Padding.Left, Padding.Top);
+                    childrenNewPosition = children.Position + new Vector2(Padding.Left, Padding.Top);
 
                     childrenNewSize = Size - new Vector2(Padding.Left + Padding.Right, Padding.Top + Padding.Bottom);
                 }
                 else if (Padding.OffsetValueType == OffsetValueType.Ratio)
                 {
-                    childrenNewPosition = Position + new Vector2(Size.X * Padding.Left / 100, Size.Y * Padding.Top / 100);
+                    childrenNewPosition = children.Position + new Vector2(children.Size.X * Padding.Left / 100, children.Size.Y * Padding.Top / 100);
 
-                    childrenNewSize = Size - new Vector2((Size.X * Padding.Left / 100) + (Size.X * Padding.Right / 100), (Size.Y * Padding.Top / 100) + (Size.Y * Padding.Bottom / 100));
+                    childrenNewSize = children.Size - new Vector2((children.Size.X * Padding.Left / 100) + (children.Size.X * Padding.Right / 100), (children.Size.Y * Padding.Top / 100) + (children.Size.Y * Padding.Bottom / 100));
                 }
 
                 if (childrenNewPosition != Vector2.Zero)

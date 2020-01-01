@@ -46,15 +46,17 @@ namespace TestProject
             var row = new Row();
             row.SetTexture();
             container.AddRow(row,80);
+            //row.SetVisible(false);
 
             var row2 = new Row();
             row2.SetTexture();
-            //container.AddRow(row2, 20);
+            container.AddRow(row2, 20);
             
 
             container.PrepareRows();
 
-            row.SetMargin(Offset.CreatePadding(OffsetValueType.Ratio,10,10,10,10));
+            //row.SetMargin(Offset.CreateMargin(OffsetValueType.Ratio,10,10,10,10));
+            container.SetPadding(Offset.CreatePadding(OffsetValueType.Ratio,0,0,0,0));
 
             var container2 = new Container();
             container2.SetTexture(Color.Red);
