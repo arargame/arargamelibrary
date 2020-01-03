@@ -76,3 +76,4 @@
 -isdragable olayında içi içe objelerden parent olanı küçülttüğünde child bir eksende durmadan ilerleyerek kayboluyor
 
 -Mesela size ın minimum değeri 0 olsun dedik fakat örneğin -10 verildiğinde anlık -10 olup sonradan 0 mı oluyor? (24.12.2019)
+-Scrollbar.cs rowsCountToShow = 5 yapınca sapıtıyor Padding kısımlarıyla ilgili sıknıtı var play butonunu(2.1.2019)

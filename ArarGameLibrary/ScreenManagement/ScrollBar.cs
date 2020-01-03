@@ -40,7 +40,7 @@ namespace ArarGameLibrary.ScreenManagement
             }
         }
 
-        public float DistanceAmongRows { get; private set; }
+        public Offset RowPadding { get; private set; }
 
         public int RowsCountToShow { get; set; }
 
@@ -60,7 +60,7 @@ namespace ArarGameLibrary.ScreenManagement
 
         public Column[] Columns { get; set; }
 
-        public ScrollBar(int rowsCountToShow = 4, int columnsCountPerRow = 3, float scrollContainerWidthRatio = 2.5f,float distanceAmongRows = 20f, params Column[] columns)
+        public ScrollBar(int rowsCountToShow = 4, int columnsCountPerRow = 3, float scrollContainerWidthRatio = 2.5f,Offset? rowPadding = null, params Column[] columns)
         {
             OnChangeRectangle += ScrollBar_OnChangeRectangle;
 
@@ -72,7 +72,7 @@ namespace ArarGameLibrary.ScreenManagement
 
             ScrollContainerWidthRatio = scrollContainerWidthRatio;
 
-            DistanceAmongRows = distanceAmongRows;
+            RowPadding = rowPadding ?? Offset.CreatePadding(OffsetValueType.Ratio, 2.5f, 2.5f, 2.5f, 2.5f);
 
             SetColumns(columns);
 
@@ -170,9 +170,9 @@ namespace ArarGameLibrary.ScreenManagement
 
                     foreach (var column in columnsToAdd)
                     {
-                        column.TestInfo.Font.SetChangeTextEvent(() => { return column.DestinationRectangle.ToString(); });
-                        column.TestInfo.Show();
-                        row.AddColumn(column,columnRatio);
+                        //column.TestInfo.Font.SetChangeTextEvent(() => { return column.DestinationRectangle.ToString(); });
+                        //column.TestInfo.Show();
+                        row.AddColumn(column, columnRatio);
                     }
                     //columnsToAdd.ForEach(c => row.AddColumn(c, columnRatio));
                     //columnsToAdd.ForEach(c => c.SetTexture(TextureManager.CreateTexture2DByRandomColor()));
@@ -194,6 +194,7 @@ namespace ArarGameLibrary.ScreenManagement
                 item.TestInfo.Show(true);
                 item.TestInfo.Font.SetText(((RowsCountToShow * page) + counter++).ToString());
             }
+
 
             RefreshRectangle();
         }
@@ -242,7 +243,17 @@ namespace ArarGameLibrary.ScreenManagement
         {
             if (ListContainer != null)
             {
-                ListContainer.PrepareRows(floatTo: "left", distanceAmongRows: DistanceAmongRows);
+                ListContainer.PrepareRows(floatTo: "left", padding: RowPadding);
+
+                //(ListContainer.Rows.ForEach(r => r.SetPadding(Offset.CreatePadding(OffsetValueType.Ratio, 5, 0, 0, DistanceAmongRows)));
+
+                foreach (var row in ListContainer.Rows)
+                {
+                    foreach (var column in row.Columns)
+                    {
+                        //column.SetPadding(Offset.CreatePadding(OffsetValueType.Ratio, 10, 0, 0, 0));
+                    }
+                }
             }
 
             if (ScrollContainer != null)

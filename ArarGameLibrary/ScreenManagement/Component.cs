@@ -292,6 +292,9 @@ namespace ArarGameLibrary.ScreenManagement
             //if (IsFixedToParentSize)
             //    SetSizeDifferenceWithParent();
 
+            if (Position == Vector2.Zero)
+                SetPosition(Parent.Position);
+
             SetDistanceToParent();
             SetSizeDifferenceRatioWithParent();
 

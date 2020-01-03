@@ -36,8 +36,6 @@ namespace ArarGameLibrary.ScreenManagement
         {
             var imageColumn = new Column();
 
-            SetTexture();
-
             imageColumn.LoadContent(texture);
 
             imageColumn.SetPosition(Position);

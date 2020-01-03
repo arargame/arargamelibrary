@@ -72,7 +72,7 @@ namespace ArarGameLibrary.Manager
 
             CursorPosition = CurrentMouseState.Position.ToVector2();
 
-            MouseWheelValue = InputManager.CurrentMouseState.ScrollWheelValue - InputManager.PreviousMouseState.ScrollWheelValue;
+            MouseWheelValue = CurrentMouseState.ScrollWheelValue - PreviousMouseState.ScrollWheelValue;
 
             if (IsPressing)
             {

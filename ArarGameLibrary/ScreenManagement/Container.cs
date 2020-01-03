@@ -7,6 +7,7 @@ using ArarGameLibrary.Manager;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ArarGameLibrary.Effect;
+using ArarGameLibrary.Model;
 
 namespace ArarGameLibrary.ScreenManagement
 {
@@ -48,16 +49,18 @@ namespace ArarGameLibrary.ScreenManagement
             return this;
         }
 
-        public Container PrepareRows(bool isCentralized = false, string floatTo = null, float distanceAmongRows = 0f)
+        public Container PrepareRows(bool isCentralized = false, string floatTo = null, Offset? padding = null)
         {
+            padding = padding ?? Offset.Zero();
+
             var maxHeight = Size.Y;
-            var takenHeight = 0f + distanceAmongRows;
+            var takenHeight = 0f;
 
             var rowList = Rows.Where(r => r.IsActive).ToList();
 
-            if (rowList.Sum(r => r.HeightRatio) + distanceAmongRows > 100)
+            if (rowList.Sum(r => r.HeightRatio) > 100)
             {
-                var averageHeightPerRow = 100 / (distanceAmongRows == 0f ? rowList.Count : rowList.Count + 1);
+                var averageHeightPerRow = 100 / rowList.Count;
 
                 rowList.ForEach(r => r.SetHeightRatio(averageHeightPerRow));
             }
@@ -76,9 +79,11 @@ namespace ArarGameLibrary.ScreenManagement
                 if (row.Frame != null)
                     row.SetFrame(row.Frame.LinesColor);
 
-                takenHeight += row.Size.Y + distanceAmongRows;
+                takenHeight += row.Size.Y;
 
                 row.PrepareColumns(isCentralized, floatTo);
+
+                row.SetPadding(padding.Value);
             }
 
             return this;
