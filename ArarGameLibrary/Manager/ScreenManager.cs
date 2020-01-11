@@ -9,6 +9,8 @@ namespace ArarGameLibrary.Manager
 {
     public class ScreenManager
     {
+        public static bool IsActive = true;
+
         public static List<IScreen> Screens = new List<IScreen>();
 
         public ScreenManager() { }
@@ -21,23 +23,29 @@ namespace ArarGameLibrary.Manager
 
         public static void Update()
         {
-            for (int i = 0; i < Screens.Count; i++)
+            if (IsActive)
             {
-                if (Screens[i].ScreenState == ScreenState.Inactive)
-                    Screens[i].UnloadContent();
-                else if (Screens[i].ScreenState == ScreenState.Active || Screens[i].ScreenState == ScreenState.Preparing)
-                    Screens[i].Update();
-            }
+                for (int i = 0; i < Screens.Count; i++)
+                {
+                    if (Screens[i].ScreenState == ScreenState.Inactive)
+                        Screens[i].UnloadContent();
+                    else if (Screens[i].ScreenState == ScreenState.Active || Screens[i].ScreenState == ScreenState.Preparing)
+                        Screens[i].Update();
+                }
 
-            Screens.RemoveAll(s => s.ScreenState == ScreenState.Inactive);
+                Screens.RemoveAll(s => s.ScreenState == ScreenState.Inactive);
+            }
         }
 
         public static void Draw()
         {
-            foreach (var screen in Screens)
+            if (IsActive)
             {
-                if (screen.ScreenState != ScreenState.Inactive)
-                    screen.Draw();
+                foreach (var screen in Screens)
+                {
+                    if (screen.ScreenState != ScreenState.Inactive)
+                        screen.Draw();
+                }
             }
         }
 
@@ -56,6 +64,11 @@ namespace ArarGameLibrary.Manager
             Global.Graphics.IsFullScreen = enable;
 
             Global.Graphics.ApplyChanges();
+        }
+
+        public static void SetActive(bool enable = true)
+        {
+            IsActive = enable;
         }
     }
 

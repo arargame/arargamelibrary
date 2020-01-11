@@ -48,7 +48,7 @@ namespace ArarGameLibrary.Manager
             Vector2? padding = null,
             Func<string> changeTextEvent = null)
         {
-            Font = Global.Content.Load<SpriteFont>(fontFile ?? "Fonts/DefaultFont");
+            Font = Global.Content().Load<SpriteFont>(fontFile ?? "Fonts/DefaultFont");
 
             SetText(text);
 

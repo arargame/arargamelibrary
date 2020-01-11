@@ -92,3 +92,17 @@
 
             column.AddChild(container);
             column.AddChild(container2);
+-Float To 
+            cnt = new Container();
+            cnt.SetTexture();
+            cnt.SetFrame(Color.Wheat);
+            cnt.SetPosition(new Vector2(250,250));
+            cnt.SetSize(new Vector2(300,50));
+
+            var cnt2 = new Container();
+            cnt2.SetTexture();
+            cnt2.SetTexture(Color.LightPink);
+            cnt2.SetSizeRatioToParent(new Vector2(25,100));
+
+            cnt.AddChild(cnt2);
+            cnt2.FloatTo("right");

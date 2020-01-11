@@ -75,7 +75,12 @@ namespace ArarGameLibrary.ScreenManagement
             base.Dispose(disposing);
         }
 
-        public static List<Button> SortButtons(Dictionary<string, Action> collection, Vector2? center = null, Vector2? margin = null, Color? textColor = null, bool isFrameVisible = true, float topHeight = 100f)
+        public static List<Button> SortButtons(Dictionary<string, Action> collection,
+            Vector2? center = null,
+            Vector2? margin = null,
+            Color? textColor = null,
+            bool isFrameVisible = true,
+            float topGap = 100f)
         {
             LinkedList<Button> buttons = new LinkedList<Button>();
 
@@ -87,18 +92,18 @@ namespace ArarGameLibrary.ScreenManagement
             if (margin == null)
                 margin = new Vector2(-Global.ViewportCenter.X * 0.7f, 10);
 
-            if (textColor == null)
-                textColor = Global.Theme.GetColor();
+            //if (textColor == null)
+            //    textColor = Global.Theme.GetColor();
 
             foreach (var item in collection)
             {
-                var button = new Button();
+                var button = new MenuButton(text: item.Key, textColor: textColor);
 
-                button.SetFont(text: item.Key, textColor: textColor);
-
-                button.MakeFrameVisible(true);
+                button.LoadContent();
 
                 button.OnClick(item.Value);
+
+                button.SetSize(new Vector2(button.Font.Size.X + 50, button.Font.Size.Y + 20));
 
                 buttons.AddLast(button);
             }
@@ -115,11 +120,11 @@ namespace ArarGameLibrary.ScreenManagement
                 }
                 else
                 {
-                    var x = center.Value.X - (float)(button.Texture.Width / 2);
+                    var x = center.Value.X - (float)(button.Size.X / 2);
 
                     startingPosition.X = x + margin.Value.X;
 
-                    startingPosition.Y = startingPosition.Y + topHeight;
+                    startingPosition.Y = startingPosition.Y + topGap;
 
                     button.SetPosition(startingPosition);
                 }

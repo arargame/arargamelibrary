@@ -24,7 +24,7 @@ namespace ArarGameLibrary.Manager
 
         public TextureManager Load(string textureName)
         {
-            Texture = Global.Content.Load<Texture2D>(textureName);
+            Texture = Global.Content().Load<Texture2D>(textureName);
 
             return this;
         }
@@ -47,7 +47,7 @@ namespace ArarGameLibrary.Manager
         {
             Texture2D newTexture = null;
 
-            newTexture = Global.Content.Load<Texture2D>(assetName);
+            newTexture = Global.Content().Load<Texture2D>(assetName);
 
             return newTexture;
         }

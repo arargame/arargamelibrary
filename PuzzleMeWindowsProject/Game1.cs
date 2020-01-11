@@ -52,7 +52,7 @@ namespace PuzzleMeWindowsProject
         /// </summary>
         protected override void Initialize()
         {
-            Global.Content = Content;
+            Global.ContentManager = Content;
             Global.GameWindow = Window;
             Global.GraphicsDevice = GraphicsDevice;
             Global.Random = new Random();
@@ -89,7 +89,7 @@ namespace PuzzleMeWindowsProject
                 //scrollBarColumns[i].SetTexture(TextureManager.CreateTexture2DByRandomColor());
             }
 
-            scrollBar = new ScrollBar(3, 3, 2.5f,20f, scrollBarColumns);
+            scrollBar = new ScrollBar(3, 3, 2.5f,null, scrollBarColumns);
             //scrollBar.LoadContent(TextureManager.CreateTexture2DBySingleColor(Color.Tan));
             //scrollBar.SetFrame(Color.Yellow,2f);
             //scrollBar.PrepareRows(true);

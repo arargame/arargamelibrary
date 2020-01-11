@@ -65,7 +65,7 @@ namespace ArarGameLibrary.ScreenManagement
 
             column.SetWidthRatio(widthRatio);
 
-            column.SetSizeDifferenceRatioWithParent(new Vector2(widthRatio, 100));
+            column.SetSizeRatioToParent(new Vector2(widthRatio, 100));
 
             return this;
         }

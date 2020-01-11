@@ -88,12 +88,16 @@
     <Compile Include="ScreenManagement\LightDrop.cs" />
     <Compile Include="ScreenManagement\Menu.cs" />
     <Compile Include="ScreenManagement\MenuButton.cs" />
+    <Compile Include="ScreenManagement\Modal.cs" />
     <Compile Include="ScreenManagement\Row.cs" />
     <Compile Include="ScreenManagement\Screen.cs" />
     <Compile Include="ScreenManagement\ScrollBar.cs" />
     <Compile Include="ScreenManagement\Theme.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="LibraryContent\Textures\lightDrop.xnb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

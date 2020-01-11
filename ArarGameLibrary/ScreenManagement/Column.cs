@@ -40,7 +40,7 @@ namespace ArarGameLibrary.ScreenManagement
 
             imageColumn.SetPosition(Position);
 
-            imageColumn.SetSizeDifferenceRatioWithParent(new Vector2(100, 100));
+            imageColumn.SetSizeRatioToParent(new Vector2(100, 100));
 
             AddChild(imageColumn);
 

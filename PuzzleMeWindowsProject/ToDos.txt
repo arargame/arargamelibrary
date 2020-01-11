@@ -77,3 +77,34 @@
 
 -Mesela size ın minimum değeri 0 olsun dedik fakat örneğin -10 verildiğinde anlık -10 olup sonradan 0 mı oluyor? (24.12.2019)
 -Scrollbar.cs rowsCountToShow = 5 yapınca sapıtıyor Padding kısımlarıyla ilgili sıknıtı var play butonunu(2.1.2019)
+
+-MainMenuden menulerin tasarımı kontrol et(10.01.2019 21:13)
+-Dosya yönetimi(özellikle save dosyası)
+-Log Yönetimi
+-Müzik yönetimi
+-Introduction Screen
+-Gesture yönetimi
+-Back button yönetimi
+-user management
+-12
+
+To implement basic acceleration you need to know a little physics. The basics you need to know about are the relationships between:
+
+Position - Where your object is
+Velocity - The direction and rate your object is changing its position
+Acceleration - The direction and rate your object is changing its velocity
+So, to add acceleration, you need to have Position and Velocity already implemented. I'll assume you're doing that already, since you're asking about Acceleration.
+
+Since you have velocity already implemented, I'll assume you have something like:
+
+player.x += player.velocity.x * dt;
+player.y += player.velocity.y * dt;
+Where dt is the time since the last update. Now if we want to change the velocity with respect to time, we just need to add a line like this:
+
+player.velocity.x += player.acceleration.x * dt;
+player.velocity.y += player.acceleration.y * dt;
+Now, if we want to modify that acceleration with the keyboard, we can do something simple like:
+
+if (KeyboardState.IsKeyDown(Keys.Right))
+    player.acceleration.x += .01f;
+

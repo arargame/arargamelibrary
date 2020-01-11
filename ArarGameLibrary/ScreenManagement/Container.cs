@@ -44,7 +44,7 @@ namespace ArarGameLibrary.ScreenManagement
 
             row.SetHeightRatio(heightRatio);
 
-            row.SetSizeDifferenceRatioWithParent(new Vector2(100, heightRatio));
+            row.SetSizeRatioToParent(new Vector2(100, heightRatio));
 
             return this;
         }
@@ -72,7 +72,7 @@ namespace ArarGameLibrary.ScreenManagement
 
                 row.SetPosition(rowPosition);
 
-                row.SetSizeDifferenceRatioWithParent(new Vector2(100, row.HeightRatio));
+                row.SetSizeRatioToParent(new Vector2(100, row.HeightRatio));
 
                 row.SetSize(new Vector2(Size.X, maxHeight * row.HeightRatio / 100));
 

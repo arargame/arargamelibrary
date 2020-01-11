@@ -13,7 +13,7 @@ namespace ArarGameLibrary.Manager
 {
     public static class Global
     {
-        public static ContentManager Content { get; set; }
+        public static ContentManager ContentManager { get; set; }
 
         public static GameTime GameTime { get; set; }
 
@@ -30,6 +30,13 @@ namespace ArarGameLibrary.Manager
         public static bool OnExit { get; set; }
 
         public static Theme Theme = new Theme(ThemeMode.Dark);
+
+        public static ContentManager Content(string rootDirectory = "Content")
+        {
+            ContentManager.RootDirectory = rootDirectory;
+
+            return ContentManager;
+        }
 
         public static void ChangeGameWindowTitle(string title)
         {

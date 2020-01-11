@@ -34,9 +34,15 @@ namespace ArarGameLibrary.ScreenManagement
 
             OppositeColor = Global.Theme.Mode == ThemeMode.White ? Theme.GetDefaultColorByMode(ThemeMode.Dark) : Theme.GetDefaultColorByMode(ThemeMode.White);
 
-            textPadding = textPadding ?? Offset.CreatePadding(OffsetValueType.Piksel, 10, 10, 0, 0);
+            textPadding = textPadding ?? Offset.CreatePadding(OffsetValueType.Ratio, 10, 25, 0, 0);
 
             SetFont(text, OppositeColor, textPadding);
+
+            var newSize = new Vector2(Font.TextMeasure.X + Padding.Left + Padding.Right, Font.TextMeasure.Y + Padding.Top + Padding.Bottom);
+
+            newSize = new Vector2(MathHelper.Clamp(newSize.X, Size.X, newSize.X), MathHelper.Clamp(newSize.Y, Size.Y, newSize.Y));
+
+            SetSize(newSize);
 
             InnerTextureLayerDepth = LayerDepth;
         }
@@ -110,9 +116,9 @@ namespace ArarGameLibrary.ScreenManagement
 
         void MenuButton_OnChangeRectangle()
         {
-            //Frame = Frame.Create(DestinationRectangle, OppositeColor);
+            Frame = Frame.Create(DestinationRectangle, OppositeColor);
 
-            //Frame.LoadContent();
+            Frame.LoadContent();
         }
     }
 }

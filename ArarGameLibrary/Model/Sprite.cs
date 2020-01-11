@@ -508,9 +508,9 @@ namespace ArarGameLibrary.Model
             SpriteEffects = effects;
         }
 
-        public void SetTexture(string name)
+        public void SetTexture(string name, string rootDirectory = "Content")
         {
-            Texture = Global.Content.Load<Texture2D>(name);
+            Texture = Global.Content(rootDirectory).Load<Texture2D>(name);
         }
 
         public void SetTexture(Texture2D texture)

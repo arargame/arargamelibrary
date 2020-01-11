@@ -26,7 +26,7 @@ namespace ArarGameLibrary.ScreenManagement
 
         public Vector2 DistanceToParent { get; set; }
 
-        public Vector2 SizeDifferenceRatioWithParent { get; set; }
+        public Vector2 SizeRatioToParent { get; set; }
         public Vector2 PositionRatio { get; set; }
 
         public Font Font { get; private set; }
@@ -178,7 +178,7 @@ namespace ArarGameLibrary.ScreenManagement
 
                     var sizeYRatio = Size.Y != 0 && newSize.Y != 0 ? (newSize.Y / Size.Y) * 100 : 0;
 
-                    SetSizeDifferenceRatioWithParent(new Vector2(sizeXRatio, sizeYRatio));
+                    SetSizeRatioToParent(new Vector2(sizeXRatio, sizeYRatio));
 
                     SetSize(newSize);
                 }
@@ -190,10 +190,6 @@ namespace ArarGameLibrary.ScreenManagement
         public new Component SetPadding(Offset padding)
         {
             Padding = padding;
-
-            //PaddingRatio = CalculatePaddingRatio();
-
-            // Component_OnChangePadding();
 
             foreach (var children in Child)
             {
@@ -222,7 +218,7 @@ namespace ArarGameLibrary.ScreenManagement
 
                     var sizeYRatio = Size.Y != 0 && childrenNewSize.Y != 0 ? (childrenNewSize.Y / Size.Y) * 100 : 0;
 
-                    children.SetSizeDifferenceRatioWithParent(new Vector2(sizeXRatio, sizeYRatio));
+                    children.SetSizeRatioToParent(new Vector2(sizeXRatio, sizeYRatio));
 
                     children.SetSize(childrenNewSize);
                 }
@@ -296,7 +292,7 @@ namespace ArarGameLibrary.ScreenManagement
                 SetPosition(Parent.Position);
 
             SetDistanceToParent();
-            SetSizeDifferenceRatioWithParent();
+            SetSizeRatioToParent();
 
             return this;
         }
@@ -363,7 +359,7 @@ namespace ArarGameLibrary.ScreenManagement
 
             SetDistanceToParent();
 
-            SetSizeDifferenceRatioWithParent();
+            SetSizeRatioToParent();
 
             foreach (Component children in Child)
             {
@@ -379,13 +375,13 @@ namespace ArarGameLibrary.ScreenManagement
 
                 if (children.IsFixedToParentSize)
                 {
-                    var newSizeDifferenceWithParent = children.CalculateSizeDifferenceWithParent();
+                    var newSizeDifferenceWithParent = children.CalculateSizeRatioParent();
 
-                    children.SetSizeDifferenceRatioWithParent();
+                    children.SetSizeRatioToParent();
 
-                    if (newSizeDifferenceWithParent != children.SizeDifferenceRatioWithParent)
+                    if (newSizeDifferenceWithParent != children.SizeRatioToParent)
                     {
-                        var newChildrenSize = (Size * children.SizeDifferenceRatioWithParent) / 100;
+                        var newChildrenSize = (Size * children.SizeRatioToParent) / 100;
 
                         children.SetSize(newChildrenSize);
 
@@ -447,20 +443,20 @@ namespace ArarGameLibrary.ScreenManagement
             }
         }
 
-        public void SetSizeDifferenceRatioWithParent(Vector2? sizeDifferenceWithParent = null)
+        public void SetSizeRatioToParent(Vector2? sizeDifferenceWithParent = null)
         {
             if (sizeDifferenceWithParent != null)
-                SizeDifferenceRatioWithParent = sizeDifferenceWithParent.Value;
+                SizeRatioToParent = sizeDifferenceWithParent.Value;
             else
             {
-                var newSizeDifferenceWithParent = CalculateSizeDifferenceWithParent();
+                var newSizeDifferenceWithParent = CalculateSizeRatioParent();
 
-                if (SizeDifferenceRatioWithParent == Vector2.Zero && newSizeDifferenceWithParent != Vector2.Zero)
-                    SizeDifferenceRatioWithParent = newSizeDifferenceWithParent;
+                if (SizeRatioToParent == Vector2.Zero && newSizeDifferenceWithParent != Vector2.Zero)
+                    SizeRatioToParent = newSizeDifferenceWithParent;
             }
         }
 
-        private Vector2 CalculateSizeDifferenceWithParent()
+        private Vector2 CalculateSizeRatioParent()
         {
             if (Parent != null)
             {
@@ -471,7 +467,7 @@ namespace ArarGameLibrary.ScreenManagement
                 return new Vector2(sizeXRatio, sizeYRatio);
             }
 
-            return SizeDifferenceRatioWithParent;
+            return SizeRatioToParent;
         }
 
         public Component FixToParentPosition(bool enable = true)
@@ -538,12 +534,6 @@ namespace ArarGameLibrary.ScreenManagement
             Font.IncreaseLayerDepth(baseDepth: LayerDepth);
 
             SetPadding(textPadding.Value);
-
-            var newSize = new Vector2(Font.TextMeasure.X + Padding.Left + Padding.Right, Font.TextMeasure.Y + Padding.Top + Padding.Bottom);
-
-            newSize = new Vector2(MathHelper.Clamp(newSize.X, Size.X, newSize.X), MathHelper.Clamp(newSize.Y, Size.Y, newSize.Y));
-
-            SetSize(newSize);
 
             return this;
         }
@@ -680,5 +670,52 @@ namespace ArarGameLibrary.ScreenManagement
             }
         }
 
+        public Component AlignChildAsCenter(Vector2? sizeDifference = null)
+        {
+            foreach (var children in Child)
+            {
+                sizeDifference = sizeDifference ?? Size - children.Size;
+
+                var childrenNewSize = Size - sizeDifference.Value;
+
+                var sizeXRatio = Size.X != 0 && childrenNewSize.X != 0 ? (childrenNewSize.X / Size.X) * 100 : 0;
+
+                var sizeYRatio = Size.Y != 0 && childrenNewSize.Y != 0 ? (childrenNewSize.Y / Size.Y) * 100 : 0;
+
+
+                children.SetSizeRatioToParent(new Vector2(sizeXRatio,sizeYRatio));
+                children.SetSize(childrenNewSize);
+
+                children.SetPosition(new Vector2(DestinationRectangle.Center.X - children.Size.X / 2, DestinationRectangle.Center.Y - children.Size.Y / 2));
+            }
+
+            return this;
+        }
+
+        public Component FloatTo(string direction)
+        {
+            if (Parent != null)
+            {
+                switch (direction)
+                {
+                    case "right":
+
+                        SetPosition(new Vector2(Parent.DestinationRectangle.Right - Size.X, Parent.Position.Y));
+
+                        break;
+
+                    case "left":
+
+                        SetPosition(Parent.Position);
+
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+
+            return this;
+        }
     }
 }

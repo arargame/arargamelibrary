@@ -245,7 +245,7 @@ namespace ArarGameLibrary.ScreenManagement
             {
                 ListContainer.PrepareRows(floatTo: "left", padding: RowPadding);
 
-                //(ListContainer.Rows.ForEach(r => r.SetPadding(Offset.CreatePadding(OffsetValueType.Ratio, 5, 0, 0, DistanceAmongRows)));
+                //ListContainer.Rows.ForEach(r => r.SetPadding(Offset.CreatePadding(OffsetValueType.Ratio, 5, 5, 5, 5)));
 
                 foreach (var row in ListContainer.Rows)
                 {

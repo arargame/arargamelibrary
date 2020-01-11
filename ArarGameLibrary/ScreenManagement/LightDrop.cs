@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -29,7 +30,7 @@ namespace ArarGameLibrary.ScreenManagement
 
         public override void LoadContent(Texture2D texture = null)
         {
-            SetTexture("Textures/lightDrop");
+            SetTexture("Textures/lightDrop","LibraryContent");
         }
 
         public override void Update(GameTime gameTime = null)

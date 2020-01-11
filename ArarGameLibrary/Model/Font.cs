@@ -42,7 +42,7 @@ namespace ArarGameLibrary.Model
             bool isPulsating = false)
         {
             //config.json veya appconfig tarzı bişey yap default font vs için Fonts/DefaultFont
-            SpriteFont = Global.Content.Load<SpriteFont>(fontFile ?? "Fonts/MenuFont");
+            SpriteFont = Global.Content().Load<SpriteFont>(fontFile ?? "Fonts/MenuFont");
 
             SetText(text);
 
@@ -114,14 +114,28 @@ namespace ArarGameLibrary.Model
                     case OffsetValueType.Piksel:
 
                         x = rectangle.Left + offset.Value.Left;
+
+                        if (x > rectangle.Right - offset.Value.Right - TextMeasure.X)
+                            x = rectangle.Right - offset.Value.Right - TextMeasure.X;
+
                         y = rectangle.Top + offset.Value.Top;
+
+                        if (y > rectangle.Bottom - offset.Value.Bottom - TextMeasure.Y)
+                            y = rectangle.Bottom - offset.Value.Bottom - TextMeasure.Y;
 
                         break;
 
                     case OffsetValueType.Ratio:
 
                         x = rectangle.Left + (rectangle.Width * offset.Value.Left / 100);
+
+                        if (x > rectangle.Right - (rectangle.Width * offset.Value.Right / 100) - TextMeasure.X)
+                            x = rectangle.Right - (rectangle.Width * offset.Value.Right / 100) - TextMeasure.X;
+
                         y = rectangle.Top + (rectangle.Height * offset.Value.Top / 100);
+
+                        if (y > rectangle.Bottom - (rectangle.Height * offset.Value.Bottom / 100) - TextMeasure.Y)
+                            y = rectangle.Bottom - (rectangle.Height * offset.Value.Bottom / 100) - TextMeasure.Y;
 
                         break;
                 }
