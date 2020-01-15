@@ -3,10 +3,7 @@ using ArarGameLibrary.Manager;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace ArarGameLibrary.Model
 {
@@ -19,6 +16,8 @@ namespace ArarGameLibrary.Model
 
     public class Font : Sprite
     {
+        public static Font Default { get; set; }
+
         public SpriteFont SpriteFont { get; set; }
 
         public string Text { get; set; }
@@ -26,7 +25,6 @@ namespace ArarGameLibrary.Model
         public Vector2 TextMeasure { get; set; }
 
         public Func<string> ChangeTextEvent { get; set; }
-
 
         public Font(string fontFile = null,
             string text = null,
@@ -42,7 +40,7 @@ namespace ArarGameLibrary.Model
             bool isPulsating = false)
         {
             //config.json veya appconfig tarzı bişey yap default font vs için Fonts/DefaultFont
-            SpriteFont = Global.Content().Load<SpriteFont>(fontFile ?? "Fonts/MenuFont");
+            SpriteFont = fontFile != null ? Global.Content().Load<SpriteFont>(fontFile) : Global.Content("LibraryContent").Load<SpriteFont>("Fonts/DefaultFont");
 
             SetText(text);
 
@@ -213,6 +211,17 @@ namespace ArarGameLibrary.Model
             ChangeTextEvent = changeTextEvent;
 
             return this;
+        }
+        
+
+        public static void Draw(string text, Vector2 position, Color color,Func<string> changeTextEvent = null)
+        {
+            if (Default == null)
+                Default = new Font(text: text, position: position, color: color, changeTextEvent: changeTextEvent);
+
+            Default.Update();
+
+            Default.Draw();
         }
     }
 }

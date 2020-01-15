@@ -30,7 +30,7 @@ namespace ArarGameLibrary.ScreenManagement
 
         public override void LoadContent(Texture2D texture = null)
         {
-            SetTexture("Textures/lightDrop","LibraryContent");
+            SetTexture("Textures/LightDrop","LibraryContent");
         }
 
         public override void Update(GameTime gameTime = null)

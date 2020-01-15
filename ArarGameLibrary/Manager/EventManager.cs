@@ -41,8 +41,7 @@ namespace ArarGameLibrary.Manager
 
             if (IsContinuous)
                 Task.Invoke();
-            else
-                if (!IsInvoked)
+            else if (!IsInvoked)
                 {
                     Task.Invoke();
 

@@ -101,7 +101,7 @@ namespace ArarGameLibrary.ScreenManagement
 
                 button.LoadContent();
 
-                button.OnClick(item.Value);
+                button.SetClickAction(item.Value);
 
                 button.SetSize(new Vector2(button.Font.Size.X + 50, button.Font.Size.Y + 20));
 

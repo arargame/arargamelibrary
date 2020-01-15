@@ -1,6 +1,7 @@
 ﻿using ArarGameLibrary.Manager;
 using ArarGameLibrary.Model;
 using ArarGameLibrary.ScreenManagement;
+using ArarGameLibrary.ScreenManagement.Screens;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -18,7 +19,13 @@ namespace TestProject
 
         ScrollBar scrollBar;
 
-        Container cnt;
+        Container cnt1001;
+
+        byte opacity = 0;
+        Texture2D texture;
+
+        Container cnt101;
+        Container cnt102;
    
         public Game1()
         {
@@ -43,6 +50,46 @@ namespace TestProject
 
         protected override void LoadContent()
         {
+            cnt101 = new Container();
+            cnt101.SetTexture();
+            cnt101.SetSize(new Vector2(100,100));
+            cnt101.TestInfo.Font.SetChangeTextEvent(() => cnt101.LayerDepth.ToString());
+            cnt101.TestInfo.Show();
+
+
+            cnt102 = new Container();
+            cnt102.TestInfo.Font.SetChangeTextEvent(() => cnt102.LayerDepth.ToString());
+            cnt102.SetTexture();
+            cnt102.SetSize(new Vector2(100, 100));
+            cnt102.SetPosition(new Vector2(250,250));
+            cnt102.TestInfo.Show();
+
+            cnt1001 = new Container();
+            cnt1001.SetTexture();
+            cnt1001.SetPosition(new Vector2(0,0));
+            cnt1001.SetSize(new Vector2(Global.ViewportWidth,Global.ViewportHeight));
+            cnt1001.TestInfo.Show("Hellow");
+
+            for (int i = 0; i < 4; i++)
+            {
+                var r = new Row();
+                r.SetTexture();
+                r.TestInfo.Font.SetChangeTextEvent(()=>r.LayerDepth.ToString());
+                r.TestInfo.Show();
+                cnt1001.AddRow(r,25);
+            }
+
+            cnt1001.PrepareRows();
+
+            var cl = new Column();
+            cl.SetName("cl");
+            cl.SetTexture();
+            cl.SetSize(new Vector2(20,20));
+            cl.SetPosition(new Vector2(250, 0));
+            cl.TestInfo.Font.SetChangeTextEvent(()=>cl.LayerDepth.ToString());
+            cl.TestInfo.Show();
+            cnt1001.Rows.FirstOrDefault().AddColumn(cl,70);
+
             //column = new Column();
             //column.SetTexture();
             //column.SetSize(new Vector2(100, 100));
@@ -57,28 +104,15 @@ namespace TestProject
 
             //column.SetDragable();
 
-            //scrollBar = SetScrollBar();
+            scrollBar = SetScrollBar();
             //scrollBar.SetActive(false);
 
             var menuScreen = new MainMenu();
 
-            ScreenManager.Add(menuScreen);
+            ScreenManager.Add(new TradeMarkScreen101());
             ScreenManager.SetActive(false);
 
-            cnt = new Container();
-            cnt.SetTexture();
-            cnt.SetFrame(Color.Wheat);
-            cnt.SetPosition(new Vector2(250,250));
-            cnt.SetSize(new Vector2(300,50));
-
-            var cnt2 = new Container();
-            cnt2.SetTexture();
-            cnt2.SetTexture(Color.LightPink);
-            cnt2.SetSizeRatioToParent(new Vector2(25,100));
-
-            cnt.AddChild(cnt2);
-            //cnt2.FloatTo("right");
-            cnt.AlignChildAsCenter(new Vector2(20,20));
+            texture = Global.Content().Load<Texture2D>("smilemanLogoFull");
         }
 
         public ScrollBar SetScrollBar()
@@ -149,12 +183,20 @@ namespace TestProject
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
+            if (opacity < 255)
+                opacity++;
             //column.Update();
 
-            //scrollBar.Update();
+            scrollBar.Update();
 
-            ScreenManager.Update();
-            cnt.Update();
+            //ScreenManager.Update();
+
+            cnt1001.Update();
+
+            cnt101.Update();
+            cnt102.Update();
+
+
 
             //if (InputManager.IsKeyDown(Keys.Up))
             //    column.SetSize(new Vector2(column.Size.X, column.Size.Y - 20));
@@ -180,6 +222,34 @@ namespace TestProject
             //    column.SetPosition(new Vector2(column.Position.X + 20, column.Position.Y));
 
 
+            if (InputManager.IsKeyDown(Keys.Up))
+            {
+                Column item = cnt1001.GetChildAs<Column>(c=>c.Name=="cl").FirstOrDefault();
+
+                item.SetPosition(new Vector2(item.Position.X, item.Position.Y - 10));
+
+                cnt101.SetPosition(new Vector2( cnt101.Position.X, cnt101.Position.Y-10));
+            }
+
+            if (InputManager.IsKeyDown(Keys.Down))
+            {
+                Column item = cnt1001.GetChildAs<Column>(c => c.Name == "cl").FirstOrDefault();
+
+                item.SetPosition(new Vector2(item.Position.X, item.Position.Y + 10));
+
+                cnt101.SetPosition(new Vector2( cnt101.Position.X, cnt101.Position.Y + 10));
+            }
+
+            if (InputManager.IsKeyDown(Keys.Left))
+            {
+                cnt101.SetPosition(new Vector2(cnt101.Position.X -10, cnt101.Position.Y));
+            }
+
+            if (InputManager.IsKeyDown(Keys.Right))
+            {
+                cnt101.SetPosition(new Vector2(cnt101.Position.X + 10, cnt101.Position.Y));
+            }
+
 
             base.Update(gameTime);
         }
@@ -189,16 +259,44 @@ namespace TestProject
         {
             GraphicsDevice.Clear(Global.Theme.GetColor());
 
+            //BlendState leri falan bir yerden çağır,intro için nonpremultiplied gerekiyor
             Global.SpriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend);
-
             //column.Draw();
 
-            //scrollBar.Draw();
+            scrollBar.Draw();
+            //cnt1001.Draw();
 
-            ScreenManager.Draw();
-            cnt.Draw();
 
+
+
+            //cnt101.SetLayerDepth(cnt102.LayerDepth + 0.1f);
+
+            //Global.SpriteBatch.Draw(cnt102.Texture, cnt102.DestinationRectangle, cnt102.SourceRectangle, cnt102.Color, cnt102.Rotation, cnt102.Origin, cnt102.SpriteEffects, cnt102.LayerDepth);
+
+            //Global.SpriteBatch.Draw(cnt101.Texture, cnt101.DestinationRectangle, cnt101.SourceRectangle, cnt101.Color, cnt101.Rotation, cnt101.Origin, cnt101.SpriteEffects, cnt101.LayerDepth);
+
+            
+
+            //Global.SpriteBatch.End();
+
+
+            //Global.SpriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend);
+            ////Global.SpriteBatch.Draw(cnt102.Texture, cnt102.DestinationRectangle, cnt102.SourceRectangle, cnt102.Color, cnt102.Rotation, cnt102.Origin, cnt102.SpriteEffects, cnt102.LayerDepth);
             Global.SpriteBatch.End();
+
+
+
+
+
+            //Font.Draw("", new Vector2(0, 250), Color.White,
+            //    () =>
+            //    {
+            //        return TimeManager.FPS.ToString();
+            //    });
+            //ScreenManager.Draw();
+
+            //Color.Lerp(Color.Black, Color.Transparent, 0.9f)
+
 
             base.Draw(gameTime);
 

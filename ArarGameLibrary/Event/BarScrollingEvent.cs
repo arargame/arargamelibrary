@@ -24,13 +24,6 @@ namespace ArarGameLibrary.Event
             {
                 if (ScrollBar.Bar.IsDragging || (ScrollBar.Bar.IsDragable && InputManager.IsMouseScrolling))
                 {
-                    //var counter2 = 0;
-                    //var xxx = ScrollContainer.Rows.Select(row => new
-                    //{
-                    //    BlockNumber = counter2++,
-                    //    OverlappedAreaHeight = Rectangle.Intersect(Bar.DestinationRectangle, row.DestinationRectangle).Height
-                    //}).ToList();
-
                     var counter = 0;
 
                     var maxOverlapAmongBarAndBlock = ScrollBar.ScrollContainer.Rows.Select(row =>

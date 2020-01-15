@@ -42,7 +42,11 @@ namespace PuzzleMeWindowsProject.Screens
 
         public override void Draw(SpriteBatch spriteBatch = null)
         {
-            Global.SpriteBatch.Draw(TransparentBackground,new Rectangle(0,0,Global.ViewportWidth,Global.ViewportHeight),Color.White);
+            Global.SpriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend);
+
+            Global.SpriteBatch.Draw(TransparentBackground, new Rectangle(0, 0, Global.ViewportWidth, Global.ViewportHeight), Color.White);
+
+            Global.SpriteBatch.End();
 
             base.Draw();
         }

@@ -43,13 +43,9 @@ namespace ArarGameLibrary.Manager
             return colors;
         }
 
-        public static Texture2D CreateTexture2D(string assetName)
+        public static Texture2D CreateTexture2D(string assetName, string rootDirectory = "Content")
         {
-            Texture2D newTexture = null;
-
-            newTexture = Global.Content().Load<Texture2D>(assetName);
-
-            return newTexture;
+            return Global.Content(rootDirectory).Load<Texture2D>(assetName);
         }
 
         public static Texture2D CreateTexture2DByColorArray(Color[] colorArray, int width=1, int height=1, bool mipmap = false, SurfaceFormat surfaceFormat = SurfaceFormat.Color)

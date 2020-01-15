@@ -1,7 +1,7 @@
 ﻿-14.3.2019 tarihinde bakıldığında ekran yönetim sistemleri hazırlanmış çalışmalar gayet başarılı görünüyor
 -Level sistemi yapılacak?
 -Gamescreen tasarlanacak
--FontManager de spritefont girilmezse default font sunan bir yapı düzenle
++FontManager de spritefont girilmezse default font sunan bir yapı düzenle(11.1.2020 +)
 -select-unselect görsel ayarlarndı piece lerin için doldurma zamanı köşelikleri olmalı seçildiğinde belli olsun
 +boş piece ayarla
 +boş zemine hareket sağla seçili piece için
@@ -40,12 +40,12 @@
 +layerdepth için enum ayarlanabilir bütün objelerde kullanılmak üzere(0,0.25,0.5,0.75,1) gibi
 +26.5.2019 Board-Piece çalışmalar yapıldı Select-Deselect fonksiyonlarındaki sorunlar giderildi
 -Time Manager,Sound Manager yapılarına ihtiyaç var
--1.6.2019 Align fonksiyonunun içine liste atılaiblir halini yap ve liste içindeki elementler birbirine göre öteleme yapsın ek olarka normal aligment ayarlansın container a göre
--1.6.2019 alt satıra geçeceğini bilmesi laızm overflow true özelliğini tasarla
+x1.6.2019 Align fonksiyonunun içine liste atılaiblir halini yap ve liste içindeki elementler birbirine göre öteleme yapsın ek olarka normal aligment ayarlansın container a göre
+x1.6.2019 alt satıra geçeceğini bilmesi laızm overflow true özelliğini tasarla
 -Episode seçmelik bir screen tasarlanacak
--Her bir episode için bir görsel ve başlat butonu içeren container
--bu container veya herhangi bir çizdirliebiir objenin alignment fonksiyonelliği
--row,column yapıları container içerisidne
++Her bir episode için bir görsel ve başlat butonu içeren container
++bu container veya herhangi bir çizdirliebiir objenin alignment fonksiyonelliği
++row,column yapıları container içerisidne
 +selectable,clickable object yapısı lazım,selectable rectangle kavramı?
 -level initial screen
 -level completed screen
@@ -86,7 +86,7 @@
 -Gesture yönetimi
 -Back button yönetimi
 -user management
--12
+-Pong örneğindeki gibi oynanabilir ekran için sınırları çizili gelen bir yapı(12.1.2019)
 
 To implement basic acceleration you need to know a little physics. The basics you need to know about are the relationships between:
 
@@ -108,3 +108,9 @@ Now, if we want to modify that acceleration with the keyboard, we can do somethi
 if (KeyboardState.IsKeyDown(Keys.Right))
     player.acceleration.x += .01f;
 
+-frame leri kullanarak kare şeklinde bir check box sistemi tasarla(11.1.2019)
+-modal üzeirne düşün(11.1.2019)
+
+-screen.cs üzeirnde eğer is preparing durumundaysa loading icon gösterilebilir
+-Global.SpriteBatch.Begin leri draw fonksiyonlarının içine al ve gerektiğinde alpha blend olaylarına gir(sıkıntılı bir olay-14.1.2020)
+-default componene cıkaran bir fonksiyon test amaçlı

@@ -140,7 +140,6 @@ namespace ArarGameLibrary.ScreenManagement
                 var listContainer = new Container();
                 listContainer.SetName("ListContainer");
                 listContainer.SetTexture();
-                //listContainer.FixToParentPosition(false);
 
                 var scrollContainerSizeX = (float)Size.X * ScrollContainerWidthRatio / 100;
                 listContainer.SetPosition(Position);
@@ -216,7 +215,7 @@ namespace ArarGameLibrary.ScreenManagement
             for (int i = 0; i < PageCount; i++)
             {
                 var row = new Row();
-                //row.SetFrame(Color.Black, 2f);
+
                 row.SetTexture(TextureManager.CreateTexture2DBySingleColor(new Color(62,62,66,255)));
 
                 var heightRatio = (float)1 / PageCount * 100;
@@ -231,8 +230,10 @@ namespace ArarGameLibrary.ScreenManagement
             bar.FixToParentPosition(false);
 
             var scrollContainerRows = scrollContainer.GetChildAs<Row>();
-            scrollContainerRows.FirstOrDefault().AddColumn(bar, 70);
 
+            var firstRow = scrollContainerRows.FirstOrDefault();
+
+            scrollContainerRows.FirstOrDefault().AddColumn(bar, 70);
 
             scrollContainer.PrepareRows(isCentralized: true);
 
@@ -244,16 +245,6 @@ namespace ArarGameLibrary.ScreenManagement
             if (ListContainer != null)
             {
                 ListContainer.PrepareRows(floatTo: "left", padding: RowPadding);
-
-                //ListContainer.Rows.ForEach(r => r.SetPadding(Offset.CreatePadding(OffsetValueType.Ratio, 5, 5, 5, 5)));
-
-                foreach (var row in ListContainer.Rows)
-                {
-                    foreach (var column in row.Columns)
-                    {
-                        //column.SetPadding(Offset.CreatePadding(OffsetValueType.Ratio, 10, 0, 0, 0));
-                    }
-                }
             }
 
             if (ScrollContainer != null)

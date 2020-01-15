@@ -50,7 +50,7 @@ namespace ArarGameLibrary.Effect
 
             SetDrawingTask(() =>
             {
-                Global.SpriteBatch.Draw(Texture, new Vector2(Rectangle.X, Rectangle.Y), Rectangle, Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, Sprite.LayerDepth - 0.5f);
+                Sprite.Draw(()=> Global.SpriteBatch.Draw(Texture, new Vector2(Rectangle.X, Rectangle.Y), Rectangle, Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, Sprite.LayerDepth - 0.5f));
             });
         }
 

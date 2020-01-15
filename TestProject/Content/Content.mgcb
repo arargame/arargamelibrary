@@ -25,20 +25,6 @@
 /processorParam:TextureFormat=Color
 /build:58669757_1118224611712565_8241604631101177856_o.jpg
 
-#begin Fonts/MenuFont.spritefont
-/importer:FontDescriptionImporter
-/processor:FontDescriptionProcessor
-/processorParam:PremultiplyAlpha=True
-/processorParam:TextureFormat=Compressed
-/build:Fonts/MenuFont.spritefont
-
-#begin Fonts/DefaultFont.spritefont
-/importer:FontDescriptionImporter
-/processor:FontDescriptionProcessor
-/processorParam:PremultiplyAlpha=True
-/processorParam:TextureFormat=Compressed
-/build:Fonts/DefaultFont.spritefont
-
 #begin mikrop.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -86,4 +72,16 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Measure.png
+
+#begin smilemanLogoFull.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=False
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:smilemanLogoFull.png
 

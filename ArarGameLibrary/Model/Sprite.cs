@@ -42,10 +42,13 @@ namespace ArarGameLibrary.Model
     {
         #region Properties
 
+        public BlendState BlendState { get; set; }
+
         public Rectangle CollisionRectangle { get; set; }
         public Color Color { get; set; }
         public ClampManager ClampManager { get; set; }
 
+        public DepthStencilState DepthStencilState { get; set; }
         public Rectangle DestinationRectangle
         {
             get
@@ -55,6 +58,8 @@ namespace ArarGameLibrary.Model
         }
         public int DrawMethodType { get; set; }
         public Vector2 DroppingRange { get; set; }
+
+        public Microsoft.Xna.Framework.Graphics.Effect Effect { get; set; }
 
         public bool IsActive { get; set; }
         public bool IsAlive { get; set; }
@@ -75,7 +80,6 @@ namespace ArarGameLibrary.Model
         public Vector2 Origin { get; set; }
 
         public Offset Padding { get; set; }
-       // public Vector2 Padding { get; set; }
         public Vector2 Position { get; set; }
         public Vector2 PositionChangingRatio
         {
@@ -96,8 +100,10 @@ namespace ArarGameLibrary.Model
             }
         }
 
+        public RasterizerState RasterizerState { get; set; }
         public float Rotation { get; set; }
 
+        public SamplerState SamplerState { get; set; }
         public float Scale { get; set; }
         //public bool SimpleShadowVisibility { get; set; }
         public Vector2 Size { get; set; }
@@ -131,9 +137,11 @@ namespace ArarGameLibrary.Model
         public Vector2 Speed { get; set; }
         public SpriteEffects SpriteEffects { get; set; }
         public SpriteBatch SpriteBatch { get; set; }
+        public SpriteSortMode SpriteSortMode { get; set; }
 
         public TestInfo TestInfo { get; set; }
         public Texture2D Texture { get; set; }
+        public Matrix? TransformMatrix { get; set; }
 
         public delegate void SomethingHasBeenChanged();
         public event SomethingHasBeenChanged OnChangeRectangle;
@@ -253,6 +261,15 @@ namespace ArarGameLibrary.Model
             }
         }
 
+        public void Draw(Action drawingFunction)
+        {
+            Global.SpriteBatch.Begin(SpriteSortMode, BlendState, SamplerState, DepthStencilState, RasterizerState, Effect, TransformMatrix);
+
+            drawingFunction();
+
+            Global.SpriteBatch.End();
+        }
+
         public virtual void Draw(SpriteBatch spriteBatch = null)
         {
             SetSpriteBatch(spriteBatch);
@@ -296,11 +313,6 @@ namespace ArarGameLibrary.Model
                             break;
                     }
                 }
-
-                //foreach (var effect in Effects)
-                //{
-                //    effect.Draw();
-                //}
 
                 foreach (var e in Events)
                 {
@@ -385,6 +397,11 @@ namespace ArarGameLibrary.Model
             IsAlive = enable;
         }
 
+        public void SetBlendState(BlendState blendState)
+        {
+            BlendState = blendState;
+        }
+
         public void SetClickable(bool enable)
         {
             IsClickable = enable;
@@ -393,6 +410,11 @@ namespace ArarGameLibrary.Model
         public void SetColor(Color color)
         {
             Color = color;
+        }
+
+        public void SetDepthStencilState(DepthStencilState depthStencilState)
+        {
+            DepthStencilState = depthStencilState;
         }
 
         public void SetDescription(string description)
@@ -411,6 +433,11 @@ namespace ArarGameLibrary.Model
         public void SetDrawMethodType(int methodType)
         {
             DrawMethodType = methodType;
+        }
+
+        public void SetEffect(Microsoft.Xna.Framework.Graphics.Effect effect)
+        {
+            Effect = effect;
         }
 
         public void SetLayerDepth(float layerDepth)
@@ -452,6 +479,11 @@ namespace ArarGameLibrary.Model
                 OnChangeRectangle?.Invoke();
         }
 
+        public void SetRasterizerState(RasterizerState rasterizerState)
+        {
+            RasterizerState = rasterizerState;
+        }
+
         public void SetRectangle()
         {
             SourceRectangle = new Rectangle(0, 0, Texture != null ? Texture.Width : DestinationRectangle.Width, Texture != null ? Texture.Height : DestinationRectangle.Height);
@@ -463,6 +495,11 @@ namespace ArarGameLibrary.Model
         public void SetRotation(float rotation)
         {
             Rotation = rotation;
+        }
+
+        public void SetSamplerState(SamplerState samplerState)
+        {
+            SamplerState = samplerState;
         }
 
         public void SetScale(float scale)
@@ -508,9 +545,14 @@ namespace ArarGameLibrary.Model
             SpriteEffects = effects;
         }
 
-        public void SetTexture(string name, string rootDirectory = "Content")
+        public void SetSpriteSortMode(SpriteSortMode spriteSortMode)
         {
-            Texture = Global.Content(rootDirectory).Load<Texture2D>(name);
+            SpriteSortMode = spriteSortMode;
+        }
+
+        public void SetTexture(string assetName, string rootDirectory = "Content")
+        {
+            Texture = TextureManager.CreateTexture2D(assetName, rootDirectory);
         }
 
         public void SetTexture(Texture2D texture)
@@ -528,6 +570,11 @@ namespace ArarGameLibrary.Model
             Texture = TextureManager.CreateTexture2DBySingleColor(color, width, height);
         }
 
+        public void SetTransformMatrix(Matrix transformMatrix)
+        {
+            TransformMatrix = transformMatrix;
+        }
+
         public virtual void SetVisible(bool enable)
         {
             IsVisible = enable;
@@ -540,16 +587,17 @@ namespace ArarGameLibrary.Model
 
         private void SetStartingSettings()
         {
+            SetBlendState(BlendState.AlphaBlend);
+
             SetClickable(false);
 
             SetStartingLayerDepth();
 
             SetOrigin();
 
+            SetSpriteSortMode(SpriteSortMode.FrontToBack);
             SetStartingPosition();
-
             SetStartingRotation();
-
             SetStartingScale();
             SetStartingSize();
             SetStartingSpeed();

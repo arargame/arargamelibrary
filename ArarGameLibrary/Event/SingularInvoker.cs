@@ -1,13 +1,22 @@
 ﻿using ArarGameLibrary.Manager;
 using ArarGameLibrary.Model;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ArarGameLibrary.Event
 {
+    //Events.Add(new SingularInvoker(this,
+    //whenToInvoke: () =>
+    //            {
+    //                return MaxRowsCount <= RowsCountToShow;
+    //            },
+    //            success: () =>
+    //            {
+    //                Bar.SetVisible(false);
+    //            },
+    //            fail: () => 
+    //            {
+    //                Bar.SetVisible(true);
+    //            }));
     public class SingularInvoker : EventManager
     {
         bool IsPositive { get; set; }
@@ -46,8 +55,6 @@ namespace ArarGameLibrary.Event
                     }
                 }
             });
-
-            //Start();
         }
 
         public override void Update()

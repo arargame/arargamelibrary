@@ -65,11 +65,16 @@ namespace ArarGameLibrary.Model
 
     public interface IDrawableObject : IXna
     {
+        BlendState BlendState { get; set; }
+
         Rectangle CollisionRectangle { get; set; }
         Color Color { get; set; }
 
+        DepthStencilState DepthStencilState { get; set; }
         Rectangle DestinationRectangle { get; }
         int DrawMethodType { get; set; }
+
+        Microsoft.Xna.Framework.Graphics.Effect Effect { get; set; }
 
         bool IsActive { get; set; }
         bool IsAlive { get; set; }
@@ -85,8 +90,10 @@ namespace ArarGameLibrary.Model
         //Vector2 Padding { get; set; }
         Vector2 Position { get; set; }
 
+        RasterizerState RasterizerState { get; set; }
         float Rotation { get; set; }
 
+        SamplerState SamplerState { get; set; }
         void SetDrawMethodType(int methodType);
         void SetSpriteEffects(SpriteEffects effects);
         void SetVisible(bool enable);
@@ -96,8 +103,10 @@ namespace ArarGameLibrary.Model
         Vector2 Speed { get; set; }
         SpriteEffects SpriteEffects { get; set; }
         SpriteBatch SpriteBatch { get; set; }
+        SpriteSortMode SpriteSortMode { get; set; }
 
         Texture2D Texture { get; set; }
+        Matrix? TransformMatrix { get; set; }
     }
 
     //public class DrawableObject : BaseObject, IDrawableObject

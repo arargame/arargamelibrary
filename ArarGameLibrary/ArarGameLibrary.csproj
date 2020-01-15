@@ -49,7 +49,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Effect\EffectManager.cs" />
     <Compile Include="Effect\PulsateEffect.cs" />
     <Compile Include="Effect\SimpleShadowEffect.cs" />
     <Compile Include="Event\BarScrollingEvent.cs" />
@@ -58,7 +57,6 @@
     <Compile Include="Event\SingularInvoker.cs" />
     <Compile Include="Manager\ClampManager.cs" />
     <Compile Include="Manager\EventManager.cs" />
-    <Compile Include="Manager\FontManager.cs" />
     <Compile Include="Manager\FrameManager.cs" />
     <Compile Include="Manager\General.cs" />
     <Compile Include="Manager\Global.cs" />
@@ -67,6 +65,7 @@
     <Compile Include="Manager\ScreenManager.cs" />
     <Compile Include="Manager\TestInfo.cs" />
     <Compile Include="Manager\TextureManager.cs" />
+    <Compile Include="Manager\TimeManager.cs" />
     <Compile Include="Model\Animation.cs" />
     <Compile Include="Model\BaseObject.cs" />
     <Compile Include="Model\Font.cs" />
@@ -82,6 +81,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Model\Sprite.cs" />
     <Compile Include="ScreenManagement\Button.cs" />
+    <Compile Include="ScreenManagement\Cinematic.cs" />
     <Compile Include="ScreenManagement\Column.cs" />
     <Compile Include="ScreenManagement\Component.cs" />
     <Compile Include="ScreenManagement\Container.cs" />
@@ -91,11 +91,21 @@
     <Compile Include="ScreenManagement\Modal.cs" />
     <Compile Include="ScreenManagement\Row.cs" />
     <Compile Include="ScreenManagement\Screen.cs" />
+    <Compile Include="ScreenManagement\Screens\TradeMarkScreen101.cs" />
     <Compile Include="ScreenManagement\ScrollBar.cs" />
     <Compile Include="ScreenManagement\Theme.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="LibraryContent\Textures\lightDrop.xnb">
+    <Content Include="LibraryContent\Textures\LightDrop.xnb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="LibraryContent\Fonts\DefaultFont.xnb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="LibraryContent\Fonts\MenuFont.xnb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="LibraryContent\Textures\SmilemanLogo.xnb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Include="packages.config" />
