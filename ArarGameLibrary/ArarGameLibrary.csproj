@@ -32,6 +32,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="LogManagement, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Dependencies\LogManagement.dll</HintPath>
+    </Reference>
     <Reference Include="MonoGame.Framework, Version=3.7.1.189, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MonoGame.Framework.Portable.3.7.1.189\lib\portable-net45+win8+wpa81\MonoGame.Framework.dll</HintPath>
     </Reference>
@@ -62,6 +66,7 @@
     <Compile Include="Manager\Global.cs" />
     <Compile Include="Manager\InputManager.cs" />
     <Compile Include="Manager\Level.cs" />
+    <Compile Include="Manager\ProjectManager.cs" />
     <Compile Include="Manager\ScreenManager.cs" />
     <Compile Include="Manager\TestInfo.cs" />
     <Compile Include="Manager\TextureManager.cs" />
@@ -74,6 +79,7 @@
     <Compile Include="Model\Graph.cs" />
     <Compile Include="Model\Image.cs" />
     <Compile Include="Model\Line.cs" />
+    <Compile Include="Model\Log.cs" />
     <Compile Include="Model\Piece.cs" />
     <Compile Include="Extension\RectangleExtension.cs" />
     <Compile Include="Model\Sound.cs" />
@@ -94,8 +100,12 @@
     <Compile Include="ScreenManagement\Screens\TradeMarkScreen101.cs" />
     <Compile Include="ScreenManagement\ScrollBar.cs" />
     <Compile Include="ScreenManagement\Theme.cs" />
+    <Compile Include="UserManagement\User.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Dependencies\LogManagement.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="LibraryContent\Textures\LightDrop.xnb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -106,6 +116,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="LibraryContent\Textures\SmilemanLogo.xnb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="LibraryContent\Fonts\LindseyFont.xnb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Include="packages.config" />

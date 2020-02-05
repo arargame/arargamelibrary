@@ -29,22 +29,13 @@ namespace TestProject
    
         public Game1()
         {
-            Content.RootDirectory = "Content";
-
-            Global.Graphics = new GraphicsDeviceManager(this);
+            Global.Game(this);
         }
 
         protected override void Initialize()
         {
-            Global.ContentManager = Content;
-            Global.GameWindow = Window;
-            Global.GraphicsDevice = GraphicsDevice;
-            Global.Random = new Random();
-            Global.SpriteBatch = new SpriteBatch(GraphicsDevice);
-            Global.Theme = new Theme(ThemeMode.Dark);
-
-            InputManager.IsMouseVisible = IsMouseVisible = true;
-
+            Global.Initialize(this);
+            
             base.Initialize();
         }
 
@@ -105,12 +96,16 @@ namespace TestProject
             //column.SetDragable();
 
             scrollBar = SetScrollBar();
-            //scrollBar.SetActive(false);
+            scrollBar.SetActive(false);
 
             var menuScreen = new MainMenu();
 
-            ScreenManager.Add(new TradeMarkScreen101());
-            ScreenManager.SetActive(false);
+            var startingScreen = new TradeMarkScreen101();
+            startingScreen.SetNextScreen(menuScreen);
+
+            ScreenManager.Add(startingScreen);
+
+            ScreenManager.SetActive(true);
 
             texture = Global.Content().Load<Texture2D>("smilemanLogoFull");
         }
@@ -173,9 +168,7 @@ namespace TestProject
 
         protected override void Update(GameTime gameTime)
         {
-            Global.GameTime = gameTime;
-            InputManager.Update();
-            InputManager.IsActive = true;
+            Global.Update(gameTime);
 
             //if (InputManager.IsLeftClicked)
             //    column.SetPosition(InputManager.CursorPosition);
@@ -189,7 +182,6 @@ namespace TestProject
 
             scrollBar.Update();
 
-            //ScreenManager.Update();
 
             cnt1001.Update();
 
@@ -284,7 +276,7 @@ namespace TestProject
             ////Global.SpriteBatch.Draw(cnt102.Texture, cnt102.DestinationRectangle, cnt102.SourceRectangle, cnt102.Color, cnt102.Rotation, cnt102.Origin, cnt102.SpriteEffects, cnt102.LayerDepth);
             Global.SpriteBatch.End();
 
-
+            ScreenManager.Draw();
 
 
 

@@ -149,7 +149,7 @@ namespace ArarGameLibrary.Model
 
             //SetTexture(texture ?? TextureManager.CreateTexture2DByRandomColor(1,1));
 
-            Font = new Font(fontFile: "Fonts/MenuFont", position: Position, color: Color.Yellow, changeTextEvent: () => SetText());
+            Font = new Font(fontFile: "Fonts/MenuFont", position: Position, fontColor: Color.Yellow, changeTextEvent: () => SetText());
 
             SetRectangle();
 

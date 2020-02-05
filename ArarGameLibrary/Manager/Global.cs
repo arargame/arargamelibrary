@@ -1,13 +1,8 @@
-﻿using ArarGameLibrary.Model;
-using ArarGameLibrary.ScreenManagement;
+﻿using ArarGameLibrary.ScreenManagement;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ArarGameLibrary.Manager
 {
@@ -19,7 +14,7 @@ namespace ArarGameLibrary.Manager
 
         public static GameWindow GameWindow { get; set; }
 
-        public static GraphicsDeviceManager Graphics { get; set; }
+        public static GraphicsDeviceManager GraphicsDeviceManager { get; set; }
 
         public static GraphicsDevice GraphicsDevice { get; set; }
 
@@ -136,6 +131,53 @@ namespace ArarGameLibrary.Manager
         public static float DeltaTime(this GameTime gameTime)
         {
             return gameTime.ElapsedGameTime.Milliseconds / 1000f;
+        }
+
+        public static void Game(Game game)
+        {
+            game.Content.RootDirectory = "Content";
+
+            GraphicsDeviceManager = new GraphicsDeviceManager(game);
+        }
+
+        public static void Initialize(Game game)
+        {
+            InputManager.IsMouseVisible = game.IsMouseVisible = true;
+
+            InputManager.IsActive = true;
+
+            ProjectManager.Load();
+
+            Random = new Random();
+
+            ContentManager = game.Content;
+
+            GameWindow = game.Window;
+
+            GraphicsDevice = game.GraphicsDevice;
+            
+            SpriteBatch = new SpriteBatch(GraphicsDevice);
+
+            Theme = new Theme(ThemeMode.Dark);
+        }
+
+        public static void LoadContent()
+        {
+
+        }
+
+        public static void Update(GameTime gameTime)
+        {
+            GameTime = gameTime;
+
+            InputManager.Update();
+
+            ScreenManager.Update();
+        }
+
+        public static void Draw()
+        {
+
         }
     }
 }

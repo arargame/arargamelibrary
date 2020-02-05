@@ -52,18 +52,18 @@ namespace ArarGameLibrary.Manager
 
         public static void ChangeScreenResolution(int width,int height)
         {
-            Global.Graphics.PreferredBackBufferWidth = width;
+            Global.GraphicsDeviceManager.PreferredBackBufferWidth = width;
 
-            Global.Graphics.PreferredBackBufferHeight = height;
+            Global.GraphicsDeviceManager.PreferredBackBufferHeight = height;
 
-            Global.Graphics.ApplyChanges();
+            Global.GraphicsDeviceManager.ApplyChanges();
         }
 
         public static void SetFullScreen(bool enable)
         {
-            Global.Graphics.IsFullScreen = enable;
+            Global.GraphicsDeviceManager.IsFullScreen = enable;
 
-            Global.Graphics.ApplyChanges();
+            Global.GraphicsDeviceManager.ApplyChanges();
         }
 
         public static void SetActive(bool enable = true)

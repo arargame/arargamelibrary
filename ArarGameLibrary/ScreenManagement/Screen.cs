@@ -15,6 +15,8 @@ namespace ArarGameLibrary.ScreenManagement
     {
         IScreen PreviousScreen { get; set; }
 
+        IScreen NextScreen { get; set; }
+
         ScreenState ScreenState { get; set; }
 
         void CheckWhetherIsReady();
@@ -26,6 +28,8 @@ namespace ArarGameLibrary.ScreenManagement
         IScreen Freeze(IScreen newScreen);
 
         IScreen SetPreviousScreen(IScreen previousScreen);
+
+        IScreen SetNextScreen(IScreen nextScreen);
     }
 
     public enum ScreenState
@@ -41,6 +45,8 @@ namespace ArarGameLibrary.ScreenManagement
         private IntPtr nativeResource = Marshal.AllocHGlobal(100);
 
         public IScreen PreviousScreen { get; set; }
+
+        public IScreen NextScreen { get; set; }
 
         public ScreenState ScreenState { get; set; }
 
@@ -134,6 +140,13 @@ namespace ArarGameLibrary.ScreenManagement
         public IScreen SetPreviousScreen(IScreen previousScreen)
         {
             PreviousScreen = previousScreen;
+
+            return this;
+        }
+
+        public IScreen SetNextScreen(IScreen nextScreen)
+        {
+            NextScreen = nextScreen;
 
             return this;
         }

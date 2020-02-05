@@ -114,3 +114,10 @@ if (KeyboardState.IsKeyDown(Keys.Right))
 -screen.cs üzeirnde eğer is preparing durumundaysa loading icon gösterilebilir
 -Global.SpriteBatch.Begin leri draw fonksiyonlarının içine al ve gerektiğinde alpha blend olaylarına gir(sıkıntılı bir olay-14.1.2020)
 -default componene cıkaran bir fonksiyon test amaçlı
+
+-GAmewindows class ını incele (26.01.2020)
+
+-settings kaydedilebilecek dosya sistemi entegrasyonu yapılacak(26.1.2020)
+-logları mail ile gönder(26.1.2020)
+-ayarlar dosyasında general ve user veya app a özel ayarların tutulacağı 2 klasör gerekli,buradaki dosyalardan save-load işlemleri,kullanıcı ayarları ve default ayarlar yüklenecek(gelişimini zamana bırakaraktan düşün)(26.01.2020)
+-başlarken ve kapatırken log tut,kullancııya özgü davranışlarda log tut ve istatistige dök(gelişimi zamana yayılabilir)(26.01.2020)

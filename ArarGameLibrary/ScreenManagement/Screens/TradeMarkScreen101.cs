@@ -1,4 +1,5 @@
 ﻿using ArarGameLibrary.Manager;
+using ArarGameLibrary.Model;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -13,6 +14,8 @@ namespace ArarGameLibrary.ScreenManagement.Screens
     //Gelişmiş : ne kadarda bir çalışması gerektiği belirtilen zmana güdümlü bir sistem saniyede 1 dakikada 1 falan ve bu devamlı veya bir kereliğine olabilir
     public class TradeMarkScreen101 : Cinematic
     {
+        private Font Font { get; set; }
+
         private Texture2D TradeMarkLogo { get; set; }
 
         private Rectangle LogoRectangle { get; set; }
@@ -40,6 +43,11 @@ namespace ArarGameLibrary.ScreenManagement.Screens
 
             LogoRectangle = new Rectangle((int)x, (int)y, (int)w, (int)h);
 
+            Font = new Font(text: "Arar Game.2010", fontColor: Color.White);
+
+            var fontPosition = new Vector2(Global.ViewportRect.Center.X - Font.TextMeasure.X / 2, LogoRectangle.Bottom);
+            Font.SetPosition(fontPosition);
+
             return true;
         }
 
@@ -53,6 +61,10 @@ namespace ArarGameLibrary.ScreenManagement.Screens
                 {
                     logoOpacity++;
                 }
+                else
+                {
+                    DisableThenAddNew(NextScreen);
+                }
             }
         }
 
@@ -63,7 +75,12 @@ namespace ArarGameLibrary.ScreenManagement.Screens
                 Global.GraphicsDevice.Clear(Color.Black);
 
                 Global.SpriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.NonPremultiplied);
-                Global.SpriteBatch.Draw(TradeMarkLogo, LogoRectangle, Color.White * logoOpacity);
+
+                Global.SpriteBatch.Draw(TradeMarkLogo, LogoRectangle,new Color((byte)255, (byte)255, (byte)255, (byte)logoOpacity));
+
+                if (logoOpacity>100)
+                    Font.Draw();
+
                 Global.SpriteBatch.End();
             }
         }

@@ -1,5 +1,6 @@
 ﻿using ArarGameLibrary.Manager;
 using ArarGameLibrary.ScreenManagement;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,6 +39,15 @@ namespace TestProject.Screens
             Components.AddRange(SortButtons(collection));
 
             return true && base.Load();
+        }
+
+        public override void Draw(SpriteBatch spriteBatch = null)
+        {
+            Global.SpriteBatch.Begin();
+
+            base.Draw(spriteBatch);
+
+            Global.SpriteBatch.End();
         }
     }
 }

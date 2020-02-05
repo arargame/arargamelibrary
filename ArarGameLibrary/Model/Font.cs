@@ -27,9 +27,10 @@ namespace ArarGameLibrary.Model
         public Func<string> ChangeTextEvent { get; set; }
 
         public Font(string fontFile = null,
+            string rootDirectory = null,
             string text = null,
             Vector2? position = null,
-            Color? color = null,
+            Color? fontColor = null,
             float rotation = 0f,
             Vector2? origin = null,
             float scale = 1f,
@@ -39,14 +40,17 @@ namespace ArarGameLibrary.Model
             Func<string> changeTextEvent = null,
             bool isPulsating = false)
         {
-            //config.json veya appconfig tarzı bişey yap default font vs için Fonts/DefaultFont
-            SpriteFont = fontFile != null ? Global.Content().Load<SpriteFont>(fontFile) : Global.Content("LibraryContent").Load<SpriteFont>("Fonts/DefaultFont");
+            fontFile = fontFile ?? "Fonts/DefaultFont";
 
+            rootDirectory = rootDirectory ?? "LibraryContent";
+
+            SpriteFont = Global.Content(rootDirectory).Load<SpriteFont>(fontFile);
+            
             SetText(text);
 
             SetPosition(position ?? Vector2.Zero);
 
-            SetColor(color ?? Color.White);
+            SetColor(fontColor ?? Color.White);
 
             Rotation = rotation;
 
@@ -217,7 +221,7 @@ namespace ArarGameLibrary.Model
         public static void Draw(string text, Vector2 position, Color color,Func<string> changeTextEvent = null)
         {
             if (Default == null)
-                Default = new Font(text: text, position: position, color: color, changeTextEvent: changeTextEvent);
+                Default = new Font(text: text, position: position, fontColor: color, changeTextEvent: changeTextEvent);
 
             Default.Update();
 

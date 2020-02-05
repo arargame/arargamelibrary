@@ -111,7 +111,8 @@ namespace ArarGameLibrary.ScreenManagement
         {
             base.Draw(spriteBatch);
 
-            Draw(()=> Global.SpriteBatch.Draw(InnerTexture, new Rectangle((int)Position.X, (int)Position.Y, (int)InnerTextureSize.X, (int)InnerTextureSize.Y), null, Color.White, 0f, Vector2.Zero, SpriteEffects, 0.2f));
+            Global.SpriteBatch.Draw(InnerTexture, new Rectangle((int)Position.X, (int)Position.Y, (int)InnerTextureSize.X, (int)InnerTextureSize.Y), null, Color.White, 0f, Vector2.Zero, SpriteEffects, 0.2f);
+            //Draw(()=> );
         }
 
         void MenuButton_OnChangeRectangle()
